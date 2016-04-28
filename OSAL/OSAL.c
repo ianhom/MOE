@@ -4,7 +4,7 @@
 * description: To be done.           
 * Version    : V1.00
 * Author     : Ian
-* Data       : 28th Apr 2016
+* Date       : 28th Apr 2016
 * History    :  No.  When           Who           What
 *               1    28/Apr/2016    Ian           Create
 ******************************************************************************/
@@ -22,7 +22,7 @@ static uint8 sg_u8ActiveTask = TASK_NO_TASK;  /* Save the current active task nu
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Data       : 28th Apr 2016
+* Date       : 28th Apr 2016
 ******************************************************************************/
 void Osal_Run_System()
 {
