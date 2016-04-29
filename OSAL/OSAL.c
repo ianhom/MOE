@@ -13,6 +13,43 @@
 
 static uint8 sg_u8ActiveTask = TASK_NO_TASK;  /* Save the current active task number */
 
+/* Create a list of process function of all tasks */
+const PF_TASK_PROCESS apfTaskFn[] = 
+{
+    Task1_Process,                   /* Task 1 process */
+    Task2_Process,                   /* Task 2 process */
+    Task3_Process                    /* Task 3 process */
+};
+
+const uint8 u8TaskCnt = sizeof(apfTaskFn) / sizeof(apfTaskFn[0]);   /* Get the quantity of tasks     */
+uint16 au16TaskEvt[sizeof(uint16)*u8TaskCnt] = {0};                 /* Create a event list for tasks */
+
+/******************************************************************************
+* Name       : void Osal_Init_Tasks()
+* Function   : Init all tasks
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: 1. Clear tasks events list with all 0-value.
+*              2. Init all tasks and pass the task ID into the tasks.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 29th Apr 2016
+******************************************************************************/
+void Osal_Init_Tasks()
+{
+    uint8 u8TaskID = 0;            /* Task No. starts from 0, higher number ==> lower priority */
+
+    /* Init the task events list with all 0 value */
+    for(uint8 u8Idx = 0; u8Idx < (sizeof(uint16)*u8TaskCnt); au16TaskEvt[u8Idx++] = 0;);
+    
+    Task1_Init(u8TaskID++);        /* Task 1 init operation */
+    Task2_Init(u8TaskID++);        /* Task 2 init operation */
+    Task3_Init(u8TaskID);          /* Task 3 inti operation */
+    
+    return;
+}
+
 /******************************************************************************
 * Name       : void Osal_Run_System()
 * Function   : The main function to schedule tasks.
