@@ -8,24 +8,20 @@
 * History    :  No.  When           Who           What
 *               1    28/Apr/2016    Ian           Create
 ******************************************************************************/
-
+#include "type_def.h"
+#include "common.h"
 #include "OSAL.h"
+#include "OSAL_App.h"
 
 static uint8 sg_u8ActiveTask = TASK_NO_TASK;  /* Save the current active task number */
 
 /* Create a list of process function of all tasks */
-const PF_TASK_PROCESS apfTaskFn[] = 
-{
-    Task1_Process,                   /* Task 1 process */
-    Task2_Process,                   /* Task 2 process */
-    Task3_Process                    /* Task 3 process */
-};
+static PF_TASK_PROCESS apfTaskFn[MAX_TASK_NUM];
 
-const uint8 u8TaskCnt = sizeof(apfTaskFn) / sizeof(apfTaskFn[0]);   /* Get the quantity of tasks     */
-uint16 au16TaskEvt[sizeof(uint16)*u8TaskCnt] = {0};                 /* Create a event list for tasks */
+uint16 au16TaskEvt[sizeof(uint16)*MAX_TASK_NUM] = {0};                 /* Create a event list for tasks */
 
 /******************************************************************************
-* Name       : void Osal_Init_Tasks()
+* Name       : void Osal_Init()
 * Function   : Init all tasks
 * Input      : None
 * Output:    : None
@@ -36,16 +32,13 @@ uint16 au16TaskEvt[sizeof(uint16)*u8TaskCnt] = {0};                 /* Create a 
 * Author     : Ian
 * Date       : 29th Apr 2016
 ******************************************************************************/
-void Osal_Init_Tasks()
+void Osal_Init()
 {
-    uint8 u8TaskID = 0;            /* Task No. starts from 0, higher number ==> lower priority */
-
     /* Init the task events list with all 0 value */
-    for(uint8 u8Idx = 0; u8Idx < (sizeof(uint16)*u8TaskCnt); au16TaskEvt[u8Idx++] = 0;);
-    
-    Task1_Init(u8TaskID++);        /* Task 1 init operation */
-    Task2_Init(u8TaskID++);        /* Task 2 init operation */
-    Task3_Init(u8TaskID);          /* Task 3 inti operation */
+    for(uint8 u8Idx = 0; u8Idx < (sizeof(uint16)*MAX_TASK_NUM); au16TaskEvt[u8Idx++] = 0;);
+
+    /* Init all tasks */
+    Osal_Tasks_Init();
     
     return;
 }
@@ -75,10 +68,10 @@ void Osal_Run_System()
                break;               /* If so, break loop */
             }
             /* If there is NO events for such task, do nothing and continue next task checking */
-        }while(++u8Idx < u8TaskCnt); /* Check all tasks */
+        }while(++u8Idx < MAX_TASK_NUM); /* Check all tasks */
         /* Reach here if an event happens for a task, or No event for all tasks  */
         
-        if(u8Idx < u8TaskCnt)  /* If an event happens for a task */
+        if(u8Idx < MAX_TASK_NUM)  /* If an event happens for a task */
         {
             uint16 u16Evt;
             uint32 u32IntSt;
@@ -100,4 +93,6 @@ void Osal_Run_System()
     }
     return;
 }
+
+/* End of file */
 

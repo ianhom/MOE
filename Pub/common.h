@@ -1,30 +1,33 @@
+
 /******************************************************************************
-* File       : OSAL.h
-* Function   : Provide the main function of OSAL-like scheduler.
+* File       : common.h
+* Function   : common definitions.
 * description: To be done.           
 * Version    : V1.00
 * Author     : Ian
-* Date       : 29th Apr 2016
+* Date       : 3rd May 2016
 * History    :  No.  When           Who           What
-*               1    29/Apr/2016    Ian           Create
+*               1    3/May/2016     Ian           Create
 ******************************************************************************/
 
-#ifndef _OSAL_H_
-#define _OSAL_H_
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-/* MACRO */
-#define TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
+/* Definition of process function for tasks */
+typedef uint16 (*PF_TASK_PROCESS)(uint16 u16Evt);
+
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _OSAL_H_ */
+#endif /* _COMMON_H_ */
 
 /* End of file */
+

@@ -1,30 +1,31 @@
 /******************************************************************************
-* File       : OSAL.h
-* Function   : Provide the main function of OSAL-like scheduler.
+* File       : OSAL_App.h
+* Function   : User application definitions.
 * description: To be done.           
 * Version    : V1.00
 * Author     : Ian
-* Date       : 29th Apr 2016
+* Date       : 3rd May 2016
 * History    :  No.  When           Who           What
-*               1    29/Apr/2016    Ian           Create
+*               1    3/May/2016     Ian           Create
 ******************************************************************************/
 
-#ifndef _OSAL_H_
-#define _OSAL_H_
+#ifndef _OSAL_APP_H_
+#define _OSAL_APP_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-/* MACRO */
-#define TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
+#define MAX_TASK_NUM             (5)      /* Max number of tasks */
+
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _OSAL_H_ */
+#endif /* OSAL_APP_H */
 
 /* End of file */
+
