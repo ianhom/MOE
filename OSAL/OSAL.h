@@ -16,18 +16,15 @@
 extern "C" {
 #endif
 
-/* Definition of process function for tasks */
-typedef uint16 (*PF_TASK_PROCESS)(uint16 u16Evt);
-
 
 /* MACRO */
-#deinfe TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
+#define TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _BTN_SM_MODULE_ */
+#endif /* _OSAL_H_ */
 
 /* End of file */
