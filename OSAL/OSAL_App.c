@@ -2,7 +2,7 @@
 * File       : OSAL_App.c
 * Function   : This file is an interface for user to add tasks to OSAL.
 *              This file should be modified according to your tasks.
-* description: To be done.           
+* description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -11,7 +11,13 @@
 ******************************************************************************/
 
 #include "type_def.h"
-#include "common.h"
+#include "common_head.h"
+#include "OSAL_App.h"
+#include "Task1.h"
+#include "Task2.h"
+#include "Task3.h"
+
+
 
 /******************************************************************************
 * Name       : void Osal_Tasks_Init()
@@ -42,11 +48,14 @@ void Osal_Tasks_Init()
     /* If the inited tasks count is NOT equals to the max number of all tasks */
     if (u8TaskID != MAX_TASK_NUM)
     {
+        DBG_PRINT("Task number ERROR!!\n");
         while(1);                  /* Enter forever loop */
     }
     /* If the inited tasks count is right, then continue */
-    
+   
     return;
 }
 
 /* End of file */
+
+
