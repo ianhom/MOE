@@ -1,24 +1,117 @@
 /******************************************************************************
 * File       : OSAL.c
 * Function   : Provide the main function of OSAL-like scheduler.
-* description: To be done.           
+* description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 28th Apr 2016
 * History    :  No.  When           Who           What
 *               1    28/Apr/2016    Ian           Create
 ******************************************************************************/
+
 #include "type_def.h"
-#include "common.h"
+#include "common_head.h"
 #include "OSAL.h"
 #include "OSAL_App.h"
 
-static uint8 sg_u8ActiveTask = TASK_NO_TASK;  /* Save the current active task number */
+static uint8 sg_u8ActiveTask = TASK_NO_TASK;            /* Save the current active task number            */
 
-/* Create a list of process function of all tasks */
-static PF_TASK_PROCESS apfTaskFn[MAX_TASK_NUM];
+static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
 
-uint16 au16TaskEvt[sizeof(uint16)*MAX_TASK_NUM] = {0};                 /* Create a event list for tasks */
+uint16 au16TaskEvt[MAX_TASK_NUM];                       /* Create a event list for tasks                  */
+
+/******************************************************************************
+* Name       : void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
+* Function   : Register task process function into the table.
+* Input      : PF_TASK_PROCESS pfTaskFn    Task process function pointer
+* Output:    : None
+* Return     : None
+* description: 1. Check if the input function pointer is invalid.
+*              2. Check if the registered task number is invlide.
+*              3. Store the function pointer into the table.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
+{
+    static uint8 s_u8RegTaskCnt = 0;  /* Start the index of task process function array */
+
+    /* Check if the input task process function pointer is invalid or NOT */
+    if(NULL == pfTaskFn)
+    {
+        DBG_PRINT("The process function of Task %d is invalid -- Fn:Osal_Tasks_init() \n", (s_u8RegTaskCnt+1));
+        return;
+    }
+
+    /* If the inited tasks count is NOT lower than the max number of all tasks */
+    if (s_u8RegTaskCnt >= MAX_TASK_NUM)
+    {
+        DBG_PRINT("Task number ERROR!! -- Fn:Osal_Tasks_init() \n");
+        while(1);                  /* Enter forever loop */
+    }
+
+    sg_apfTaskFn[s_u8RegTaskCnt++] = pfTaskFn;  /* Save the task process function pointer into the task table */
+
+    return;
+}
+
+/******************************************************************************
+* Name       : void Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
+* Function   : Set a memory block with a desired value
+* Input      : uint8* pDes   The destination pointer
+*              uint8 u8Val   The desired set to be set
+*              uint8 u8Len   The length of memory block in byte
+* Output:    : None
+* Return     : None
+* description: Set a memory block with a desired value
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
+{   /* Loop for the desired length bytes to be set */
+    for(uint8 u8Idx = 0; u8Idx < u8Len; u8Idx++)
+    {
+        pDes[u8Idx] = u8Val;   /* Set with the desired value */
+    }
+    return;
+}
+
+/******************************************************************************
+* Name       : void Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Function   : To be done
+* Input      : To be done
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+{  
+    au16TaskEvt[u8TaskID] |= u16Evt;
+    return;
+}
+
+/******************************************************************************
+* Name       : void Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Function   : To be done
+* Input      : To be done
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
+{  
+    au16TaskEvt[u8TaskID] &= (~u16Evt);
+    return;
+}
+
 
 /******************************************************************************
 * Name       : void Osal_Init()
@@ -26,22 +119,55 @@ uint16 au16TaskEvt[sizeof(uint16)*MAX_TASK_NUM] = {0};                 /* Create
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: 1. Clear tasks events list with all 0-value.
-*              2. Init all tasks and pass the task ID into the tasks.
+* description: 1. Clear tasks events list with NO EVENT.
+*              2. Clear task process function pointer table with NULL.
+*              3. Init all tasks and pass the task ID into the tasks.
+*              4. Check all tasks are registered.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 29th Apr 2016
 ******************************************************************************/
 void Osal_Init()
 {
-    /* Init the task events list with all 0 value */
-    for(uint8 u8Idx = 0; u8Idx < (sizeof(uint16)*MAX_TASK_NUM); au16TaskEvt[u8Idx++] = 0;);
+    /* Init the task events list with NO EVENT                */
+    Osal_Memset((uint8*)au16TaskEvt, EVENT_NONE, sizeof(uint16)*MAX_TASK_NUM);
+   
+    /* Init the task process function pointer table with NULL */
+    Osal_Memset((uint8*)sg_apfTaskFn, NULL, sizeof(uint16*)*MAX_TASK_NUM);
 
     /* Init all tasks */
     Osal_Tasks_Init();
-    
+
+    /* Check all task process function pointers are registered */
+    for(uint8 u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
+    {   /* If the pointer is NULL */
+        if(NULL == sg_apfTaskFn[u8Idx])
+        {
+            DBG_PRINT("Task function pointer table is wrong\n");
+            while(1);                  /* Enter forever loop */
+        }
+    }
+   
     return;
 }
+
+/******************************************************************************
+* Name       : void OSAL_ProcessPoll()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void OSAL_ProcessPoll()
+{
+    /* To be done... */
+    return;
+}
+
 
 /******************************************************************************
 * Name       : void Osal_Run_System()
@@ -57,42 +183,64 @@ void Osal_Init()
 void Osal_Run_System()
 {
     uint8 u8Idx;
-    for(;;) /* The main loop */
+    for(;;)                               /* The main loop                */
     {
-        OSAL_ProcessPoll();  /* Do polling process if needed */
-        
+        OSAL_ProcessPoll();               /* Do polling process if needed */
+       
         do
         {
-            if(au16TaskEvt[u8Idx])  /* Check if events happen for such task */
-            {        
-               break;               /* If so, break loop */
+            if(au16TaskEvt[u8Idx])        /* Check if events happen for such task */
+            {       
+               break;                     /* If so, break loop                    */
             }
             /* If there is NO events for such task, do nothing and continue next task checking */
-        }while(++u8Idx < MAX_TASK_NUM); /* Check all tasks */
+        }while(++u8Idx < MAX_TASK_NUM);   /* Check all tasks */
         /* Reach here if an event happens for a task, or No event for all tasks  */
-        
-        if(u8Idx < MAX_TASK_NUM)  /* If an event happens for a task */
+       
+        if(u8Idx < MAX_TASK_NUM)          /* If an event happens for a task */
         {
             uint16 u16Evt;
             uint32 u32IntSt;
-            
+           
             ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly, save the interrupt status and disable all interrupts */
             u16Evt = au16TaskEvt[u8Idx];    /* Get the event */
             au16TaskEvt[u8Idx] = 0;         /* Clean the event temporary */
-            EXIT_CRITICAL_ZONE(u32INtSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
-            
+            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
+           
             sg_u8ActiveTask = u8Idx;                       /* Save the active task number    */
-            u16Evt = (apfTaskFn[u8Idx](u8Idx, u16Evt));    /* Call the task process function */
+            u16Evt = (sg_apfTaskFn[u8Idx](u16Evt));        /* Call the task process function */
             sg_u8ActiveTask = TASK_NO_TASK;                /* Finish task processing and cancel active task mark */
-            
+           
             ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly, save the interrupt status and disable all interrupts */
             au16TaskEvt[u8Idx] = u16Evt;    /* Add the rest events back */
-            EXIT_CRITICAL_ZONE(u32INtSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
+            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
         }
         /* If u8Idx is NOT lower than u8TaskCnt, it indicate that NO event happens and nothing need to be done */
+        u8Idx = 0;
     }
     return;
 }
 
+/******************************************************************************
+* Name       : uint8 OSAL_Get_Acktive_Task()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8 OSAL_Get_Acktive_Task()
+{
+    return sg_u8ActiveTask;
+}
+
+
+
 /* End of file */
+
+
+
 
