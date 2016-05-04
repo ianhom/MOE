@@ -26,6 +26,8 @@ typedef unsigned char         int8;        /* Type definition for 8-bit signed c
 typedef unsigned short int    int16;       /* Type definition for 16-bit signed short int   */
 typedef unsigned int          int32;       /* Type definition for 32-bit signed int         */
 
+#define NULL                  (0)           /* Value for NULL pointer                        */
+
 #ifdef __cplusplus
 }
 #endif
