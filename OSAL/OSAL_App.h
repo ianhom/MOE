@@ -17,9 +17,9 @@ extern "C" {
 #endif
 
 
-#define MAX_TASK_NUM             (5)      /* Max number of tasks */
+#define MAX_TASK_NUM             (3)      /* Max number of tasks */
 
-
+void Osal_Tasks_Init();
 
 #ifdef __cplusplus
 }
