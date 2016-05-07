@@ -91,7 +91,14 @@ void Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 ******************************************************************************/
 void Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 {  
+    uint32 u32IntSt;
+    
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
     au16TaskEvt[u8TaskID] |= u16Evt;
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
     return;
 }
 
@@ -108,7 +115,14 @@ void Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 ******************************************************************************/
 void Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 {  
+    uint32 u32IntSt;
+    
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
     au16TaskEvt[u8TaskID] &= (~u16Evt);
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
     return;
 }
 
@@ -152,7 +166,7 @@ void Osal_Init()
 }
 
 /******************************************************************************
-* Name       : void OSAL_ProcessPoll()
+* Name       : void Osal_ProcessPoll()
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -162,7 +176,7 @@ void Osal_Init()
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-void OSAL_ProcessPoll()
+void Osal_ProcessPoll()
 {
     /* To be done... */
     return;
@@ -185,7 +199,8 @@ void Osal_Run_System()
     uint8 u8Idx;
     for(;;)                               /* The main loop                */
     {
-        OSAL_ProcessPoll();               /* Do polling process if needed */
+        Osal_Timer_Process();             /* Update all timers            */
+        Osal_ProcessPoll();               /* Do polling process if needed */
        
         do
         {
@@ -195,25 +210,29 @@ void Osal_Run_System()
             }
             /* If there is NO events for such task, do nothing and continue next task checking */
         }while(++u8Idx < MAX_TASK_NUM);   /* Check all tasks */
-        /* Reach here if an event happens for a task, or No event for all tasks  */
+        /* Reach here if an event happens for a task, or No event for all tasks   */
        
-        if(u8Idx < MAX_TASK_NUM)          /* If an event happens for a task */
+        if(u8Idx < MAX_TASK_NUM)          /* If an event happens for a task       */
         {
             uint16 u16Evt;
             uint32 u32IntSt;
            
-            ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly, save the interrupt status and disable all interrupts */
-            u16Evt = au16TaskEvt[u8Idx];    /* Get the event */
+            ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+            /**************************************************************************************************/
+            u16Evt = au16TaskEvt[u8Idx];    /* Get the event             */
             au16TaskEvt[u8Idx] = 0;         /* Clean the event temporary */
-            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
-           
+            /**************************************************************************************************/
+            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+            
             sg_u8ActiveTask = u8Idx;                       /* Save the active task number    */
             u16Evt = (sg_apfTaskFn[u8Idx](u16Evt));        /* Call the task process function */
             sg_u8ActiveTask = TASK_NO_TASK;                /* Finish task processing and cancel active task mark */
            
-            ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly, save the interrupt status and disable all interrupts */
+           ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+           /**************************************************************************************************/
             au16TaskEvt[u8Idx] = u16Evt;    /* Add the rest events back */
-            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone and restore the interrupt status and enable interrupts */
+           /**************************************************************************************************/
+           EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
         }
         /* If u8Idx is NOT lower than u8TaskCnt, it indicate that NO event happens and nothing need to be done */
         u8Idx = 0;
@@ -222,7 +241,7 @@ void Osal_Run_System()
 }
 
 /******************************************************************************
-* Name       : uint8 OSAL_Get_Acktive_Task()
+* Name       : uint8 Osal_Get_Acktive_Task()
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -232,7 +251,7 @@ void Osal_Run_System()
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 OSAL_Get_Acktive_Task()
+uint8 Osal_Get_Acktive_Task()
 {
     return sg_u8ActiveTask;
 }
