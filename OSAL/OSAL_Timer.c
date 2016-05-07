@@ -1,6 +1,6 @@
 /******************************************************************************
 * File       : OSAL_Timer.c
-* Function   : Provide timer service.
+* Function   : Provide timer services.
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
@@ -36,19 +36,21 @@ static PF_TIMER_SRC  sg_pfSysTm  = NULL;
 uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
 {   /* Check if the input function is NULL or NOT */
     if (NULL == pfSysTm)
-    {   /* If invalid, return error */
-        return SW_ERR;    
+    {   
+        DBG_PRINT("System time function pointer is invalid!!\n");
+        return SW_ERR;    /* If invalid, return error */   
     }
     /* If the input function is OK, then go on */
 
     sg_pfSysTm = pfSysTm;      /* Save the system time function for further using */
-
+    DBG_PRINT("OSAL timer inited successfully!!\n");   
+ 
     return SW_OK;
 }
 
 /******************************************************************************
-* Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
-* Function   : Init OSAL timer
+* Name       : static T_TIMER_NODE* Osal_Timer_Add()
+* Function   : Add a timer node
 * Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
 * Output:    : None
 * Return     : SW_OK   Successful.
@@ -58,29 +60,30 @@ uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Add()
+static T_TIMER_NODE* Osal_Timer_Add()
 {
     T_TIMER_NODE* ptNode;
 
-    /* 链表头结点已经存在 */
-    ptNode = (T_TIMER_NODE*)malloc(sizeof(T_TIMER_NODE)); /* 申请定时器结点 */
-    if (NULL == ptNode)
+    ptNode = (T_TIMER_NODE*)malloc(sizeof(T_TIMER_NODE)); /* Allocate a timer node */
+    /* If the allocation is FAILED */
+    if (NULL == ptNode)                                   
     {
-        return NULL; /* 检查是否申请成功 */
+        DBG_PRINT("No more heap space for timer node!!\n");
+        return NULL; /* Return NULL to indicate failed operation */
     }
+    /* Else, new timer node is allocated */
 
-    /* 结点申请成功 */
-    ptNode->next              = NULL;                   /* 下个结点地址置空 */
+    ptNode->next = NULL;                 /* Set the next node as NULL       */
 
-    if(NULL == sg_ptTmTail)
+    if(NULL == sg_ptTmTail)              /* If there is NO nodes            */
     {
-        sg_ptTmHead = ptNode;
+        sg_ptTmHead = ptNode;            /* Add new node as the fisrt one   */
     }
-    else
+    else                                 /* If node exsits                  */
     {
-        sg_ptTmTail->Next = ptNode;
+        sg_ptTmTail->Next = ptNode;      /* Add new node after the tail one */
     }
-    sg_ptTmTail = ptNode;
+    sg_ptTmTail = ptNode;                /* Update the tail node            */
 
     return ptNode;
 
@@ -88,9 +91,224 @@ T_TIMER_NODE* Osal_Timer_Add()
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
-* Function   : Init OSAL timer
-* Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
+* Name       : T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+* Function   : Start a timer
+* Input      : uint8  u8TaskID    The task which waits the timeout
+*              uint16 u16Evt      The event whcih is set when timeout
+*              uint16 u16Cnt      The restart count for the time
+*              uint32 u32TmOut    The time for the timmout
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+{
+    T_TIMER_NODE* ptNode;
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptNode = Osal_Timer_Add();                            /* Allocate a timer node              */
+    if (NULL == ptNode)                                   /* If new timer is failed to allocate */
+    {
+        DBG_PRINT("New timer node is failed to start\n");
+        return NULL;                                      /* Return NULL, fail to start a timer */
+    }
+    /* A timer node was added successfully */
+        
+    ptNode->tTimer.u32TmNow   = sg_pfSysTm();             /* Get the system time                */
+    ptNode->tTimer.u32TmStart = ptNode->tTimer.u32TmNow;  /* Get the system time                */     
+    ptNode->tTimer.u32TmOut   = u32TmOut;                 /* Set the timeout time               */
+    ptNode->tTimer.u8Cnt      = u16Cnt;                   /* Set the restart count              */
+    ptNode->tTimer.u16Evt     = u16Evt;                   /* Set the event                      */
+    ptNode->tTimer.u8TaskID   = u8TaskID;                 /* Set the task ID                    */
+
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    DBG_PRINT("New timer is started!!\n");
+
+    return ptNode;
+
+}
+
+
+/******************************************************************************
+* Name       : static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
+* Function   : Delete a timer node
+* Input      : T_TIMER_NODE* ptNode  The timer node to be delete.
+* Output:    : None
+* Return     : NULL           Fail to delete a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is deleted.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
+{
+    T_TIMER_NODE* ptFind;
+
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    if (NULL == ptNode)                         /* If the input node pointer is invalid  */
+    {
+        return NULL;                            /* Return NULL, no node to be deleted    */
+    }
+
+    if(ptNode == sg_ptTmHead)                   /* If the deleting node is the head node */
+    {
+        if(ptNode == sg_ptTmTail)               /* And if it is the unique node          */
+        {
+            DBG_PRINT("The last timer node is deleted!!\n");
+            sg_ptTmHead = NULL;                 /* Set NULL to head node                 */
+            sg_ptTmTail = NULL;                 /* Set NULL to tail node                 */
+        }
+        else                                    /* Else if it is NOT the unique node     */
+        {
+            sg_ptTmHead = sg_ptTmHead->ptNext;  /* Make head pointing to the next node   */
+        }
+        free(ptNode);                           /* Free the deleting node                */
+        DBG_PRINT("The deleting node is free!!\n");
+        return ptNode;                          
+    }    
+    /* Else, the deleting node is NOT the head node, then go on */
+
+    ptFind = sg_ptTmHead;                       /* Get the head node                     */
+    while (ptFind)                              /* If such node is NOT null              */
+    {
+        if (ptFind->next == ptNode)             /* Check if the next node is the one     */
+        {
+            ptFind->next = ptNode->next;        /* Delete the node                       */
+            free(ptNode);                       /* Free the deleting node                */
+            DBG_PRINT("The deleting node is free!!\n");
+            if(NULL == ptFind->next)            /* If the tail node is deleted           */
+            {
+                sg_ptTmTail = ptFind;           /* Update the tail node                  */
+            }
+            return ptFind;                      /* Return the deteled node pointer       */
+        }
+        ptFind = ptFind->next;                  /* Update the searching node             */
+    }
+
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    return NULL;                     /* 鏈壘鍒帮紝鎿嶄綔澶辫触 */
+}
+
+
+/******************************************************************************
+* Name       : T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
+* Function   : Stop a started timer.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be stopped
+* Output:    : None
+* Return     : NULL           Fail to stop a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is stopped.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
+{
+    T_TIMER_NODE* ptFind;
+
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptFind = Osal_Timer_Find(ptNode);     /* Search the timer node    */
+    if(NULL == ptFind)                    /* If the node is NOT found */
+    {
+        DBG_PRINT("The timer node to be stopped is NOT found!!\n");
+        return NULL;                      /* NOT found, return NULL   */
+    }
+    /* Else, the timer node is found */
+
+    ptNode->tTimer.u16Cnt = 0;            /* Update the start point   */
+
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    DBG_PRINT("Timer is stopped!!\n");
+    return ptNode;
+}
+
+
+/******************************************************************************
+* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Function   : Try to find a node.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
+* Output:    : None
+* Return     : NULL           Fail to find the node.
+*              T_TIMER_NODE*  The pointer of the founed node.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+{
+    T_TIMER_NODE * ptFind;
+    
+    ptFind = sg_ptTmHead;             /* Get the head node of timers          */
+    while(ptFind)                     /* If such node is avaliable            */
+    {                                
+        if(ptFind == ptNode)          /* And if it is the searched node       */
+        {
+            DBG_PRINT("Find the timer node!!\n");
+            break;                    /* Find it and break the loop           */
+        }
+        ptFind = ptFind->ptNext;      /* Update the node pointer              */
+    }
+    return ptFind;
+}
+
+/******************************************************************************
+* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Function   : Try to find a node.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
+* Output:    : None
+* Return     : NULL           Fail to find the node.
+*              T_TIMER_NODE*  The pointer of the founed node.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Restart(T_TIMER_NODE* ptNode)
+{
+    T_TIMER_NODE *ptFind;
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptFind = Osal_Timer_Find(ptNode);     /* Search the timer node    */
+    if(NULL == ptFind)                    /* If the node is NOT found */
+    {
+        DBG_PRINT("The timer node to be restarted is NOT found!!\n");
+        return NULL;                      /* NOT found, return NULL   */
+    }
+    /* Else, the timer node is found */
+
+    ptNode->tTimer.start = sg_pfSysTm();  /* Update the start point   */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    DBG_PRINT("Timer is restarted!!\n");
+    return ptNode;                      
+}
+
+
+/******************************************************************************
+* Name       : uint8 Osal_Timer_Process(void)
+* Function   : Main process for timer updating.
+* Input      : None
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -99,171 +317,86 @@ T_TIMER_NODE* Osal_Timer_Add()
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint16 u16TmOut)
-{
-    T_TIMER_NODE* ptNode;
-
-    ptNode = Osal_Timer_Add();
-    if (NULL == ptNode)
-    {
-        return NULL; /* 检查是否申请成功 */
-    }
-
-    /* 结点申请成功 */
-    ptNode->tTimer.u16TmStart = sg_pfSysTm();           /* 获取计时起始时间 */
-    ptNode->tTimer.u16TmNow   = sg_pfSysTm();           /* 获取当前时间 */
-    ptNode->tTimer.u16TmOut   = u16TmOut;                      /* 已经过的时间 */
-    ptNode->tTimer.u8Cnt      = u16Cnt;
-    ptNode->tTimer.u16Evt     = u16Evt;
-    ptNode->tTimer.u8TaskID   = u8TaskID;
-
-    return ptNode;
-
-}
-
-
-/*************************************************************************
-* 函数名称：int KillTimer(T_TIMER_NODE* ptNode)
-* 功能说明：删除定时器结点
-* 输入参数：T_TIMER_NODE* ptNode 定时器结点地址
-* 输出参数：无
-* 返 回 值：SW_ERR: 操作失败
-           SW_OK 操作成功
-* 其它说明：无
-**************************************************************************/
-T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
-{
-    T_TIMER_NODE* ptFind;
-
-    if (NULL == ptNode)
-    {
-        return NULL; /* 检查定时器结点是否为空 */
-    }
-
-    if(ptNode == sg_ptTmHead)
-    {
-        if(ptNode == sg_ptTmTail)
-        {
-            sg_ptTmHead = NULL;
-            sg_ptTmTail = NULL;
-        }
-        else
-        {
-            sg_ptTmHead = sg_ptTmHead->ptNext;
-        }
-        free(ptNode);
-        return ptNode;
-    }    
-
-    ptFind = sg_ptTmHead; /* 先找到头结点 */
-    while (ptFind) /* 如果不是末尾结点 */
-    {
-        if (ptFind->next == ptNode)      /* 检查下一结点是否为需删除结点 */
-        {
-            ptFind->next = ptNode->next; /* 重新链接上下结点 */
-            free(ptNode);                /* 删除结点 */
-            if(NULL == ptFind->next)
-            {
-                sg_ptTmTail = ptFind;
-            }
-            return SW_OK;                /* 操作成功，退出程序 */
-        }
-        ptFind = ptFind->next;           /* 继续查找下一结点 */
-    }
-    return NULL;                     /* 未找到，操作失败 */
-}
-
-
-T_TIMER_NODE* Osal_Timer_Find(T_TIMER_NODE* ptNode)
-{
-    T_TIMER_NODE *ptFind = sg_ptTmHead;
-
-    while(ptFind)
-    {
-        if(ptFind == ptNode)
-        {
-            break;
-        }
-        ptFind = ptFind->ptNext;
-    }
-    return ptFind;
-}
-
-
-/*************************************************************************
-* 函数名称：int ResetTimer(T_TIMER_NODE* ptNode)
-* 功能说明：重启定时器结点
-* 输入参数：T_TIMER_NODE* ptNode 定时器结点地址
-* 输出参数：无
-* 返 回 值：SW_ERR: 操作失败
-           SW_OK 操作成功
-* 其它说明：无
-**************************************************************************/
-T_TIMER_NODE* Osal_Timer_Restart(T_TIMER_NODE* ptNode)
-{
-    if (NULL == ptNode)
-    {
-        return NULL;                /* 检查定时器结点是否为空 */
-    }
-
-    if(NULL == Osal_Timer_Find())
-    {
-        return NULL;
-    }
-
-    ptNode->tTimer.start = sg_pfSysTm(); /* 更新定时器起始时间 */
-    return ptNode;                       /* 操作成功 */
-}
-
-
-/*************************************************************************
-* 函数名称：int ProcessTimer(void)
-* 功能说明：更新定时器结点
-* 输入参数：无
-* 输出参数：无
-* 返 回 值：SW_ERR: 操作失败
-            SW_OK 操作成功
-* 其它说明：无
-**************************************************************************/
 uint8 Osal_Timer_Process(void)
 {
     T_TIMER_NODE* ptFind;
     T_TIMER_NODE* ptNodeFree;
-    if (NULL == sg_ptTmHead)
-    {
-        return SW_OK; /* 没有定时器需要运行 */
-    }
-    ptFind = sg_ptTmHead;          /* 找到第一个有效结点 */
-    while(ptFind)                         /* 如果不是末尾结点 */
-    {
-        ptFind->tTimer.now = sg_pfSysTm(); /* 更新时间 */
 
-        /* 计算此刻时间与起始时间的时间差 */    
-        if((ptFind->tTimer.now - ptFind->tTimer.start) >= ptFind->tTimer.timeout)          /* 如果时差大于等于设定的计时时间 */
-        {
-            Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
+    uint32 u32IntSt;
 
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptFind = sg_ptTmHead;                     /* Get the head timer         */
+    while(ptFind)                             /* If such timer is avaliable */
+    {
+        ptFind->tTimer.now = sg_pfSysTm();    /* Update the time            */
+
+        if(0 == ptFind->tTimer.u16Cnt)        /* If the timing count is 0   */
+        {                                     
+            ptNodeFree = ptFind;              /* Get the deleting timer     */
+            ptFind = ptFind->next;            /* Point the next timer       */
+            Osal_Timer_Del(ptNodeFree);       /* Delete the timer           */
+            continue;                         /* Go on check next timer     */
+        }          
+
+        /* If the time is up */   
+        if((ptFind->tTimer.now - ptFind->tTimer.start) >= ptFind->tTimer.timeout)         
+        {   /* Set the desired evnet */
+            Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);  
+            DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
+
+            /* If the it is NOT infinite count */
+            if(ptFind->tTimer.u16Cnt != OSAL_TMR_INFINITE_CNT)              
+            {
+                ptFind->tTimer.u16Cnt--;    /* Update the count     */
+            }
+            /* If the timing count is NOT 0 */
             if(ptFind->tTimer.u16Cnt)
             {
-                if(ptFind->tTimer.u16Cnt != FOREVER_PERIOD)
-                {
-                    ptFind->tTimer.u16Cnt--;
-                }
-                
-                Osal_Timer_Restart(ptFind);                              /* 如果是周期性触发，重启定时器 */
+                DBG_PRINT("Timer is restarted, %d times left\n",ptFind->tTimer.u16Cnt);
+                Osal_Timer_Restart(ptFind); /* Restart the timer    */   
             }
-            else
-            {                                                    /* 如果是单次触发，删除定时器 */
-                ptNodeFree = ptFind;
-                ptFind = ptFind->next;
-                Osal_Timer_Del(ptNodeFree);
-                continue;
-            }            
         }
-        ptFind = ptFind->next;                                   /* 继续更新下一个定时器结点 */
+        ptFind = ptFind->next;              /* Check the next timer */
     }
-    return SW_OK;                                                /* 操作成功 */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    return SW_OK;                                               
 }
+
+/******************************************************************************
+* Name       : static uint16 Osal_Timer_Cnt()
+* Function   : Get the count of timers
+* Input      : None
+* Output:    : None
+* Return     : uint16   The count of timers
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+static uint16 Osal_Timer_Cnt()
+{
+    T_TIMER_NODE *ptFind;
+    uint16 u16TmrCnt = 0;
+
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptFind = sg_ptTmHead;           /* Get the head timer         */
+    while(ptFind)                   /* If such timer is avaliable */
+    {
+        u16TmrCnt++;                /* Increase the count         */
+        ptFind = ptFind->ptNext;    /* Check the next one         */
+    }
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    DBG_PRINT("The count of the timer is %d\n",u16TmrCnt);
+    return u16TmrCnt;
+}
+
 
 /* end of file */
 
