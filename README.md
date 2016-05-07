@@ -1,8 +1,16 @@
 # OSAL-like
+## Introduce
 OSAL is a good scheduler and I‘d like to try to re-build it and use it in future
 
-#7th May 2016
-Timer is added, however  the code is NOT debug yet. Please wait for the updating.
+## Log
+### 7th May 2016
+Timer is added, however **the code is NOT debug yet**. Please wait for the updating.
 
-#4th May 2016
+### 5th May 2016
+[百度](http://www.baidu.com)   
+![baidu](https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png)
+> -百度一下会死啊！ 
+> -会。。。
+
+### 4th May 2016
 I have finished the basical parts of schudeler function, I use 3 tasks and set event to each others, it works. Also I add debug print MACROs with maybe useful. I will add software timer in next step.
