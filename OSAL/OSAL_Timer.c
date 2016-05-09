@@ -19,7 +19,7 @@ static T_TIMER_NODE* Osal_Timer_Add();
 static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode);
 static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode);
 static uint16 Osal_Timer_Test_Max_Cnt();
-static uint16 Osal_Timer_Test_StartStop();
+static uint8  Osal_Timer_Test_StartStop();
 
 
 static T_TIMER_NODE *sg_ptTmHead = NULL;
@@ -447,18 +447,18 @@ static uint16 Osal_Timer_Test_Max_Cnt()
 }
 
 /******************************************************************************
-* Name       : static uint16 Osal_Timer_Test_StartStop()
+* Name       : static uint8 Osal_Timer_Test_StartStop()
 * Function   : Test start and stop function
 * Input      : None
 * Output:    : None
-* Return     : uint16   The Max. count of timers
+* Return     : To be done
 * description: To be done.
 *              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
 * Version    : V1.00
 * Author     : Ian
 * Date       : 9th May 2016
 ******************************************************************************/
-static uint16 Osal_Timer_Test_StartStop()
+static uint8 Osal_Timer_Test_StartStop()
 {
     T_TIMER_NODE *ptNode;
     uint32 u32IntSt;
