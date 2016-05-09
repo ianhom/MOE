@@ -63,19 +63,27 @@ void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
 *              uint8 u8Val   The desired set to be set
 *              uint8 u8Len   The length of memory block in byte
 * Output:    : None
-* Return     : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
 * description: Set a memory block with a desired value
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-void Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
-{   /* Loop for the desired length bytes to be set */
+uint8 Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
+{   
+    /* Check if the pointer is invalid or NOT */
+    if (NULL == pDes)
+    {   /* Return error if invalid pointer */
+        return SW_ERR;
+    }
+    /* Loop for the desired length bytes to be set */
     for(uint8 u8Idx = 0; u8Idx < u8Len; u8Idx++)
     {
         pDes[u8Idx] = u8Val;   /* Set with the desired value */
     }
-    return;
+
+    return SW_OK;
 }
 
 /******************************************************************************
