@@ -3,6 +3,9 @@
 OSAL is a good scheduler and I‘d like to try to re-build it and use it in future
 
 ## Log
+### 9th May 2016
+Still work with software timers, add some test functions, **un-debugged**.
+
 ### 7th May 2016
 Timer is added, however **the code is NOT debug yet**. Please wait for the updating.
 
