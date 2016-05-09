@@ -16,22 +16,22 @@
 extern "C" {
 #endif
 
-typedef uint16 (*PF_TIMER_SRC)(void);
+typedef uint32 (*PF_TIMER_SRC)(void);
 
 /*******************************************************************************
 * Structure  : T_TIMER
 * Description: Structure of timer.
-* Memebers   : uint16    u16TmStart;      0~0xFFFF        Start time point         
-*              uint16    u16TmNow;        0~0xFFFF        Current time point       
-*              uint16    u16TmOut;        0~0xFFFF        Timeout time             
-*              uint16    u16Cnt;          0               Periodic
-*                                         1~0xFFFF        Counts to start the timer  
+* Memebers   : uint32    u32TmStart;      0~0xFFFFFFFF        Start time point         
+*              uint32    u32TmNow;        0~0xFFFFFFFF        Current time point       
+*              uint32    u32TmOut;        0~0xFFFFFFFF        Timeout time             
+*              uint16    u16Cnt;          0xFFFF              Periodic
+*                                         0~0xFFFE            Counts to start the timer  
 *******************************************************************************/
 typedef struct _T_TIMER
 {
-    uint16    u16TmStart;              /* Start time point         */
-    uint16    u16TmNow;                /* Current time point       */
-    uint16    u16TmOut;                /* Timeout time             */
+    uint32    u32TmStart;              /* Start time point         */
+    uint32    u32TmNow;                /* Current time point       */
+    uint32    u32TmOut;                /* Timeout time             */
     uint16    u16Cnt;                  /* Count to start the timer */
     uint16    u16Evt;                  /* Timeout event to be set  */
     uint8     u8TaskID;                /* Timeout event task ID    */
@@ -45,8 +45,112 @@ typedef struct _T_TIMER_NODE
 }T_TIMER_NODE;
 
 /* MACRO */
+#define OSAL_TMR_INFINITE_CNT   (0xFFFF)     /* Infinite restart count  */
 
 
+/******************************************************************************
+* Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
+* Function   : Init OSAL timer
+* Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm);
+
+/******************************************************************************
+* Name       : T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+* Function   : Start a timer
+* Input      : uint8  u8TaskID    The task which waits the timeout
+*              uint16 u16Evt      The event whcih is set when timeout
+*              uint16 u16Cnt      The restart count for the time
+*              uint32 u32TmOut    The time for the timmout
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut);
+
+/******************************************************************************
+* Name       : T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
+* Function   : Stop a started timer.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be stopped
+* Output:    : None
+* Return     : NULL           Fail to stop a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is stopped.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode);
+
+
+
+
+/******************************************************************************
+* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Function   : Try to find a node.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
+* Output:    : None
+* Return     : NULL           Fail to find the node.
+*              T_TIMER_NODE*  The pointer of the founed node.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+T_TIMER_NODE* Osal_Timer_Restart(T_TIMER_NODE* ptNode);
+
+
+/******************************************************************************
+* Name       : uint8 Osal_Timer_Process(void)
+* Function   : Main process for timer updating.
+* Input      : None
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+uint8 Osal_Timer_Process(void);
+
+/******************************************************************************
+* Name       : uint16 Osal_Timer_Test_Cnt()
+* Function   : Get the count of timers
+* Input      : None
+* Output:    : None
+* Return     : uint16   The count of timers
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+uint16 Osal_Timer_Test_Cnt();
+
+/******************************************************************************
+* Name       : void Osal_Timer_Test_General()
+* Function   : General test
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done
+*              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
+* Version    : V1.00
+* Author     : Ian
+* Date       : 9th May 2016
+******************************************************************************/
+void Osal_Timer_Test_General();
 
 
  
