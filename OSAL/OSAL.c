@@ -79,19 +79,27 @@ void Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 }
 
 /******************************************************************************
-* Name       : void Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Name       : uint8 Osal_Event_Set(uint8 u8TaskID, uint16 Event)
 * Function   : To be done
-* Input      : To be done
+* Input      : uint8  u8TaskID
+*              uint16 u16Evt
 * Output:    : None
-* Return     : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-void Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+uint8 Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 {  
     uint32 u32IntSt;
+
+    /* Check if the task ID is invalid or NOT */
+    if(u8TaskID >= MAX_TASK_NUM)
+    {   /* If task ID is wrong, return error */
+        return SW_ERR;
+   }
     
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -99,23 +107,30 @@ void Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return;
+    return SW_OK;
 }
 
 /******************************************************************************
-* Name       : void Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Name       : uint8 Osal_Event_Set(uint8 u8TaskID, uint16 Event)
 * Function   : To be done
-* Input      : To be done
+* Input      : uint8  u8TaskID
+*              uint16 u16Evt
 * Output:    : None
-* Return     : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-void Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
+uint8 Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 {  
     uint32 u32IntSt;
+    /* Check if the task ID is invalid or NOT */
+    if(u8TaskID >= MAX_TASK_NUM)
+    {   /* If task ID is wrong, return error */
+        return SW_ERR;
+    }
     
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -123,7 +138,7 @@ void Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return;
+    return SW_OK;
 }
 
 
