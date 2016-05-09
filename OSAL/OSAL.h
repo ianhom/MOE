@@ -28,7 +28,7 @@ extern "C" {
 
 
 void   Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn);
-void   Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
+uint8  Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
 uint8  Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt);
 uint8  Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt);
 void   Osal_Init();
