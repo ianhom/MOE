@@ -110,6 +110,11 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     T_TIMER_NODE* ptNode;
     uint32 u32IntSt;
 
+    if(0 == u16Cnt)                                       /* If the start count is 0            */
+    {
+        return NULL;                                      /* Unnecessary to start the timer     */
+    }
+
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     ptNode = Osal_Timer_Add();                            /* Allocate a timer node              */
@@ -366,7 +371,7 @@ uint8 Osal_Timer_Process(void)
 }
 
 /******************************************************************************
-* Name       : static uint16 Osal_Timer_Cnt()
+* Name       : uint16 Osal_Timer_Test_Cnt()
 * Function   : Get the count of timers
 * Input      : None
 * Output:    : None
@@ -376,7 +381,7 @@ uint8 Osal_Timer_Process(void)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-static uint16 Osal_Timer_Cnt()
+uint16 Osal_Timer_Test_Cnt()
 {
     T_TIMER_NODE *ptFind;
     uint16 u16TmrCnt = 0;
@@ -395,6 +400,97 @@ static uint16 Osal_Timer_Cnt()
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     DBG_PRINT("The count of the timer is %d\n",u16TmrCnt);
     return u16TmrCnt;
+}
+
+/******************************************************************************
+* Name       : uint16 Osal_Timer_Test_Max_Cnt()
+* Function   : Get the Max. count of timers
+* Input      : None
+* Output:    : None
+* Return     : uint16   The Max. count of timers
+* description: Warning: This test function is just show how many timers can be 
+*              allocated in heap space. It will run out all heap space and free
+*              all of them after about 100ms.
+*              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
+* Version    : V1.00
+* Author     : Ian
+* Date       : 9th May 2016
+******************************************************************************/
+uint16 Osal_Timer_Test_Max_Cnt()
+{
+    uint16 u16Idx;
+    uint32 u32IntSt;
+
+    T_TIMER_NODE *ptNode = (T_TIMER_NODE*)(&sg_ptTmHead); /* Make it a non-NULL value       */
+
+    DBG_PRINT("**IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**\n");
+    DBG_PRINT("Warning: This test function is just show how many timers can be allocated in heap space.\n");
+    
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/    
+    /* Check how many timers can be added */
+    for (u16Idx = 0; ptNode != NULL ; u16Idx++)
+    {
+        ptNode = Osal_Timer_Start(0, 0, 1, 10);            /* Set 10ms timeout for each timer */
+    }
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    DBG_PRINT("Max timer count is %d, Heap is full currently, please wait 100ms for heap free operation!!\n",u16Idx);
+    return u16Idx;
+}
+
+/******************************************************************************
+* Name       : uint16 Osal_Timer_Test_StartStop()
+* Function   : Test start and stop function
+* Input      : None
+* Output:    : None
+* Return     : uint16   The Max. count of timers
+* description: To be done.
+*              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
+* Version    : V1.00
+* Author     : Ian
+* Date       : 9th May 2016
+******************************************************************************/
+uint16 Osal_Timer_Test_StartStop()
+{
+    T_TIMER_NODE *ptNode;
+    uint32 u32IntSt;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/    
+    DBG_PRINT("Try to start timer for 10ms\n"); 
+    ptNode = Osal_Timer_Start(0, 0, 1, 10);             /* Start a timer              */
+    if(NULL == ptNode)                                  /* Check if successful or NOT */
+    {
+        DBG_PRINT("Failed to start a timer!!\n");       
+        return SW_ERR;
+    }
+    DBG_PRINT("The time is started successfully\n");
+
+    /* Find the started timer */
+    if(Osal_Timer_Find(ptNode) == ptNode)
+    {
+        DBG_PRINT("The started timer is found in the timer talbe.\n");
+    }
+    else
+    {
+        DBG_PRINT("The started timer is NOT found!!\n");
+        return SW_ERR;
+    }
+
+    DBG_PRINT("Try to stop the timer\n"); 
+    ptNode = Osal_Timer_Stop(ptNode);                   /* Stop the timer             */
+    if(NULL == ptNode)                                  /* Check if successful or NOT */
+    {
+        DBG_PRINT("Failed to stop a timer!!\n");
+        return SW_ERR;
+    }
+    DBG_PRINT("The time is stopped successfully\n");
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    return SW_OK;
 }
 
 
