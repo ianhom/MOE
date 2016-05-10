@@ -92,7 +92,6 @@ static T_TIMER_NODE* Osal_Timer_Add()
     sg_ptTmTail = ptNode;                /* Update the tail node            */
 
     return ptNode;
-
 }
 
 
@@ -144,7 +143,6 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     DBG_PRINT("New timer is started!!\n");
 
     return ptNode;
-
 }
 
 
@@ -430,7 +428,7 @@ static uint16 Osal_Timer_Test_Max_Cnt()
     T_TIMER_NODE *ptNode = (T_TIMER_NODE*)(&sg_ptTmHead); /* Make it a non-NULL value       */
 
     DBG_PRINT("**IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**\n");
-    DBG_PRINT("Warning: This test function is just show how many timers can be allocated in heap space.\n");
+    DBG_PRINT("Warning: This test function just shows how many timers can be allocated in heap space.\n");
     
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/    
