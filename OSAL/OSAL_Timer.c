@@ -22,10 +22,10 @@ static uint16 Osal_Timer_Test_Max_Cnt();
 static uint8  Osal_Timer_Test_StartStop();
 
 
-static T_TIMER_NODE *sg_ptTmHead = NULL;
-static T_TIMER_NODE *sg_ptTmTail = NULL;
+static T_TIMER_NODE *sg_ptTmHead = NULL;      /* Timer head node */
+static T_TIMER_NODE *sg_ptTmTail = NULL;      /* Timer tail node */
 
-static PF_TIMER_SRC  sg_pfSysTm  = NULL;
+static PF_TIMER_SRC  sg_pfSysTm  = NULL;      /* System ms time  */
 
 /******************************************************************************
 * Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
