@@ -22,10 +22,10 @@ static uint16 Osal_Timer_Test_Max_Cnt();
 static uint8  Osal_Timer_Test_StartStop();
 
 
-static T_TIMER_NODE *sg_ptTmHead = NULL;      /* Timer head node */
-static T_TIMER_NODE *sg_ptTmTail = NULL;      /* Timer tail node */
+static T_TIMER_NODE *sg_ptTmHead = NULL;
+static T_TIMER_NODE *sg_ptTmTail = NULL;
 
-static PF_TIMER_SRC  sg_pfSysTm  = NULL;      /* System ms time  */
+static PF_TIMER_SRC  sg_pfSysTm  = NULL;
 
 /******************************************************************************
 * Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
@@ -79,7 +79,7 @@ static T_TIMER_NODE* Osal_Timer_Add()
     }
     /* Else, new timer node is allocated */
 
-    ptNode->next = NULL;                 /* Set the next node as NULL       */
+    ptNode->ptNext = NULL;               /* Set the next node as NULL       */
 
     if(NULL == sg_ptTmTail)              /* If there is NO nodes            */
     {
@@ -87,11 +87,12 @@ static T_TIMER_NODE* Osal_Timer_Add()
     }
     else                                 /* If node exsits                  */
     {
-        sg_ptTmTail->Next = ptNode;      /* Add new node after the tail one */
+        sg_ptTmTail->ptNext = ptNode;    /* Add new node after the tail one */
     }
     sg_ptTmTail = ptNode;                /* Update the tail node            */
 
     return ptNode;
+
 }
 
 
@@ -133,7 +134,7 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     ptNode->tTimer.u32TmNow   = sg_pfSysTm();             /* Get the system time                */
     ptNode->tTimer.u32TmStart = ptNode->tTimer.u32TmNow;  /* Get the system time                */     
     ptNode->tTimer.u32TmOut   = u32TmOut;                 /* Set the timeout time               */
-    ptNode->tTimer.u8Cnt      = u16Cnt;                   /* Set the restart count              */
+    ptNode->tTimer.u16Cnt     = u16Cnt;                   /* Set the restart count              */
     ptNode->tTimer.u16Evt     = u16Evt;                   /* Set the event                      */
     ptNode->tTimer.u8TaskID   = u8TaskID;                 /* Set the task ID                    */
 
@@ -143,6 +144,7 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     DBG_PRINT("New timer is started!!\n");
 
     return ptNode;
+
 }
 
 
@@ -192,18 +194,18 @@ static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
     ptFind = sg_ptTmHead;                       /* Get the head node                     */
     while (ptFind)                              /* If such node is NOT null              */
     {
-        if (ptFind->next == ptNode)             /* Check if the next node is the one     */
+        if (ptFind->ptNext == ptNode)           /* Check if the next node is the one     */
         {
-            ptFind->next = ptNode->next;        /* Delete the node                       */
+            ptFind->ptNext = ptNode->ptNext;    /* Delete the node                       */
             free(ptNode);                       /* Free the deleting node                */
             DBG_PRINT("The deleting node is free!!\n");
-            if(NULL == ptFind->next)            /* If the tail node is deleted           */
+            if(NULL == ptFind->ptNext)          /* If the tail node is deleted           */
             {
                 sg_ptTmTail = ptFind;           /* Update the tail node                  */
             }
             return ptFind;                      /* Return the deteled node pointer       */
         }
-        ptFind = ptFind->next;                  /* Update the searching node             */
+        ptFind = ptFind->ptNext;                /* Update the searching node             */
     }
 
     /**************************************************************************************************/
@@ -298,15 +300,15 @@ T_TIMER_NODE* Osal_Timer_Restart(T_TIMER_NODE* ptNode)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptFind = Osal_Timer_Find(ptNode);     /* Search the timer node    */
-    if(NULL == ptFind)                    /* If the node is NOT found */
+    ptFind = Osal_Timer_Find(ptNode);          /* Search the timer node    */
+    if(NULL == ptFind)                         /* If the node is NOT found */
     {
         DBG_PRINT("The timer node to be restarted is NOT found!!\n");
-        return NULL;                      /* NOT found, return NULL   */
+        return NULL;                           /* NOT found, return NULL   */
     }
     /* Else, the timer node is found */
 
-    ptNode->tTimer.start = sg_pfSysTm();  /* Update the start point   */
+    ptNode->tTimer.u32TmStart = sg_pfSysTm();  /* Update the start point   */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     DBG_PRINT("Timer is restarted!!\n");
@@ -335,21 +337,21 @@ uint8 Osal_Timer_Process(void)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptFind = sg_ptTmHead;                     /* Get the head timer         */
-    while(ptFind)                             /* If such timer is avaliable */
+    ptFind = sg_ptTmHead;                       /* Get the head timer         */
+    while(ptFind)                               /* If such timer is avaliable */
     {
-        ptFind->tTimer.now = sg_pfSysTm();    /* Update the time            */
+        ptFind->tTimer.u32TmNow = sg_pfSysTm(); /* Update the time            */
 
-        if(0 == ptFind->tTimer.u16Cnt)        /* If the timing count is 0   */
+        if(0 == ptFind->tTimer.u16Cnt)          /* If the timing count is 0   */
         {                                     
-            ptNodeFree = ptFind;              /* Get the deleting timer     */
-            ptFind = ptFind->next;            /* Point the next timer       */
-            Osal_Timer_Del(ptNodeFree);       /* Delete the timer           */
-            continue;                         /* Go on check next timer     */
+            ptNodeFree = ptFind;                /* Get the deleting timer     */
+            ptFind = ptFind->ptNext;            /* Point the next timer       */
+            Osal_Timer_Del(ptNodeFree);         /* Delete the timer           */
+            continue;                           /* Go on check next timer     */
         }          
 
         /* If the time is up */   
-        if((ptFind->tTimer.now - ptFind->tTimer.start) >= ptFind->tTimer.timeout)         
+        if((ptFind->tTimer.u32TmNow - ptFind->tTimer.u32TmStart) >= ptFind->tTimer.u32TmOut)         
         {   /* Set the desired evnet */
             Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);  
             DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
@@ -366,7 +368,7 @@ uint8 Osal_Timer_Process(void)
                 Osal_Timer_Restart(ptFind); /* Restart the timer    */   
             }
         }
-        ptFind = ptFind->next;              /* Check the next timer */
+        ptFind = ptFind->ptNext;             /* Check the next timer */
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -428,7 +430,7 @@ static uint16 Osal_Timer_Test_Max_Cnt()
     T_TIMER_NODE *ptNode = (T_TIMER_NODE*)(&sg_ptTmHead); /* Make it a non-NULL value       */
 
     DBG_PRINT("**IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**\n");
-    DBG_PRINT("Warning: This test function just shows how many timers can be allocated in heap space.\n");
+    DBG_PRINT("Warning: This test function is just show how many timers can be allocated in heap space.\n");
     
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/    
@@ -511,7 +513,7 @@ static uint8 Osal_Timer_Test_StartStop()
 ******************************************************************************/
 void Osal_Timer_Test_General()
 {
-    Osal_Timer_Cnt();
+    Osal_Timer_Cnt(); 
     Osal_Timer_Test_Max_Cnt();
     Osal_Timer_Test_StartStop();
     return;
