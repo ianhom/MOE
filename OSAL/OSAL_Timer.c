@@ -534,14 +534,16 @@ static uint8 Osal_Timer_Test_StartStop()
 ******************************************************************************/
 void Osal_Timer_Test_General()
 {
-    Osal_Timer_Cnt(); 
-    Osal_Timer_Test_Max_Cnt();
-    while(NULL != sg_ptTmHead)
+    Osal_Timer_Cnt();              /* Get the current timer count          */
+    Osal_Timer_Test_Max_Cnt();     /* Check how many timers can be created */
+    while(NULL != sg_ptTmHead)     /* Wait all timers timeout              */
     {
-        Osal_Timer_Process();
+        Osal_Timer_Process();      /* Process all timers                   */
     }
-    Osal_Timer_Cnt(); 
-    Osal_Timer_Test_StartStop();
+
+    Osal_Timer_Cnt();              /* Get the current timer count          */
+
+    Osal_Timer_Test_StartStop();   /* Test the start & stop function       */
     return;
 }
 /* end of file */
