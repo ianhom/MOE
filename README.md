@@ -9,6 +9,9 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 - [ ] Design friendly & useful API
 
 ## Log
+### 20th May 2015
+Start debug the timer.
+
 ### 9th May 2016
 Still work with software timers, add some test functions, **un-debugged**.
 
