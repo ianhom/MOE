@@ -515,6 +515,11 @@ void Osal_Timer_Test_General()
 {
     Osal_Timer_Cnt(); 
     Osal_Timer_Test_Max_Cnt();
+    while(NULL != sg_ptTmHead)
+    {
+        Osal_Timer_Process();
+    }
+    Osal_Timer_Cnt(); 
     Osal_Timer_Test_StartStop();
     return;
 }
