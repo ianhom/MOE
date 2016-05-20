@@ -511,8 +511,7 @@ static uint8 Osal_Timer_Test_StartStop()
         Osal_Timer_Process();                           /* Wait for time up            */
     }
     DBG_PRINT("Time up!! Is it a 5000ms delay?\n");
-    Osal_Timer_Process();                               /* To delete the timeout timer */
-    DBG_PRINT("The timer should be deleted now!\n");
+
 
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
