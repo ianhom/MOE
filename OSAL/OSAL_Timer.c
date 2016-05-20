@@ -466,8 +466,8 @@ static uint8 Osal_Timer_Test_StartStop()
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/    
     DBG_PRINT("Try to start timer for 10ms\n"); 
-    ptNode = Osal_Timer_Start(0, 0, 1, 10);             /* Start a timer              */
-    if(NULL == ptNode)                                  /* Check if successful or NOT */
+    ptNode = Osal_Timer_Start(0, 0, 1, 10);             /* Start a timer               */
+    if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to start a timer!!\n");       
         return SW_ERR;
@@ -486,13 +486,34 @@ static uint8 Osal_Timer_Test_StartStop()
     }
 
     DBG_PRINT("Try to stop the timer\n"); 
-    ptNode = Osal_Timer_Stop(ptNode);                   /* Stop the timer             */
-    if(NULL == ptNode)                                  /* Check if successful or NOT */
+    ptNode = Osal_Timer_Stop(ptNode);                   /* Stop the timer              */
+    if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to stop a timer!!\n");
         return SW_ERR;
     }
     DBG_PRINT("The time is stopped successfully\n");
+    
+    Osal_Timer_Process();                               /* To delete the stopped timer */
+
+    DBG_PRINT("Try to start another timer for 5000ms\n"); 
+    ptNode = Osal_Timer_Start(0, 0, 1, 5000);           /* Start a timer               */
+    if(NULL == ptNode)                                  /* Check if successful or NOT  */
+    {
+        DBG_PRINT("Failed to start a timer!!\n");       
+        return SW_ERR;
+    }
+    DBG_PRINT("The time is started successfully\n");
+
+    DBG_PRINT("Wait a time up message after 5000ms\n");
+    while(NULL != sg_ptTmHead)
+    {
+        Osal_Timer_Process();                           /* Wait for time up            */
+    }
+    DBG_PRINT("Time up!! Is it a 5000ms delay?\n");
+    Osal_Timer_Process();                               /* To delete the timeout timer */
+    DBG_PRINT("The timer should be deleted now!\n");
+
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
