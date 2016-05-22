@@ -512,6 +512,14 @@ static uint8 Osal_Timer_Test_StartStop()
     }
     DBG_PRINT("Time up!! Is it a 5000ms delay?\n");
 
+    DBG_PRINT("Try to stop a deleted timer\n");
+    ptNode = Osal_Timer_Stop(ptNode);                   /* Stop the timer              */
+    if(NULL == ptNode)                                  /* Check if successful or NOT  */
+    {
+        DBG_PRINT("Failed to stop a timer!!\n");
+        return SW_ERR;
+    }
+
 
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
