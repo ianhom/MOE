@@ -15,18 +15,16 @@
 int main (void)
 {  
 
-    DBG_PRINT("\n\n\n\n");
+    DBG_PRINT("\n***** OSAL-like scheduler V0.01 *****\n");
     
     Timer_Init();
     Osal_Timer_Init(App_GetSystemTime_ms);
-
-    Osal_Timer_Test_General();
     
     Osal_Init();
     
-    Osal_Event_Set(1,EVENT_TEST);
-    Osal_Event_Set(1,EVENT_TEST);
-    Osal_Event_Clr(1,EVENT_TEST);
+    Osal_Timer_Start(0,EVENT_TEST,OSAL_TMR_INFINITE_CNT,1000);
+    Osal_Timer_Start(1,EVENT_TEST,OSAL_TMR_INFINITE_CNT,2000);
+    Osal_Timer_Start(2,EVENT_TEST,OSAL_TMR_INFINITE_CNT,3000);
     
     Osal_Run_System();
  
