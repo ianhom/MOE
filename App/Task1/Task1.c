@@ -55,7 +55,6 @@ uint16 Task1_Process(uint16 u16Evt)
     if (u16Evt & EVENT_TEST)
     {
         DBG_PRINT("This is task 1 process function, Task ID is %d\n", sg_u8TaskID);
-        Osal_Event_Set(1,EVENT_TEST);
         return (u16Evt ^ EVENT_TEST);
     }
 
