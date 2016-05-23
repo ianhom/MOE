@@ -10,6 +10,7 @@
 ******************************************************************************/
 
 #include "type_def.h"
+#define __DEBUG_MODE __DEBUG_NONE
 #include "common_head.h"
 #include "OSAL.h"
 #include "OSAL_Timer.h"
@@ -517,9 +518,20 @@ static uint8 Osal_Timer_Test_StartStop()
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to stop a timer!!\n");
+    } 
+
+    DBG_PRINT("Start a 10-times 1 second timer!!\n");
+    ptNode = Osal_Timer_Start(0, 0, 10, 1000);           /* Start a timer               */
+    if(NULL == ptNode)                                  /* Check if successful or NOT  */
+    {
+        DBG_PRINT("Failed to start a timer!!\n");       
         return SW_ERR;
     }
-
+    while(NULL != sg_ptTmHead)
+    {
+        Osal_Timer_Process();                           /* Wait for time up            */
+    }
+    DBG_PRINT("General test for timer is finished!\n");
 
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
