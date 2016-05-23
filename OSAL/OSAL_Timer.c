@@ -243,7 +243,7 @@ T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
     }
     /* Else, the timer node is found */
 
-    ptNode->tTimer.u16Cnt = 0;            /* Update the start point   */
+    ptNode->tTimer.u16Cnt = 0;            /* Set the count as 0       */
 
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -512,7 +512,7 @@ static uint8 Osal_Timer_Test_StartStop()
     }
     DBG_PRINT("Time up!! Is it a 5000ms delay?\n");
 
-    DBG_PRINT("Try to stop a deleted timer\n");
+    DBG_PRINT("Try to stopped a deleted timer\n");
     ptNode = Osal_Timer_Stop(ptNode);                   /* Stop the timer              */
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
