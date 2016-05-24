@@ -11,8 +11,12 @@
 
 #include "type_def.h"
 #include "common_head.h"
+#include "project_config.h"
 #include "OSAL.h"
+#include "debug.h"
 #include "OSAL_App.h"
+#include "OSAL_Timer.h"
+
 
 static uint8 sg_u8ActiveTask = TASK_NO_TASK;            /* Save the current active task number            */
 
