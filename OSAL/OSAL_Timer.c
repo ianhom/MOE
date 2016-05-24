@@ -10,11 +10,11 @@
 ******************************************************************************/
 
 #include "type_def.h"
-#define __DEBUG_MODE __DEBUG_NONE
 #include "common_head.h"
+#include "project_config.h"
 #include "OSAL.h"
 #include "OSAL_Timer.h"
-
+#include "debug.h"
 
 static T_TIMER_NODE* Osal_Timer_Add();
 static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode);
