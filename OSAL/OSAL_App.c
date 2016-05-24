@@ -12,11 +12,12 @@
 
 #include "type_def.h"
 #include "common_head.h"
+#include "project_config.h"
 #include "OSAL_App.h"
+#include "debug.h"
 #include "Task1.h"
 #include "Task2.h"
 #include "Task3.h"
-
 
 
 /******************************************************************************
