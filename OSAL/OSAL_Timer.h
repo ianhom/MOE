@@ -16,6 +16,16 @@
 extern "C" {
 #endif
 
+/* Check if specified option is set for debugging */
+#ifndef __DEBUG_MODE_OSAL_TIMER                    
+#define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
+#else
+#ifdef __DEBUG_MODE
+#undef __DEBUG_MODE
+#endif
+#define __DEBUG_MODE      __DEBUG_MODE_OSAL_TIMER     /* According the set from project_config.h */
+#endif
+
 typedef uint32 (*PF_TIMER_SRC)(void);
 
 /*******************************************************************************
