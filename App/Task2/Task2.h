@@ -16,6 +16,17 @@
 extern "C" {
 #endif
 
+/* Check if specified option is set for debugging */
+#ifndef __DEBUG_MODE_APP_TASK_2                    
+#define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
+#else
+#ifdef __DEBUG_MODE
+#undef __DEBUG_MODE
+#endif
+#define __DEBUG_MODE      __DEBUG_MODE_APP_TASK_2     /* According the set from project_config.h */
+#endif
+
+
 
 void Task2_Init(uint8 u8TaskID);
 uint16 Task2_Process(uint16 u16Evt);
