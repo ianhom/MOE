@@ -11,8 +11,10 @@
 
 #include "type_def.h"
 #include "common_head.h"
+#include "project_config.h"
 #include "OSAL.h"
 #include "Task3.h"
+#include "debug.h"
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
@@ -57,6 +59,7 @@ uint16 Task3_Process(uint16 u16Evt)
         DBG_PRINT("This is task 3 process function, Task ID is %d\n", sg_u8TaskID);
         return (u16Evt ^ EVENT_TEST);
     }
+    return u16Evt;
 }
 
 /* End of file */
