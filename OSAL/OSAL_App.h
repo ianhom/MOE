@@ -16,6 +16,16 @@
 extern "C" {
 #endif
 
+/* Check if specified option is set for debugging */
+#ifndef __DEBUG_MODE_OSAL_APP                    
+#define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
+#else
+#ifdef __DEBUG_MODE
+#undef __DEBUG_MODE
+#endif
+#define __DEBUG_MODE      __DEBUG_MODE_OSAL_APP       /* According the set from project_config.h */
+#endif
+
 
 #define MAX_TASK_NUM             (3)      /* Max number of tasks */
 
