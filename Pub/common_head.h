@@ -18,7 +18,6 @@ extern "C" {
 #endif
 
 
-
 /* Definition of process function for tasks */
 typedef uint16 (*PF_TASK_PROCESS)(uint16 u16Evt);
 
@@ -28,32 +27,13 @@ typedef uint16 (*PF_TASK_PROCESS)(uint16 u16Evt);
 #define __DEBUG_FUNC_LINE_INFO      3      /* Provide function and line info with printf       */
 #define __DEBUG_FILE_LINE_FUNC_INFO 4      /* Provode file, line and function info with printf */
 
-#define __DEBUG_MODE       __DEBUG_FUNC_LINE_INFO
-
-#if (__DEBUG_MODE  == __DEBUG_FILE_LINE_FUNC_INFO)
-    #pragma message("*** Debug printf outputs file name, function name, line number and desired info!! ***")
-    #define DBG_PRINT(x,...)        printf("FILE: "__FILE__", FUNC : %s, LINE: %d -- \n "x" \n", __func__ , __LINE__, ##__VA_ARGS__)
-
-#elif (__DEBUG_MODE  == __DEBUG_FILE_LINE_INFO)
-    #pragma message("*** Debug printf outputs file name, line number and desired info!! ***")
-    #define DBG_PRINT(x,...)        printf("FILE: "__FILE__",  LINE: %d -- \n "x" \n", __LINE__, ##__VA_ARGS__)
-
-#elif (__DEBUG_MODE  == __DEBUG_FUNC_LINE_INFO)
-    #pragma message("*** Debug printf outputs function name, line number and desired info!! ***")
-    #define DBG_PRINT(x,...)        printf("FUNC : %s, LINE: %d -- \n "x" \n", __func__ , __LINE__, ##__VA_ARGS__)
-
-#elif (__DEBUG_MODE == __DEBUG_BASIC_INFO)
-    #pragma message("*** Debug printf outputs desired basic info!! ***")
-    #define DBG_PRINT(x,...)        printf(x, ##__VA_ARGS__)
-
-#else
-    #pragma message("*** Debug printf is DISABLED!! ***")
-    #define DBG_PRINT(x,...)
-#endif
-
 #define ENTER_CRITICAL_ZONE(x) x=1;
 
 #define EXIT_CRITICAL_ZONE(x) if(1 == x) x=0;
+
+
+#define SW_OK             (0)         /* Return: Successful */
+#define SW_ERR            (0xFF)      /* Return: Failed     */
 
 
 #ifdef __cplusplus
