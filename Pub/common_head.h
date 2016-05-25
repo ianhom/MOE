@@ -27,6 +27,12 @@ typedef uint16 (*PF_TASK_PROCESS)(uint16 u16Evt);
 #define __DEBUG_FUNC_LINE_INFO      3      /* Provide function and line info with printf       */
 #define __DEBUG_FILE_LINE_FUNC_INFO 4      /* Provode file, line and function info with printf */
 
+
+#define __MALLOC_STD                0      /* Use standard malloc and free */
+#define __MALLOC_OSAL               1      /* Use OSAL malloc and free     */
+#define __MALLOC_MY                 2      /* Use your malloc and free     */
+
+
 #define ENTER_CRITICAL_ZONE(x) x=1;
 
 #define EXIT_CRITICAL_ZONE(x) if(1 == x) x=0;
