@@ -26,9 +26,21 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_OSAL           /* According the set from project_config.h */
 #endif
 
+/* Malloc MARCO */ 
+#if (__MALLOC_OPTION != __MALLOC_MY)
+#if (__MALLOC_OPTION == __MALLOC_OSAL)
+#define OSAL_MALLOC(size)      Osal_Malloc(size)
+#define OSAL_FREE(p)           Osal_Free(p)
+#else
+#define OSAL_MALLOC(size)      malloc(size)
+#define OSAL_FREE(p)           free(p)
+#endif
+#endif
 
+typedef void* (*PF_MALLOC)(uint32 u32Size);
+typedef void (*PF_FREE)(void *p);
 
-/* MACRO */
+/* OSAL MACRO */
 #define TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
 
 #define EVENT_NONE                  (0x00)           /* There is no events                       */
@@ -46,6 +58,9 @@ void   Osal_Init();
 void   Osal_ProcessPoll();
 void   Osal_Run_System();
 uint8  Osal_Get_Acktive_Task();
+void   Osal_Reg_Malloc_Free();
+void*  Osal_Malloc(uint32 u32Size);
+void   Osal_Free(void *p);
 
  
 #ifdef __cplusplus
