@@ -18,6 +18,10 @@
 #include "OSAL_Timer.h"
 
 
+static PF_MALLOC sg_pfMalloc = NULL;
+static PF_FREE   sg_pfFree   = NULL;
+
+
 static uint8 sg_u8ActiveTask = TASK_NO_TASK;            /* Save the current active task number            */
 
 static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
@@ -283,6 +287,58 @@ uint8 Osal_Get_Acktive_Task()
     return sg_u8ActiveTask;
 }
 
+void Osal_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
+{
+    sg_pfMalloc = pfMalloc;  /* Get malloc function */
+    sg_pfFree   = pfFree;    /* Get free function   */
+    return;
+}
+/******************************************************************************
+* Name       : void* Osal_Malloc(uint32 u32Size)
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 25th May 2016
+******************************************************************************/
+void* Osal_Malloc(uint32 u32Size)
+{   
+    /* Check if malloc and free function is registered */
+    if((NULL != sg_pfMalloc) && (NULL != sg_pfFree) )
+    {   /* If so, use the registered malloc */
+        return sg_pfMalloc(u32Size);
+    }
+
+    /* A malloc function to be done here later */
+    return NULL;
+}
+
+/******************************************************************************
+* Name       : void Osal_Free(void *p)
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 25th May 2016
+******************************************************************************/
+void Osal_Free(void *p)
+{
+    /* Check if malloc and free function is registered */
+    if((NULL != sg_pfMalloc) && (NULL != sg_pfFree) )
+    {   /* If so, use the registered free */
+        sg_pfFree(p);
+        return;
+    }
+
+    /* A malloc function to be done here later */
+    return;    
+}
 
 
 /* End of file */
