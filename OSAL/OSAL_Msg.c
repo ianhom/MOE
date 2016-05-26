@@ -18,7 +18,7 @@
 
 
 /******************************************************************************
-* Name       : void* Osal_Msg_alloc(uint16 u16Size,uint8 u8MsgType)
+* Name       : void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
 * Function   : Create a message
 * Input      : uint16 u16Size       0~65535   Length of the Message    
 *              uint8  u8MsgType     0~255     Type of message
@@ -30,13 +30,15 @@
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-void* Osal_Msg_alloc(uint16 u16Size,uint8 u8MsgType)
+void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
     
+    /* If the length of message is less then a message head */
     if(u16Size <= sizeof(T_MSG_HEAD))
-    {
+    {   
+        DBG_PRINT("Can NOT create the message!! The length of message is invalid!!\n");
         return NULL;
     }
 
