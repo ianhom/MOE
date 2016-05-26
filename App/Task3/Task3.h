@@ -1,6 +1,6 @@
 /******************************************************************************
 * File       : Task3.h
-* Function   : To be doen.
+* Function   : To be done.
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
