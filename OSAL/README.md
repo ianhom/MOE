@@ -4,6 +4,9 @@
 The folder contains all core files of "OSAL-like". It includes OSAL scheduler, OSAL timer, OSAL message and so on.
 
 ## Log
+### 26th May 2016
+Start message works. 
+
 ### 23rd May 2016
 Timer debugging complete.   
 - [x] Debug timer code
