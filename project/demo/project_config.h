@@ -46,7 +46,7 @@ Options for __MALLOC_OPTION:
     __MALLOC_OSAL            Use OSAL malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
-#define __MALLOC_OPTION             __MALLOC_STD//__MALLOC_OSAL//__MALLOC_MY
+#define __MALLOC_OPTION             __MALLOC_STD
 
 
 #ifdef __DEBUG_ENABLE
@@ -54,6 +54,7 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_OSAL           __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_OSAL_APP       __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_OSAL_TIMER     __DEBUG_NONE  
+#define __DEBUG_MODE_OSAL_MSG       __DEBUG_FUNC_LINE_INFO  
 #define __DEBUG_MODE_APP_TASK_1     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_2     __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_3     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
