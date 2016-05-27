@@ -47,6 +47,7 @@ void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
     ptMsgHead = (T_MSG_HEAD*)OSAL_MALLOC(u16Size);
     if(NULL != ptMsgHead)
     {
+        DBG_PRINT("Create a message successfully!!\n");
         ptMsgHead->ptNext     = NULL;
         ptMsgHead->u16Size    = u16Size - sizeof(T_MSG_HEAD);
         ptMsgHead->u8DestTask = TASK_NO_TASK;
@@ -55,7 +56,8 @@ void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-    return NULL;
+    DBG_PRINT("Can NOT create the message!! the operation of malloc is failed!!\n");
+    return NULL;   
 }
 
 /* end of file */
