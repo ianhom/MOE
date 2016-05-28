@@ -16,6 +16,9 @@
 #include "OSAL_Msg.h"
 #include "debug.h"
 
+static T_MSG_HEAD * sg_ptMsgHead = NULL;  /* Head node of messages */ 
+static T_MSG_HEAD * sg_ptMsgTail = NULL;  /* Tail node of messages */
+
 /******************************************************************************
 * Name       : void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
 * Function   : Create a message
@@ -59,14 +62,56 @@ void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
     return NULL;   
 }
 
-uint8 Osal_Msg_Send(T_MSG_HEAD *ptMsg)
-{
-    /* Check if the pointer is invalid or NOT */
+/******************************************************************************
+* Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
+* Function   : Create a message
+* Input      : uint8       u8DestTask   0~254    The destination task number
+*              T_MSG_HEAD *ptMsg                 The pointer of message 
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 28th May 2016
+******************************************************************************/
+uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
+{    
+    uint32 u32IntSt;
+    
+    /* Check if the pointer is valid or NOT */
     if(NULL == ptMsg)
     {
         DBG_PRINT("The message to be sent is invalid!!\n");
         return SW_ERR;
     }
+    
+    /* Check if the destination task is valid or NOT */
+    if(u8DestTask >= MAX_TASK_NUM)
+    {
+        DBG_PRINT("The destination task of the sending message is invalid!!\n");
+        return SW_ERR;
+    }
+
+    ptMsg->ptNext = NULL;
+    ptMsg->u8DestTask = u8DestTask;
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    if(NULL == sg_ptMsgHead)             /* If there is NO nodes            */
+    {
+        sg_ptMsgHead = ptMsg;            /* Add new node as the fisrt one   */
+    }
+    else                                 /* If node exsits                  */
+    {
+        sg_ptMsgTail->ptNext = ptMsg;    /* Add new node after the tail one */
+    }
+    sg_ptMsgTail = ptMsg;                /* Update the tail node            */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    
+    DBG_PRINT("Message is sent successfully!!\n");
+    return SW_OK;
 }
 
 /* end of file */
