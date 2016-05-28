@@ -30,16 +30,18 @@ extern "C" {
 * Structure  : T_MSG_HEAD
 * Description: Structure of message head.
 * Memebers   : void   *ptNext                 Next node of message
+*              void   *ptMsgInfo;             All information of the message to be sent
 *              uint16  u16Size      1~655XX   Length of message(NOT includes the head)
 *              uint8   u8DestTask   0~254     The Destination task number
 *              uint8   u8MsgType    0~255     Kind of message types
 *******************************************************************************/
 typedef struct _T_MSG_HEAD
 {
-    void   *ptNext;             /* Next node of message                     */
-    uint16  u16Size;            /* Length of message(NOT includes the head) */
-    uint8   u8DestTask;         /* The Destination task number              */
-    uint8   u8MsgType;          /* Kind of message types                    */
+    void   *ptNext;             /* Next node of message                      */
+    void   *ptMsgInfo;          /* All information of the message to be sent */
+    uint16  u16Size;            /* Length of message(NOT includes the head)  */
+    uint8   u8DestTask;         /* The Destination task number               */
+    uint8   u8MsgType;          /* Kind of message types                     */
 }T_MSG_HEAD;
 
 
