@@ -26,8 +26,9 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_OSAL_APP       /* According the set from project_config.h */
 #endif
 
-
+#ifndef MAX_TASK_NUM
 #define MAX_TASK_NUM             (3)      /* Max number of tasks */
+#endif
 
 void Osal_Tasks_Init();
 
