@@ -16,7 +16,6 @@
 #include "OSAL_Msg.h"
 #include "debug.h"
 
-
 /******************************************************************************
 * Name       : void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
 * Function   : Create a message
@@ -58,6 +57,16 @@ void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     DBG_PRINT("Can NOT create the message!! the operation of malloc is failed!!\n");
     return NULL;   
+}
+
+uint8 Osal_Msg_Send(T_MSG_HEAD *ptMsg)
+{
+    /* Check if the pointer is invalid or NOT */
+    if(NULL == ptMsg)
+    {
+        DBG_PRINT("The message to be sent is invalid!!\n");
+        return SW_ERR;
+    }
 }
 
 /* end of file */
