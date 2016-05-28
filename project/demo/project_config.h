@@ -21,6 +21,8 @@ extern "C" {
 #endif
 
 /* Configure Zone */
+#define MAX_TASK_NUM             (3)                  /* Max number of tasks */
+
 #define __DEBUG_ENABLE
 
 /*********************************************************
@@ -65,7 +67,6 @@ Options for __MALLOC_OPTION:
 #define OSAL_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define OSAL_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
-
 
 
 #ifdef __cplusplus
