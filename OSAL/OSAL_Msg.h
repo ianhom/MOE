@@ -62,7 +62,7 @@ void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType);
 
 /******************************************************************************
 * Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
-* Function   : Create a message
+* Function   : Send the message to the destination task.
 * Input      : uint8       u8DestTask   0~254    The destination task number
 *              T_MSG_HEAD *ptMsg                 The pointer of message 
 * Output:    : None
