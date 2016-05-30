@@ -64,7 +64,7 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_APP_TASK_3     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #endif
 
-                           
+
 #if (__MALLOC_OPTION == __MALLOC_MY)         /* If you want to use your malloc and free */
 #define OSAL_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define OSAL_FREE(p)        My_Free(p)       /* Add your free function here             */
