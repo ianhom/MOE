@@ -32,7 +32,6 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 * Structure  : T_TIMER
 * Description: Structure of timer.
 * Memebers   : uint32    u32TmStart;      0~0xFFFFFFFF        Start time point         
-*              uint32    u32TmNow;        0~0xFFFFFFFF        Current time point       
 *              uint32    u32TmOut;        0~0xFFFFFFFF        Timeout time             
 *              uint16    u16Cnt;          0xFFFF              Periodic
 *                                         0~0xFFFE            Counts to start the timer  
@@ -40,7 +39,6 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 typedef struct _T_TIMER
 {
     uint32    u32TmStart;              /* Start time point         */
-    uint32    u32TmNow;                /* Current time point       */
     uint32    u32TmOut;                /* Timeout time             */
     uint16    u16Cnt;                  /* Count to start the timer */
     uint16    u16Evt;                  /* Timeout event to be set  */
