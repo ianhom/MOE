@@ -20,7 +20,7 @@ static T_MSG_HEAD * sg_ptMsgListHead = NULL;  /* Head node of messages */
 static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 
 /******************************************************************************
-* Name       : void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
+* Name       : T_MSG_HEAD* Osal_Msg_Create( uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 * Function   : Create a message
 * Input      : uint16 u16Size       0~65535   Length of the Message    
 *              uint8  u8MsgType     0~255     Type of message
@@ -32,35 +32,24 @@ static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-void* Osal_Msg_Create(uint16 u16Size, uint8 u8MsgType, void *ptMsg)
+T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,  uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
     uint8      *pu8Data;
-    
-    /* If the length of message is less then a message head */
-    if(0 == u16Size)
-    {   
-        DBG_PRINT("Can NOT create the message!! The length of message is invalid!!\n");
-        return NULL;
-    }
-
-    /* Check if the message pointer is valid or NOT */
-    if(NULL == ptMsg)
-    {
-        DBG_PRINT("Can NOT create the message!! The message pointer is invalid!!");
-        return NULL;
-    }
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     ptMsgHead = (T_MSG_HEAD*)OSAL_MALLOC(u16Size + sizeof(T_MSG_HEAD));
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
     if(NULL != ptMsgHead)
     {
         DBG_PRINT("Create a message successfully!!\n");
         ptMsgHead->ptNext     = NULL;
         ptMsgHead->u16Size    = u16Size;
-        ptMsgHead->u8DestTask = TASK_NO_TASK;
+        ptMsgHead->u8DestTask = u8DestTask;
         ptMsgHead->u8MsgType  = u8MsgType;
         
         pu8Data = (uint8*)(ptMsgHead + 1); 
@@ -69,10 +58,9 @@ void* Osal_Msg_Create(uint16 u16Size, uint8 u8MsgType, void *ptMsg)
             *(pu8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
         }
         
-        return (void*)ptMsgHead;
+        return ptMsgHead;
     }
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
     DBG_PRINT("Can NOT create the message!! the operation of malloc is failed!!\n");
     return NULL;   
 }
@@ -90,17 +78,11 @@ void* Osal_Msg_Create(uint16 u16Size, uint8 u8MsgType, void *ptMsg)
 * Author     : Ian
 * Date       : 28th May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
+uint8 Osal_Msg_Send(uint8 u8DestTask,  uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {    
     uint32 u32IntSt;
-    
-    /* Check if the pointer is valid or NOT */
-    if(NULL == ptMsg)
-    {
-        DBG_PRINT("The message to be sent is invalid!!\n");
-        return SW_ERR;
-    }
-    
+    T_MSG_HEAD *ptMsgNode;
+       
     /* Check if the destination task is valid or NOT */
     if(u8DestTask >= MAX_TASK_NUM)
     {
@@ -108,20 +90,39 @@ uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
         return SW_ERR;
     }
 
-    ptMsg->ptNext = NULL;
-    ptMsg->u8DestTask = u8DestTask;
+    /* If the length of message is less then a message head */
+    if(0 == u16Size)
+    {   
+        DBG_PRINT("Can NOT create the message!! The length of message is invalid!!\n");
+        return SW_ERR;
+    }
+
+    /* Check if the message pointer is valid or NOT */
+    if(NULL == ptMsg)
+    {
+        DBG_PRINT("Can NOT create the message!! The message pointer is invalid!!\n");
+        return SW_ERR;
+    }
+
+    ptMsgNode = Osal_Msg_Create(u8DestTask, u8MsgType, u16Size, ptMsg);
+    if(NULL == ptMsgNode)
+    {
+        DBG_PRINT("Message is NOT created!!\n");
+        return SW_ERR;
+    }
+
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    if(NULL == sg_ptMsgListHead)             /* If there is NO nodes            */
+    if(NULL == sg_ptMsgListHead)                 /* If there is NO nodes            */
     {
-        sg_ptMsgListHead = ptMsg;            /* Add new node as the fisrt one   */
+        sg_ptMsgListHead = ptMsgNode;            /* Add new node as the fisrt one   */
     }
-    else                                     /* If node exsits                  */
+    else                                         /* If node exsits                  */
     {
-        sg_ptMsgListTail->ptNext = ptMsg;    /* Add new node after the tail one */
+        sg_ptMsgListTail->ptNext = ptMsgNode;    /* Add new node after the tail one */
     }
-    sg_ptMsgListTail = ptMsg;                /* Update the tail node            */
+    sg_ptMsgListTail = ptMsgNode;                /* Update the tail node            */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
