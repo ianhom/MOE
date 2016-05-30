@@ -80,13 +80,14 @@ void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
 ******************************************************************************/
 uint8 Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 {   
+    uint8 u8Idx;
     /* Check if the pointer is invalid or NOT */
     if (NULL == pDes)
     {   /* Return error if invalid pointer */
         return SW_ERR;
     }
     /* Loop for the desired length bytes to be set */
-    for(uint8 u8Idx = 0; u8Idx < u8Len; u8Idx++)
+    for(u8Idx = 0; u8Idx < u8Len; u8Idx++)
     {
         pDes[u8Idx] = u8Val;   /* Set with the desired value */
     }
@@ -174,6 +175,8 @@ uint8 Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 ******************************************************************************/
 void Osal_Init()
 {
+    uint32 u8Idx;    
+
     /* Init the task events list with NO EVENT                */
     Osal_Memset((uint8*)au16TaskEvt, EVENT_NONE, sizeof(uint16)*MAX_TASK_NUM);
    
@@ -184,7 +187,7 @@ void Osal_Init()
     Osal_Tasks_Init();
 
     /* Check all task process function pointers are registered */
-    for(uint8 u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
+    for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
     {   /* If the pointer is NULL */
         if(NULL == sg_apfTaskFn[u8Idx])
         {
