@@ -16,14 +16,19 @@
 #include "OSAL_Msg.h"
 #include "debug.h"
 
+static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+
+
 static T_MSG_HEAD * sg_ptMsgListHead = NULL;  /* Head node of messages */ 
 static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 
 /******************************************************************************
-* Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,  uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+* Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Create a message
-* Input      : uint16 u16Size       0~65535   Length of the Message    
+* Input      : uint8  u8DestTask    0~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
+*              uint16 u16Size       0~65535   Length of the Message
+*              void *ptMsg                    Pointer of user message information
 * Output:    : None
 * Return     : Pointer of the message data struct.
 *              NULL:  Failed.
@@ -32,11 +37,11 @@ static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
-
+    uint16 u16Index;
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -47,22 +52,24 @@ T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, v
     if(NULL != ptMsgHead)
     {
         DBG_PRINT("Create a message successfully!!\n");
-        ptMsgHead->ptNext     = NULL;
+        ptMsgHead->ptNext     = NULL;         
         ptMsgHead->u16Size    = u16Size;
         ptMsgHead->u8DestTask = u8DestTask;
         ptMsgHead->u8MsgType  = u8MsgType;
         
-#ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
+#ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED                     /* If the complier does NOT support flexible array */
         {
             uint8 *pu8Data;
-            pu8Data = (uint8*)(ptMsgHead + 1); 
-            for(uint16 u16Index = 0; u16Index < u16Size; u16Index++)
+            pu8Data = (uint8*)(ptMsgHead + 1);            /* Calculate the address of the field for data     */
+            /* Copy the data from user information to the message */
+            for(u16Index = 0; u16Index < u16Size; u16Index++)
             {
                 *(pu8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
             }
         }
-#else
-        for(uint16 u16Index = 0; u16Index < u16Size; u16Index++)
+#else                                                     /* If the complier DO support flexible array       */
+        /* Copy the data from user information to the message */
+        for(u16Index = 0; u16Index < u16Size; u16Index++)
         {
             *(ptMsgHead->au8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
         }
@@ -75,10 +82,12 @@ T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, v
 }
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
+* Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
-* Input      : uint8       u8DestTask   0~254    The destination task number
-*              T_MSG_HEAD *ptMsg                 The pointer of message 
+* Input      : uint8  u8DestTask    0~254     The destination task number
+*              uint8  u8MsgType     0~255     Type of message
+*              uint16 u16Size       0~65535   Length of the Message
+*              void *ptMsg                    Pointer of user message information
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -87,7 +96,7 @@ T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, v
 * Author     : Ian
 * Date       : 28th May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Send(uint8 u8DestTask,  uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {    
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgNode;
