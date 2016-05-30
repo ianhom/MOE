@@ -21,11 +21,13 @@ extern "C" {
 #endif
 
 /* Configure Zone */
-#define MAX_TASK_NUM             (3)                  /* Max number of tasks    */
+#define MAX_TASK_NUM                         (3)      /* Max number of tasks                      */
  
-#define __FLEXIBLE_ARRAY_SUPPORTED                    /* Support flexible array */
+#define __FLEXIBLE_ARRAY_NOT_SUPPORTED                /* Complier does NOT support flexible array */
 
-#define __DEBUG_ENABLE                                /* Debug mode is enabled  */
+#define __TIMER_CALLBACK_SUPPORTED                    /* Timer callback is supported              */
+
+#define __DEBUG_ENABLE                                /* Debug mode is enabled                    */
 
 /*********************************************************
 NOTE: You have four ways to use malloc:
@@ -50,7 +52,7 @@ Options for __MALLOC_OPTION:
     __MALLOC_OSAL            Use OSAL malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
-#define __MALLOC_OPTION             __MALLOC_STD      /* Use standard malloc and free */
+#define __MALLOC_OPTION             __MALLOC_STD      /* Use standard malloc and free funciton  */
 
 
 #ifdef __DEBUG_ENABLE
@@ -64,7 +66,7 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_APP_TASK_3     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #endif
 
-
+                           
 #if (__MALLOC_OPTION == __MALLOC_MY)         /* If you want to use your malloc and free */
 #define OSAL_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define OSAL_FREE(p)        My_Free(p)       /* Add your free function here             */
