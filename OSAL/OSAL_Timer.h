@@ -41,8 +41,10 @@ typedef uint32 (*PF_TIMER_CB)(void *pPara);
 *******************************************************************************/
 typedef struct _T_TIMER
 {
+#ifdef __TIMER_CALLBACK_SUPPORTED
     PF_TIMER_CB  pfTmCallback;            /* Callback when time is up */
     void        *pPara;                   /* Parameters for callback  */
+#endif
     uint32       u32TmStart;              /* Start time point         */
     uint32       u32TmOut;                /* Timeout time             */
     uint16       u16Cnt;                  /* Count to start the timer */
