@@ -71,7 +71,7 @@ static T_TIMER_NODE* Osal_Timer_Add()
 {
     T_TIMER_NODE* ptNode;
 
-    ptNode = (T_TIMER_NODE*)malloc(sizeof(T_TIMER_NODE)); /* Allocate a timer node */
+    ptNode = (T_TIMER_NODE*)OSAL_MALLOC(sizeof(T_TIMER_NODE)); /* Allocate a timer node */
     /* If the allocation is FAILED */
     if (NULL == ptNode)                                   
     {
@@ -132,8 +132,7 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     }
     /* A timer node was added successfully */
         
-    ptNode->tTimer.u32TmNow   = sg_pfSysTm();             /* Get the system time                */
-    ptNode->tTimer.u32TmStart = ptNode->tTimer.u32TmNow;  /* Get the system time                */     
+    ptNode->tTimer.u32TmStart = sg_pfSysTm();             /* Get the system time                */     
     ptNode->tTimer.u32TmOut   = u32TmOut;                 /* Set the timeout time               */
     ptNode->tTimer.u16Cnt     = u16Cnt;                   /* Set the restart count              */
     ptNode->tTimer.u16Evt     = u16Evt;                   /* Set the event                      */
@@ -341,8 +340,6 @@ uint8 Osal_Timer_Process(void)
     ptFind = sg_ptTmHead;                       /* Get the head timer         */
     while(ptFind)                               /* If such timer is avaliable */
     {
-        ptFind->tTimer.u32TmNow = sg_pfSysTm(); /* Update the time            */
-
         if(0 == ptFind->tTimer.u16Cnt)          /* If the timing count is 0   */
         {                                     
             ptNodeFree = ptFind;                /* Get the deleting timer     */
@@ -352,7 +349,7 @@ uint8 Osal_Timer_Process(void)
         }          
 
         /* If the time is up */   
-        if((ptFind->tTimer.u32TmNow - ptFind->tTimer.u32TmStart) >= ptFind->tTimer.u32TmOut)         
+        if((sg_pfSysTm() - ptFind->tTimer.u32TmStart) >= ptFind->tTimer.u32TmOut)         
         {   /* Set the desired evnet */
             Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);  
             DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
