@@ -135,8 +135,15 @@ T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm)
     ptNode->tTimer.u16Evt       = ptTm->u16Evt;           /* Set the event                      */
     ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
     ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
-    ptNode->tTimer.pPara        = ptTm->pPara;            /* Set the parameter of callback      */
-
+    /* If the parameter is NULL */
+    if(NULL == ptTm->pPara)                               
+    {
+        ptNode->tTimer.pPara    = (void*)ptNode;          /* If the parameter is NULL           */
+    }
+    else
+    {
+        ptNode->tTimer.pPara    = ptTm->pPara;            /* Set the parameter of callback      */
+    }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
