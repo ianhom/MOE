@@ -144,6 +144,8 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
+    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task      */
+
     DBG_PRINT("Message is sent successfully!!\n");
     return SW_OK;
 }
