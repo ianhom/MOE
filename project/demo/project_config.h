@@ -21,9 +21,11 @@ extern "C" {
 #endif
 
 /* Configure Zone */
-#define MAX_TASK_NUM             (3)                  /* Max number of tasks */
+#define MAX_TASK_NUM             (3)                  /* Max number of tasks    */
+ 
+#define __FLEXIBLE_ARRAY_SUPPORTED                    /* Support flexible array */
 
-#define __DEBUG_ENABLE
+#define __DEBUG_ENABLE                                /* Debug mode is enabled  */
 
 /*********************************************************
 NOTE: You have four ways to use malloc:
@@ -48,7 +50,7 @@ Options for __MALLOC_OPTION:
     __MALLOC_OSAL            Use OSAL malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
-#define __MALLOC_OPTION             __MALLOC_STD
+#define __MALLOC_OPTION             __MALLOC_STD      /* Use standard malloc and free */
 
 
 #ifdef __DEBUG_ENABLE
