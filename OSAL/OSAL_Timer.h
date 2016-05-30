@@ -27,22 +27,27 @@ extern "C" {
 #endif
 
 typedef uint32 (*PF_TIMER_SRC)(void);
+typedef uint32 (*PF_TIMER_CB)(void *pPara);
 
 /*******************************************************************************
 * Structure  : T_TIMER
 * Description: Structure of timer.
-* Memebers   : uint32    u32TmStart;      0~0xFFFFFFFF        Start time point         
-*              uint32    u32TmOut;        0~0xFFFFFFFF        Timeout time             
-*              uint16    u16Cnt;          0xFFFF              Periodic
-*                                         0~0xFFFE            Counts to start the timer  
+* Memebers   : PF_TIMER_CB  pfTmCallback;                       Callback when time is up 
+*              void        *pPara;                              Parameters for callback  
+*              uint32      u32TmStart;      0~0xFFFFFFFF        Start time point         
+*              uint32      u32TmOut;        0~0xFFFFFFFF        Timeout time             
+*              uint16      u16Cnt;          0xFFFF              Periodic
+*                                           0~0xFFFE            Counts to start the timer  
 *******************************************************************************/
 typedef struct _T_TIMER
 {
-    uint32    u32TmStart;              /* Start time point         */
-    uint32    u32TmOut;                /* Timeout time             */
-    uint16    u16Cnt;                  /* Count to start the timer */
-    uint16    u16Evt;                  /* Timeout event to be set  */
-    uint8     u8TaskID;                /* Timeout event task ID    */
+    PF_TIMER_CB  pfTmCallback;            /* Callback when time is up */
+    void        *pPara;                   /* Parameters for callback  */
+    uint32       u32TmStart;              /* Start time point         */
+    uint32       u32TmOut;                /* Timeout time             */
+    uint16       u16Cnt;                  /* Count to start the timer */
+    uint16       u16Evt;                  /* Timeout event to be set  */
+    uint8        u8TaskID;                /* Timeout event task ID    */
 }T_TIMER;
 
 
@@ -73,10 +78,7 @@ uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm);
 /******************************************************************************
 * Name       : T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
 * Function   : Start a timer
-* Input      : uint8  u8TaskID    The task which waits the timeout
-*              uint16 u16Evt      The event whcih is set when timeout
-*              uint16 u16Cnt      The restart count for the time
-*              uint32 u32TmOut    The time for the timmout
+* Input      : T_TIMER *ptTm     Pointer of timers set by user.
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
@@ -85,7 +87,7 @@ uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm);
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut);
+T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm);
 
 /******************************************************************************
 * Name       : T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
