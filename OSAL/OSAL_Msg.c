@@ -41,7 +41,7 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
-    uint16 u16Index;
+    uint16 u16Idx;
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -62,16 +62,16 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
             uint8 *pu8Data;
             pu8Data = (uint8*)(ptMsgHead + 1);            /* Calculate the address of the field for data     */
             /* Copy the data from user information to the message */
-            for(u16Index = 0; u16Index < u16Size; u16Index++)
+            for(u16Idx = 0; u16Idx < u16Size; u16Idx++)
             {
-                *(pu8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
+                *(pu8Data[u16Idx] = *((uint8*)ptMsg)[u16Idx]);
             }
         }
 #else                                                     /* If the complier DO support flexible array       */
         /* Copy the data from user information to the message */
-        for(u16Index = 0; u16Index < u16Size; u16Index++)
+        for(u16Idx = 0; u16Idx < u16Size; u16Idx++)
         {
-            *(ptMsgHead->au8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
+            *(ptMsgHead->au8Data[u16Idx] = *((uint8*)ptMsg)[u16Idx]);
         }
 #endif        
         return ptMsgHead;
