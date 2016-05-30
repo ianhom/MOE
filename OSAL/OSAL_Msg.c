@@ -16,8 +16,8 @@
 #include "OSAL_Msg.h"
 #include "debug.h"
 
-static T_MSG_HEAD * sg_ptMsgHead = NULL;  /* Head node of messages */ 
-static T_MSG_HEAD * sg_ptMsgTail = NULL;  /* Tail node of messages */
+static T_MSG_HEAD * sg_ptMsgListHead = NULL;  /* Head node of messages */ 
+static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 
 /******************************************************************************
 * Name       : void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
@@ -32,28 +32,43 @@ static T_MSG_HEAD * sg_ptMsgTail = NULL;  /* Tail node of messages */
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-void* Osal_Msg_Create(uint16 u16Size,uint8 u8MsgType)
+void* Osal_Msg_Create(uint16 u16Size, uint8 u8MsgType, void *ptMsg)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
+    uint8      *pu8Data;
     
     /* If the length of message is less then a message head */
-    if(u16Size <= sizeof(T_MSG_HEAD))
+    if(0 == u16Size)
     {   
         DBG_PRINT("Can NOT create the message!! The length of message is invalid!!\n");
         return NULL;
     }
 
+    /* Check if the message pointer is valid or NOT */
+    if(NULL == ptMsg)
+    {
+        DBG_PRINT("Can NOT create the message!! The message pointer is invalid!!");
+        return NULL;
+    }
+
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptMsgHead = (T_MSG_HEAD*)OSAL_MALLOC(u16Size);
+    ptMsgHead = (T_MSG_HEAD*)OSAL_MALLOC(u16Size + sizeof(T_MSG_HEAD));
     if(NULL != ptMsgHead)
     {
         DBG_PRINT("Create a message successfully!!\n");
         ptMsgHead->ptNext     = NULL;
-        ptMsgHead->u16Size    = u16Size - sizeof(T_MSG_HEAD);
+        ptMsgHead->u16Size    = u16Size;
         ptMsgHead->u8DestTask = TASK_NO_TASK;
         ptMsgHead->u8MsgType  = u8MsgType;
+        
+        pu8Data = (uint8*)(ptMsgHead + 1); 
+        for(uint16 u16Index = 0; u16Index < u16Size; u16Index++)
+        {
+            *(pu8Data[u16Index] = *((uint8*)ptMsg)[u16Index]);
+        }
+        
         return (void*)ptMsgHead;
     }
     /**************************************************************************************************/
@@ -98,15 +113,15 @@ uint8 Osal_Msg_Send(uint8 u8DestTask,T_MSG_HEAD *ptMsg)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    if(NULL == sg_ptMsgHead)             /* If there is NO nodes            */
+    if(NULL == sg_ptMsgListHead)             /* If there is NO nodes            */
     {
-        sg_ptMsgHead = ptMsg;            /* Add new node as the fisrt one   */
+        sg_ptMsgListHead = ptMsg;            /* Add new node as the fisrt one   */
     }
-    else                                 /* If node exsits                  */
+    else                                     /* If node exsits                  */
     {
-        sg_ptMsgTail->ptNext = ptMsg;    /* Add new node after the tail one */
+        sg_ptMsgListTail->ptNext = ptMsg;    /* Add new node after the tail one */
     }
-    sg_ptMsgTail = ptMsg;                /* Update the tail node            */
+    sg_ptMsgListTail = ptMsg;                /* Update the tail node            */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
