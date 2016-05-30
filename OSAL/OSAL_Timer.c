@@ -134,6 +134,7 @@ T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm)
     ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
     ptNode->tTimer.u16Evt       = ptTm->u16Evt;           /* Set the event                      */
     ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
+#ifdef __TIMER_CALLBACK_SUPPORTED
     ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
     /* If the parameter is NULL */
     if(NULL == ptTm->pPara)                               
@@ -144,6 +145,7 @@ T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm)
     {
         ptNode->tTimer.pPara    = ptTm->pPara;            /* Set the parameter of callback      */
     }
+#endif
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -359,10 +361,12 @@ uint8 Osal_Timer_Process(void)
         {   /* Set the desired evnet */
             Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);  
             DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
+#ifdef __TIMER_CALLBACK_SUPPORTED
             if (NULL != ptFind->tTimer.pfTmCallback)                /* If we have callback for such timer */
             {
                 ptFind->tTimer.pfTmCallback(ptFind->tTimer.pPara);  /* Call the callback function         */
             }
+#endif
 
             /* If the it is NOT infinite count */
             if(ptFind->tTimer.u16Cnt != OSAL_TMR_INFINITE_CNT)              
