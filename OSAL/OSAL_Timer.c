@@ -100,10 +100,7 @@ static T_TIMER_NODE* Osal_Timer_Add()
 /******************************************************************************
 * Name       : T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
 * Function   : Start a timer
-* Input      : uint8  u8TaskID    The task which waits the timeout
-*              uint16 u16Evt      The event whcih is set when timeout
-*              uint16 u16Cnt      The restart count for the time
-*              uint32 u32TmOut    The time for the timmout
+* Input      : T_TIMER *ptTm     Pointer of timers set by user.
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
@@ -112,12 +109,12 @@ static T_TIMER_NODE* Osal_Timer_Add()
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm)
 {
     T_TIMER_NODE* ptNode;
     uint32 u32IntSt;
 
-    if(0 == u16Cnt)                                       /* If the start count is 0            */
+    if(0 == ptTm->u16Cnt)                                 /* If the start count is 0            */
     {
         return NULL;                                      /* Unnecessary to start the timer     */
     }
@@ -132,11 +129,13 @@ T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uin
     }
     /* A timer node was added successfully */
         
-    ptNode->tTimer.u32TmStart = sg_pfSysTm();             /* Get the system time                */     
-    ptNode->tTimer.u32TmOut   = u32TmOut;                 /* Set the timeout time               */
-    ptNode->tTimer.u16Cnt     = u16Cnt;                   /* Set the restart count              */
-    ptNode->tTimer.u16Evt     = u16Evt;                   /* Set the event                      */
-    ptNode->tTimer.u8TaskID   = u8TaskID;                 /* Set the task ID                    */
+    ptNode->tTimer.u32TmStart   = sg_pfSysTm();           /* Get the system time                */     
+    ptNode->tTimer.u32TmOut     = ptTm->u32TmOut;         /* Set the timeout time               */
+    ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
+    ptNode->tTimer.u16Evt       = ptTm->u16Evt;           /* Set the event                      */
+    ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
+    ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
+    ptNode->tTimer.pPara        = ptTm->pPara;            /* Set the parameter of callback      */
 
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -211,7 +210,7 @@ static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return NULL;                     /* 未找到，操作失败 */
+    return NULL;                    /* Have NOT found the done */
 }
 
 
@@ -353,6 +352,10 @@ uint8 Osal_Timer_Process(void)
         {   /* Set the desired evnet */
             Osal_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);  
             DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
+            if (NULL != ptFind->tTimer.pfTmCallback)                /* If we have callback for such timer */
+            {
+                ptFind->tTimer.pfTmCallback(ptFind->tTimer.pPara);  /* Call the callback function         */
+            }
 
             /* If the it is NOT infinite count */
             if(ptFind->tTimer.u16Cnt != OSAL_TMR_INFINITE_CNT)              
