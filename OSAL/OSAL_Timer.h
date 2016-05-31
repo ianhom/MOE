@@ -55,8 +55,8 @@ typedef struct _T_TIMER
 
 typedef struct _T_TIMER_NODE
 {
-    T_TIMER                tTimer;    /* Timer data of such node     */
     struct _T_TIMER_NODE  *ptNext;    /* Pointer for next timer node */
+    T_TIMER                tTimer;    /* Timer data of such node     */
 }T_TIMER_NODE;
 
 /* MACRO */
