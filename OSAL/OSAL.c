@@ -48,14 +48,14 @@ void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
     /* Check if the input task process function pointer is invalid or NOT */
     if(NULL == pfTaskFn)
     {
-        DBG_PRINT("The process function of Task %d is invalid -- Fn:Osal_Tasks_init() \n", (s_u8RegTaskCnt+1));
+        DBG_PRINT("The process function of Task %d is invalid \n", (s_u8RegTaskCnt+1));
         return;
     }
 
     /* If the inited tasks count is NOT lower than the max number of all tasks */
-    if (s_u8RegTaskCnt >= MAX_TASK_NUM)
+    if (s_u8RegTaskCnt > MAX_TASK_NUM)
     {
-        DBG_PRINT("Task number ERROR!! -- Fn:Osal_Tasks_init() \n");
+        DBG_PRINT("Task number ERROR!!\n");
         while(1);                  /* Enter forever loop */
     }
 
@@ -110,17 +110,32 @@ uint8 Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 ******************************************************************************/
 uint8 Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 {  
+    uint8  u8Idx;
     uint32 u32IntSt;
 
+    if(TASK_ALL_TASK == u8TaskID)   /* If it is an event for all tasks */
+    {
+        DBG_PRINT("It is an event for all tasks\n");
+        ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+        /**************************************************************************************************/
+        for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
+        {
+            au16TaskEvt[u8Idx] |= u16Evt;              /* Set all tasks with the event */
+        }
+        /**************************************************************************************************/
+        EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+        return SW_OK;
+    }
+
     /* Check if the task ID is invalid or NOT */
-    if(u8TaskID >= MAX_TASK_NUM)
+    if(u8TaskID > MAX_TASK_NUM)
     {   /* If task ID is wrong, return error */
         return SW_ERR;
-   }
-    
+    }
+
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    au16TaskEvt[u8TaskID] |= u16Evt;
+    au16TaskEvt[u8TaskID - 1] |= u16Evt;
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -142,16 +157,32 @@ uint8 Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 ******************************************************************************/
 uint8 Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 {  
+    uint8  u8Idx;
     uint32 u32IntSt;
+
+    if(TASK_ALL_TASK == u8TaskID)   /* If it is an event for all tasks */
+    {
+        DBG_PRINT("It is an event for all tasks\n");
+        ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+        /**************************************************************************************************/
+        for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
+        {
+            au16TaskEvt[u8Idx] &= (~u16Evt);           /* Clear all tasks with the event */
+        }
+        /**************************************************************************************************/
+        EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+        return SW_OK;
+    }
+
     /* Check if the task ID is invalid or NOT */
-    if(u8TaskID >= MAX_TASK_NUM)
+    if(u8TaskID > MAX_TASK_NUM)
     {   /* If task ID is wrong, return error */
         return SW_ERR;
     }
     
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    au16TaskEvt[u8TaskID] &= (~u16Evt);
+    au16TaskEvt[u8TaskID - 1] &= (~u16Evt);
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -230,7 +261,7 @@ void Osal_ProcessPoll()
 ******************************************************************************/
 void Osal_Run_System()
 {
-    uint8 u8Idx;
+    uint8 u8Idx = 0;
     for(;;)                               /* The main loop                */
     {
         Osal_Timer_Process();             /* Update all timers            */
@@ -258,7 +289,7 @@ void Osal_Run_System()
             /**************************************************************************************************/
             EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
             
-            sg_u8ActiveTask = u8Idx;                       /* Save the active task number    */
+            sg_u8ActiveTask = u8Idx + 1;                   /* Save the active task number    */
             u16Evt = (sg_apfTaskFn[u8Idx](u16Evt));        /* Call the task process function */
             sg_u8ActiveTask = TASK_NO_TASK;                /* Finish task processing and cancel active task mark */
            
@@ -290,12 +321,24 @@ uint8 Osal_Get_Acktive_Task()
     return sg_u8ActiveTask;
 }
 
+/******************************************************************************
+* Name       : void Osal_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 25th May 2016
+******************************************************************************/
 void Osal_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
 {
     sg_pfMalloc = pfMalloc;  /* Get malloc function */
     sg_pfFree   = pfFree;    /* Get free function   */
     return;
 }
+
 /******************************************************************************
 * Name       : void* Osal_Malloc(uint32 u32Size)
 * Function   : To be done.
