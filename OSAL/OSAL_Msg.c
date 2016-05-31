@@ -158,46 +158,84 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     return SW_OK;
 }
 
-uint8* Osal_Msg_Receive(uint8 u8LocalTask, uint8 u8NextTask)
+/******************************************************************************
+* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask)
+* Function   : Send the message to the destination task.
+* Input      : uint8  u8DestTask    1~254     The destination task number
+*              uint8  u8NextTask    0~254     The next task number which receives 
+*                                             such forwarded message
+* Output:    : uint8 *pu8Type       0~255     Type of message
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: Note: If the u8NextTask is the same with u8DestTask, the next task
+*                    will be set as TASK_NO_TASK, forward the same message to 
+*                    itself is meaningless.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 31st May 2016
+******************************************************************************/
+uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
 {
     T_MSG_HEAD *ptFind  = sg_ptMsgListHead;
     T_MSG_HEAD *ptFound = NULL;
     uint8      *ptData  = NULL;
 
-    while(ptFind != NULL)
+    /* Check if the task is valid or NOT                                                        */
+    /* The Destination task should NOT be TASK_NO_TASK, that is meaningless                     */
+    /* The Destination task should NOT be TASK_ALL_TASK, that is meaningless                    */
+    /* The Next task should NOT be TASK_ALL_TASK, can NOT forward the message for all task here */
+    if((TASK_NO_TASK == u8DestTask ) || (TASK_ALL_TASK == u8DestTask ) ||(TASK_ALL_TASK == u8NextTask))
     {
-        if(ptFind->u8DestTask == u8LocalTask)
-        {
-            if(NULL == ptFound)
-            {
-                ptFound = ptFind;
-            }
-            else
-            {
-                Osal_Event_Set(u8LocalTask,EVENT_MSG);
-                break;
-            }
-        }
-        ptFind = ptFind->ptNext;
+        DBG_PRINT("Invalid task number when receiving a message!!\n");
+        return NULL;
     }
 
+    /* Try to find the message */
+    while(ptFind != NULL)
+    {
+        if(ptFind->u8DestTask == u8DestTask)           /* If the message is found            */
+        {
+            if(NULL == ptFound)                        /* If we have NOT found anyone before */
+            {
+                DBG_PRINT("A new message is found!!\n");
+                ptFound = ptFind;                      /* Set such as the one we found       */
+            }
+            else                                       /* If we have found one before        */
+            {
+                DBG_PRINT("There are more messages for task %d!!\n",u8DestTask);
+                Osal_Event_Set(u8DestTask ,EVENT_MSG); /* Set message event for next receive */
+                break;                                 /* Stop following message checking    */
+            }
+        }
+        ptFind = ptFind->ptNext;                       /* Continue check next message        */
+    }
+
+    /* If we have found a message */
     if(NULL != ptFound)
     {
-        if(0 == ptFound->u8CopyCnt)
+        *pu8Type = ptFound->u8MsgType;                 /* Output the type of message         */
+        
+        /* If such message is for all task */
+        /* Or, if next task is itself      */
+        if((0 != ptFound->u8CopyCnt) || (u8DestTask == u8NextTask))
         {
-            ptFound->u8DestTask = u8NextTask;
+            ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
+            DBG_PRINT("The message is unnecessary to be forwarded!!\n");
         }
         else
         {
-            ptFound->u8DestTask = TASK_NO_TASK;
+            ptFound->u8DestTask = u8NextTask;          /* Otherwise, forward such message    */
+            DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
+
         }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
-        return (uint8*)(ptFind + 1);
+        return (uint8*)(ptFind + 1);                   /* Return the data of message         */
 #else
-        return (uint8*)ptFind->au8Data;
+        return (uint8*)ptFind->au8Data;                /* Return the data of message         */
 #endif        
     }
-
+   
+    DBG_PRINT("No message is found for task %d!!\n",u8DestTask);
     return NULL;
 }
 
