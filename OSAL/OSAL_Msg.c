@@ -25,7 +25,7 @@ static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
 /******************************************************************************
 * Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Create a message
-* Input      : uint8  u8DestTask    0~254     The destination task number
+* Input      : uint8  u8DestTask    1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
@@ -54,9 +54,17 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
         DBG_PRINT("Create a message successfully!!\n");
         ptMsgHead->ptNext     = NULL;         
         ptMsgHead->u16Size    = u16Size;
-        ptMsgHead->u8DestTask = u8DestTask;
         ptMsgHead->u8MsgType  = u8MsgType;
-        
+        if(TASK_ALL_TASK == u8DestTask)
+        {
+            ptMsgHead->u8DestTask = TASK_NO_TASK;
+            ptMsgHead->u8CopyCnt  = MAX_TASK_NUM;         /* Message for all tasks                           */
+        }
+        else
+        {
+            ptMsgHead->u8DestTask = u8DestTask;
+            ptMsgHead->u8CopyCnt  = 0;                    /* Message for single tasks                        */
+        }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED                     /* If the complier does NOT support flexible array */
         {
             uint8 *pu8Data;
@@ -84,7 +92,7 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 /******************************************************************************
 * Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
-* Input      : uint8  u8DestTask    0~254     The destination task number
+* Input      : uint8  u8DestTask    1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
@@ -102,7 +110,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     T_MSG_HEAD *ptMsgNode;
        
     /* Check if the destination task is valid or NOT */
-    if(u8DestTask >= MAX_TASK_NUM)
+    if((u8DestTask > MAX_TASK_NUM) && (u8DestTask != TASK_ALL_TASK))
     {
         DBG_PRINT("The destination task of the sending message is invalid!!\n");
         return SW_ERR;
@@ -150,5 +158,69 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     return SW_OK;
 }
 
+uint8* Osal_Msg_Receive(uint8 u8LocalTask, uint8 u8NextTask)
+{
+    T_MSG_HEAD *ptFind  = sg_ptMsgListHead;
+    T_MSG_HEAD *ptFound = NULL;
+    uint8      *ptData  = NULL;
+
+    while(ptFind != NULL)
+    {
+        if(ptFind->u8DestTask == u8LocalTask)
+        {
+            if(NULL == ptFound)
+            {
+                ptFound = ptFind;
+            }
+            else
+            {
+                Osal_Event_Set(u8LocalTask,EVENT_MSG);
+                break;
+            }
+        }
+        ptFind = ptFind->ptNext;
+    }
+
+    if(NULL != ptFound)
+    {
+        if(0 == ptFound->u8CopyCnt)
+        {
+            ptFound->u8DestTask = u8NextTask;
+        }
+        else
+        {
+            ptFound->u8DestTask = TASK_NO_TASK;
+        }
+#ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
+        return (uint8*)(ptFind + 1);
+#else
+        return (uint8*)ptFind->au8Data;
+#endif        
+    }
+
+    return NULL;
+}
+
+uint8* Osal_Msg_Process()
+{
+    T_MSG_HEAD *ptFind = sg_ptMsgListHead;
+    
+    while(ptFind != NULL)
+    {
+        if(TASK_NO_TASK == ptFind->u8DestTask)
+        {
+            if(0 != ptFind->u8CopyCnt)
+            {
+                ptFind->u8DestTask = 1 + MAX_TASK_NUM - ptFind->u8CopyCnt;
+                ptFind->u8CopyCnt--;
+                Osal_Event_Set(ptFind->u8DestTask,EVENT_MSG);
+            }
+            
+            
+        }
+        
+        ptFind = ptFind->ptNext;
+    }
+}
 /* end of file */
 
