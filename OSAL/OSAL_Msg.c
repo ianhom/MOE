@@ -239,6 +239,45 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
     return NULL;
 }
 
+/******************************************************************************
+* Name       : static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
+* Function   : Detele a message
+* Input      : T_MSG_HEAD *ptMsg  The message to be deteled.
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 31st May 2016
+******************************************************************************/
+static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
+{
+    /* Check if the pointer of message to be deteled is invalid or NOT */
+    if(NULL == ptMsg)
+    {
+        DBG_PRINT("The pointer of message to be deteled is invalid!!\n");
+        return NULL;
+    }
+    
+    DBG_PRINT("Delete the message now.\n");
+    OSAL_FREE(ptMsg);
+    return ptMsg;
+}
+
+/******************************************************************************
+* Name       : uint8* Osal_Msg_Process()
+* Function   : Message process function, distribute "all task message" to each
+*              task, and delete useless message.
+* Input      : None
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 31st May 2016
+******************************************************************************/
 uint8* Osal_Msg_Process()
 {
     T_MSG_HEAD *ptFind = sg_ptMsgListHead;
