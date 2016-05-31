@@ -205,7 +205,7 @@ static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
         if (ptFind->ptNext == ptNode)           /* Check if the next node is the one     */
         {
             ptFind->ptNext = ptNode->ptNext;    /* Delete the node                       */
-            free(ptNode);                       /* Free the deleting node                */
+            OSAL_FREE(ptNode);                  /* Free the deleting node                */
             DBG_PRINT("The deleting node is free!!\n");
             if(NULL == ptFind->ptNext)          /* If the tail node is deleted           */
             {
