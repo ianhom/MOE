@@ -153,8 +153,17 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
-    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task      */
-
+    /* If it is a message for a single task */
+    if(TASK_ALL_TASK != u8DestTask)
+    {
+        Osal_Event_Set(u8DestTask,EVENT_MSG);    /* Set a message event to call destination task        */
+    }
+    else/* If it is a message for all tasks */
+    {
+        DBG_PRINT("A message for TASK_ALL_TASK is sent by task %d", Osal_Get_Acktive_Task());
+        sg_u8MsgPollFlag = OSAL_MSG_POLL;        /* Message event set will be done when message process */
+    }
+    
     DBG_PRINT("Message is sent successfully!!\n");
     return SW_OK;
 }
@@ -221,6 +230,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
         if((0 != ptFound->u8CopyCnt) || (u8DestTask == u8NextTask))
         {
             ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
+            sg_u8MsgPollFlag    = OSAL_MSG_POLL;       /* Set flag to delete the message     */
             DBG_PRINT("The message is unnecessary to be forwarded!!\n");
         }
         else
@@ -284,6 +294,13 @@ uint8* Osal_Msg_Process()
     T_MSG_HEAD *ptFind;
     T_MSG_HEAD *ptMsg;
     
+    if(OSAL_MSG_POLL_NONE == sg_u8MsgPollFlag)
+    {
+        return SW_OK;
+    }
+   
+    sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;
+
     ptFind = sg_ptMsgListHead;
     while(ptFind != NULL)
     {
@@ -294,6 +311,7 @@ uint8* Osal_Msg_Process()
                 ptFind->u8DestTask = 1 + MAX_TASK_NUM - ptFind->u8CopyCnt;
                 ptFind->u8CopyCnt--;
                 Osal_Event_Set(ptFind->u8DestTask,EVENT_MSG);
+                sg_u8MsgPollFlag = OSAL_MSG_POLL;
             }
 
             if(ptFind == sg_ptMsgListHead)
