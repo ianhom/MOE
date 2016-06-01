@@ -23,11 +23,13 @@ extern "C" {
 #ifdef __DEBUG_MODE
 #undef __DEBUG_MODE
 #endif
-#define __DEBUG_MODE      __DEBUG_MODE_OSAL_MSG       /* According the set from project_config.h */
+#define __DEBUG_MODE      __DEBUG_MODE_OSAL_MSG       /* According the set from project_config.h   */
 #endif
 
-#define OSAL_MSG_POLL_NONE          (0)               /* Unnecessary to poll message process     */
-#define OSAL_MSG_POLL               (1)               /* Need to poll message process            */
+#define OSAL_MSG_POLL_NONE          (0)               /* Unnecessary to poll message process       */
+#define OSAL_MSG_POLL               (1)               /* Need to poll message process              */
+#define OSAL_MSG_ALL_FLAG_NONE      (0)               /* No "To all tasks" message to be processed */
+#define OSAL_MSG_ALL_FLAG           (1)               /* "To all tasks" message need be processed  */
 
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
