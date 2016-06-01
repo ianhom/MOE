@@ -19,9 +19,11 @@
 static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 
 
-static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                /* Head node of messages     */ 
-static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                /* Tail node of messages     */
-static uint8        sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;  /* Message poll request flag */
+static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                     /* Head node of messages      */ 
+static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                     /* Tail node of messages      */
+static uint8        sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message poll request flag  */
+//static uint8        sg_u8MsgAllFlag  = OSAL_MSG_ALL_FLAG_NONE;   /* Message for all tasks flag */
+
 
 /******************************************************************************
 * Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -226,13 +228,21 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
         *pu8Type = ptFound->u8MsgType;                 /* Output the type of message         */
         
         /* If such message is for all task */
-        /* Or, if next task is itself      */
-        if((0 != ptFound->u8CopyCnt) || (u8DestTask == u8NextTask))
+        if(0 != ptFound->u8CopyCnt)
+        {
+            ptFound->u8CopyCnt--;                      /* Count down the copy count          */
+            ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
+            sg_u8MsgPollFlag    = OSAL_MSG_POLL;       /* Set flag to delete the message     */
+            DBG_PRINT("The message for all task is processed by task %d, ready for next forwarding!!\n", Osal_Get_Acktive_Task());
+        }
+        /* Else if next task is itself     */
+        else if(u8DestTask == u8NextTask)
         {
             ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
             sg_u8MsgPollFlag    = OSAL_MSG_POLL;       /* Set flag to delete the message     */
             DBG_PRINT("The message is unnecessary to be forwarded!!\n");
         }
+        /* Else, need forward the message  */
         else
         {
             ptFound->u8DestTask = u8NextTask;          /* Otherwise, forward such message    */
@@ -293,13 +303,19 @@ uint8* Osal_Msg_Process()
 {
     T_MSG_HEAD *ptFind;
     T_MSG_HEAD *ptMsg;
+    uint32      u32IntSt;
     
     if(OSAL_MSG_POLL_NONE == sg_u8MsgPollFlag)
     {
         return SW_OK;
     }
-   
+    
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
     sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    
 
     ptFind = sg_ptMsgListHead;
     while(ptFind != NULL)
@@ -309,11 +325,11 @@ uint8* Osal_Msg_Process()
             if(0 != ptFind->u8CopyCnt)
             {
                 ptFind->u8DestTask = 1 + MAX_TASK_NUM - ptFind->u8CopyCnt;
-                ptFind->u8CopyCnt--;
                 Osal_Event_Set(ptFind->u8DestTask,EVENT_MSG);
-                sg_u8MsgPollFlag = OSAL_MSG_POLL;
             }
 
+            ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+            /**************************************************************************************************/
             if(ptFind == sg_ptMsgListHead)
             {
                 if(ptFind == sg_ptMsgListTail)
@@ -343,8 +359,12 @@ uint8* Osal_Msg_Process()
                     ptMsg = ptMsg->ptNext;
                 }
             }
+            /**************************************************************************************************/
+            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
         } 
+        ptMsg  = ptFind;
         ptFind = ptFind->ptNext;
+        Osal_Msg_Del(ptMsg);
     }
 }
 /* end of file */
