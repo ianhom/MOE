@@ -19,8 +19,9 @@
 static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 
 
-static T_MSG_HEAD * sg_ptMsgListHead = NULL;  /* Head node of messages */ 
-static T_MSG_HEAD * sg_ptMsgListTail = NULL;  /* Tail node of messages */
+static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                /* Head node of messages     */ 
+static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                /* Tail node of messages     */
+static uint8        sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;  /* Message poll request flag */
 
 /******************************************************************************
 * Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -244,8 +245,8 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
 * Function   : Detele a message
 * Input      : T_MSG_HEAD *ptMsg  The message to be deteled.
 * Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Return     : Pointer of the message data struct.
+*              NULL:  Failed.
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
@@ -280,8 +281,10 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
 ******************************************************************************/
 uint8* Osal_Msg_Process()
 {
-    T_MSG_HEAD *ptFind = sg_ptMsgListHead;
+    T_MSG_HEAD *ptFind;
+    T_MSG_HEAD *ptMsg;
     
+    ptFind = sg_ptMsgListHead;
     while(ptFind != NULL)
     {
         if(TASK_NO_TASK == ptFind->u8DestTask)
@@ -292,10 +295,37 @@ uint8* Osal_Msg_Process()
                 ptFind->u8CopyCnt--;
                 Osal_Event_Set(ptFind->u8DestTask,EVENT_MSG);
             }
-            
-            
-        }
-        
+
+            if(ptFind == sg_ptMsgListHead)
+            {
+                if(ptFind == sg_ptMsgListTail)
+                {
+                    sg_ptMsgListHead = NULL;
+                    sg_ptMsgListTail = NULL;
+                }
+                else
+                {
+                    sg_ptMsgListHead = sg_ptMsgListHead->ptNext;
+                }
+            }
+            else
+            {
+                ptMsg = sg_ptMsgListHead;
+                while(ptMsg != NULL)
+                {
+                    if(ptMsg->ptNext == ptFind)
+                    {
+                        ptMsg->ptNext == ptFind->ptNext;
+                        if(ptMsg->ptNext == NULL)
+                        {
+                            sg_ptMsgListTail = ptMsg;
+                        }
+                        break;
+                    }
+                    ptMsg = ptMsg->ptNext;
+                }
+            }
+        } 
         ptFind = ptFind->ptNext;
     }
 }
