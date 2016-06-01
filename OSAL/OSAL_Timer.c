@@ -174,12 +174,13 @@ static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
 
     uint32 u32IntSt;
 
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
     if (NULL == ptNode)                         /* If the input node pointer is invalid  */
     {
         return NULL;                            /* Return NULL, no node to be deleted    */
     }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
 
     if(ptNode == sg_ptTmHead)                   /* If the deleting node is the head node */
     {
