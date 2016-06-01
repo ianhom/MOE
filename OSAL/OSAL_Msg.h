@@ -26,25 +26,28 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_OSAL_MSG       /* According the set from project_config.h */
 #endif
 
+#define OSAL_MSG_POLL_NONE          (0)               /* Unnecessary to poll message process     */
+#define OSAL_MSG_POLL               (1)               /* Need to poll message process            */
+
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
 * Description: Structure of message head.
-* Memebers   : void   *ptNext                 Next node of message
-*              uint16  u16Size      1~65535   Length of message(NOT includes the head)
-*              uint8   u8DestTask   1~254     The Destination task number
-*              uint8   u8MsgType    0~255     Kind of message types
-*              uint8   u8CopyCnt    0~255     Count for message copy
-*              uint8   au8Data[0];            Data information of the message           
+* Memebers   : struct _T_MSG_HEAD   *ptNext                 Next node of message
+*              uint16                u16Size      1~65535   Length of message(NOT includes the head)
+*              uint8                 u8DestTask   1~254     The Destination task number
+*              uint8                 u8MsgType    0~255     Kind of message types
+*              uint8                 u8CopyCnt    0~255     Count for message copy
+*              uint8                 au8Data[0];            Data information of the message           
 *******************************************************************************/
 typedef struct _T_MSG_HEAD
 {
-    void   *ptNext;             /* Next node of message                      */
-    uint16  u16Size;            /* Length of message(NOT includes the head)  */
-    uint8   u8DestTask;         /* The Destination task number               */
-    uint8   u8MsgType;          /* Kind of message types                     */
-    uint8   u8CopyCnt;          /* Count for message copy                    */
+    struct _T_MSG_HEAD   *ptNext;   /* Next node of message                      */
+    uint16  u16Size;                /* Length of message(NOT includes the head)  */
+    uint8   u8DestTask;             /* The Destination task number               */
+    uint8   u8MsgType;              /* Kind of message types                     */
+    uint8   u8CopyCnt;              /* Count for message copy                    */
 #ifndef __FLEXIBLE_ARRAY_NOT_SUPPORTED
-    uint8   au8Data[0];         /* Data information of the message           */
+    uint8   au8Data[0];             /* Data information of the message           */
 #endif
 }T_MSG_HEAD;
 
