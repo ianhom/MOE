@@ -194,7 +194,7 @@ static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
         {
             sg_ptTmHead = sg_ptTmHead->ptNext;  /* Make head pointing to the next node   */
         }
-        free(ptNode);                           /* Free the deleting node                */
+        OSAL_FREE(ptNode);                      /* Free the deleting node                */
         DBG_PRINT("The deleting node is free!!\n");
         return ptNode;                          
     }    
