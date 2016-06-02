@@ -58,10 +58,24 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
         ptMsgHead->ptNext     = NULL;         
         ptMsgHead->u16Size    = u16Size;
         ptMsgHead->u8MsgType  = u8MsgType;
+        ptMsgHead->u8SrcTask  = TASK_CURRENT_TASK;
         if(TASK_ALL_TASK == u8DestTask)
         {
-            ptMsgHead->u8DestTask = TASK_NO_TASK;
-            ptMsgHead->u8CopyCnt  = MAX_TASK_NUM;         /* Message for all tasks                           */
+#ifdef __WANTED_A_LIVE_FOX
+            ptMsgHead->u8DestTask = TASK_CURRENT_TASK % TASK_LAST_TASK + 1; /* Start with the next task      */
+            DBG_PRINT("Fox is ready to kill the next one!!\n");
+#else
+            /* If it is the first task which send a message to other tasks */
+            if(TASK_CURRENT_TASK == TASK_FIRST_TASK)
+            {
+                ptMsgHead->u8DestTask = TASK_FIRST_TASK + 1;/* Start with the Second one                     */
+            }
+            else
+            {
+                ptMsgHead->u8DestTask = TASK_FIRST_TASK;  /* Start with the first one                        */
+            }
+#endif        
+            ptMsgHead->u8CopyCnt  = MAX_TASK_NUM - 1;     /* Message for all tasks                           */
         }
         else
         {
@@ -155,16 +169,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
-    /* If it is a message for a single task */
-    if(TASK_ALL_TASK != u8DestTask)
-    {
-        Osal_Event_Set(u8DestTask,EVENT_MSG);    /* Set a message event to call destination task        */
-    }
-    else/* If it is a message for all tasks */
-    {
-        DBG_PRINT("A message for TASK_ALL_TASK is sent by task %d", Osal_Get_Acktive_Task());
-        sg_u8MsgPollFlag = OSAL_MSG_POLL;        /* Message event set will be done when message process */
-    }
+    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task        */
     
     DBG_PRINT("Message is sent successfully!!\n");
     return SW_OK;
@@ -201,6 +206,13 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
         DBG_PRINT("Invalid task number when receiving a message!!\n");
         return NULL;
     }
+  
+    /* Check if the pointer is invalid or NOT */
+    if(NULL == pu8Type)
+    {
+        DBG_PRINT("Invalid pointer for message type!!\n");
+        return NULL;
+    }
 
     /* Try to find the message */
     while(ptFind != NULL)
@@ -227,19 +239,44 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
     {
         *pu8Type = ptFound->u8MsgType;                 /* Output the type of message         */
         
-        /* If such message is for all task */
-        if(0 != ptFound->u8CopyCnt)
+        /* If such message is for all task and there are more than 1 forwarding */
+        if(ptFound->u8CopyCnt > 1)
         {
-            ptFound->u8CopyCnt--;                      /* Count down the copy count          */
-            ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
-            sg_u8MsgPollFlag    = OSAL_MSG_POLL;       /* Set flag to delete the message     */
-            DBG_PRINT("The message for all task is processed by task %d, ready for next forwarding!!\n", Osal_Get_Acktive_Task());
+            ptFound->u8CopyCnt--;                                        /* Count down the copy count  */
+#ifdef __WANTED_A_LIVE_FOX         
+            ptFound->u8DestTask = TASK_CURRENT_TASK % TASK_LAST_TASK + 1;/* Stop forward such message  */
+            DBG_PRINT("Fox just killed %d!!\n", TASK_CURRENT_TASK);
+#else
+            /* If the next task is the one which sent this message */
+            if(ptFound->u8DestTask == ptFound->u8SrcTask)
+            {
+                ptFound->u8DestTask += 2;                      /* Forward to the next task   */
+                DBG_PRINT("It is a self-message send by %d, ignore!!\n", TASK_CURRENT_TASK);
+            }
+            else
+            {
+                ptFound->u8DestTask++;                         /* Forward to the next task   */  
+            }                     
+#endif
+            Osal_Event_Set(ptFound->u8DestTask,EVENT_MSG);     /* Set MSG event to next task */
+            DBG_PRINT("The message to all task is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
+        }
+                
+        /* If such message is for all task and this is the last forwarding */
+        else if(1 == ptFound->u8CopyCnt)
+        {
+            ptFound->u8CopyCnt = 0;                            /* Set 0 to copy count        */
+            ptFound->u8DestTask = TASK_NO_TASK;                /* Stop forwarding message    */
+#ifdef __WANTED_A_LIVE_FOX
+            DBG_PRINT("Fox killed all except self %d!!\n", ptFound->u8SrcTask);                    
+#endif
+            DBG_PRINT("The message to all task is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
         }
         /* Else if next task is itself     */
-        else if(u8DestTask == u8NextTask)
+        /* Or there is no more forwarding  */
+        else if((u8DestTask == u8NextTask) || (TASK_NO_TASK == u8NextTask))
         {
             ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
-            sg_u8MsgPollFlag    = OSAL_MSG_POLL;       /* Set flag to delete the message     */
             DBG_PRINT("The message is unnecessary to be forwarded!!\n");
         }
         /* Else, need forward the message  */
@@ -247,7 +284,11 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
         {
             ptFound->u8DestTask = u8NextTask;          /* Otherwise, forward such message    */
             DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
+        }
 
+        if(TASK_NO_TASK == ptFound->u8DestTask)
+        {
+            sg_u8MsgPollFlag = OSAL_MSG_POLL;          /* Set flag to delete the message     */
         }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
         return (uint8*)(ptFind + 1);                   /* Return the data of message         */
@@ -322,12 +363,6 @@ uint8* Osal_Msg_Process()
     {
         if(TASK_NO_TASK == ptFind->u8DestTask)
         {
-            if(0 != ptFind->u8CopyCnt)
-            {
-                ptFind->u8DestTask = 1 + MAX_TASK_NUM - ptFind->u8CopyCnt;
-                Osal_Event_Set(ptFind->u8DestTask,EVENT_MSG);
-            }
-
             ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
             /**************************************************************************************************/
             if(ptFind == sg_ptMsgListHead)
