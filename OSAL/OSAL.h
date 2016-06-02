@@ -43,7 +43,7 @@ typedef void (*PF_FREE)(void *p);
 /* OSAL MACRO */
 #define TASK_NO_TASK                (0x00)                    /* Task number which means there is no task */
 #define TASK_ALL_TASK               (0xFF)                    /* Task number which means all tasks        */
-#define TASK_FISRT_TASK             (0x01)                    /* Task number of the first one             */
+#define TASK_FIRST_TASK             (0x01)                    /* Task number of the first one             */
 #define TASK_LAST_TASK              MAX_TASK_NUM              /* Task number of the last one              */
 #define TASK_CURRENT_TASK           Osal_Get_Acktive_Task()   /* Task number of current one               */
 
