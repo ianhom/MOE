@@ -41,13 +41,17 @@ typedef void* (*PF_MALLOC)(uint32 u32Size);
 typedef void (*PF_FREE)(void *p);
 
 /* OSAL MACRO */
-#define TASK_NO_TASK                (0xFF)           /* Task number which means there is no task */
+#define TASK_NO_TASK                (0x00)                    /* Task number which means there is no task */
+#define TASK_ALL_TASK               (0xFF)                    /* Task number which means all tasks        */
+#define TASK_FISRT_TASK             (0x01)                    /* Task number of the first one             */
+#define TASK_LAST_TASK              MAX_TASK_NUM              /* Task number of the last one              */
+#define TASK_CURRENT_TASK           Osal_Get_Acktive_Task()   /* Task number of current one               */
 
-#define EVENT_NONE                  (0x00)           /* There is no events                       */
-#define EVENT_TEST                  (0x01)           /* There is a test event                    */
-#define EVENT_TIMER                 (0x02)           /* There is a timer event                   */
-#define EVENT_MSG                   (0x04)           /* There is a message event                 */
-#define EVENT_INT                   (0x08)           /* There is an interrupt event              */
+#define EVENT_NONE                  (0x0000)                  /* There is no events                       */
+#define EVENT_TEST                  (0x0001)                  /* There is a test event                    */
+#define EVENT_TIMER                 (0x0002)                  /* There is a timer event                   */
+#define EVENT_MSG                   (0x0004)                  /* There is a message event                 */
+#define EVENT_INT                   (0x0008)                  /* There is an interrupt event              */
 
 
 void   Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn);
