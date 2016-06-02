@@ -28,8 +28,6 @@ extern "C" {
 
 #define OSAL_MSG_POLL_NONE          (0)               /* Unnecessary to poll message process       */
 #define OSAL_MSG_POLL               (1)               /* Need to poll message process              */
-#define OSAL_MSG_ALL_FLAG_NONE      (0)               /* No "To all tasks" message to be processed */
-#define OSAL_MSG_ALL_FLAG           (1)               /* "To all tasks" message need be processed  */
 
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
@@ -39,6 +37,7 @@ extern "C" {
 *              uint8                 u8DestTask   1~254     The Destination task number
 *              uint8                 u8MsgType    0~255     Kind of message types
 *              uint8                 u8CopyCnt    0~255     Count for message copy
+*              uint8                 u8SrcTask    1~254     The task which sends this message
 *              uint8                 au8Data[0];            Data information of the message           
 *******************************************************************************/
 typedef struct _T_MSG_HEAD
@@ -48,6 +47,7 @@ typedef struct _T_MSG_HEAD
     uint8   u8DestTask;             /* The Destination task number               */
     uint8   u8MsgType;              /* Kind of message types                     */
     uint8   u8CopyCnt;              /* Count for message copy                    */
+    uint8   u8SrcTask;              /* The task which sends this message         */
 #ifndef __FLEXIBLE_ARRAY_NOT_SUPPORTED
     uint8   au8Data[0];             /* Data information of the message           */
 #endif
