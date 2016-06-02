@@ -54,18 +54,19 @@ Options for __MALLOC_OPTION:
     __MALLOC_OSAL            Use OSAL malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
-#define __MALLOC_OPTION             __MALLOC_STD      /* Use standard malloc and free funciton  */
+#define __MALLOC_OPTION                 __MALLOC_STD      /* Use standard malloc and free funciton  */
 
 
 #ifdef __DEBUG_ENABLE
-#define __DEBUG_MODE_MAIN           __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL           __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_APP       __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_TIMER     __DEBUG_NONE  
-#define __DEBUG_MODE_OSAL_MSG       __DEBUG_FUNC_LINE_INFO  
-#define __DEBUG_MODE_APP_TASK_1     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_2     __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_3     __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_MAIN               __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_OSAL               __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_OSAL_APP           __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_OSAL_TIMER         __DEBUG_NONE  
+#define __DEBUG_MODE_OSAL_LINK_LIST     __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_OSAL_MSG           __DEBUG_FUNC_LINE_INFO  
+#define __DEBUG_MODE_APP_TASK_1         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
+#define __DEBUG_MODE_APP_TASK_2         __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
+#define __DEBUG_MODE_APP_TASK_3         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #endif
 
                            
