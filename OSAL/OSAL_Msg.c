@@ -351,55 +351,53 @@ uint8* Osal_Msg_Process()
         return SW_OK;
     }
     
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
     sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-    
+    DBG_PRINT("Running message process!!\n");
 
     ptFind = sg_ptMsgListHead;
     while(ptFind != NULL)
-    {
+    {   
+        /* If we find a message with no destination task, detele it */
         if(TASK_NO_TASK == ptFind->u8DestTask)
         {
             ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
             /**************************************************************************************************/
+            /* If such message is the first one */
             if(ptFind == sg_ptMsgListHead)
             {
-                if(ptFind == sg_ptMsgListTail)
+                if(ptFind == sg_ptMsgListTail)                   /* And it is also the last one */
                 {
-                    sg_ptMsgListHead = NULL;
-                    sg_ptMsgListTail = NULL;
+                    sg_ptMsgListHead = NULL;                     
+                    sg_ptMsgListTail = NULL;                     /* There is no message         */
                 }
-                else
+                else                                             /* If it is NOT the last one   */
                 {
-                    sg_ptMsgListHead = sg_ptMsgListHead->ptNext;
+                    sg_ptMsgListHead = sg_ptMsgListHead->ptNext; /* Make next one as the head   */
                 }
             }
-            else
+            else/* If such message is NOT the first one */                                                  
             {
-                ptMsg = sg_ptMsgListHead;
-                while(ptMsg != NULL)
+                ptMsg = sg_ptMsgListHead;                        /* Start with the first one    */
+                while(ptMsg != NULL)                             
                 {
-                    if(ptMsg->ptNext == ptFind)
+                    if(ptMsg->ptNext == ptFind)                  /* If we find the previous one */
                     {
-                        ptMsg->ptNext == ptFind->ptNext;
-                        if(ptMsg->ptNext == NULL)
+                        ptMsg->ptNext == ptFind->ptNext;         /* Delete message from list    */
+                        OSAL_FREE(ptFind);                       /* Free the deleting node      */
+                        DBG_PRINT("The deleting node is free!!\n");
+                        if(ptMsg->ptNext == NULL)                
                         {
-                            sg_ptMsgListTail = ptMsg;
+                            sg_ptMsgListTail = ptMsg;            /* Update the tail message     */
                         }
                         break;
                     }
-                    ptMsg = ptMsg->ptNext;
+                    ptMsg = ptMsg->ptNext;                       /* Check next one              */
                 }
             }
             /**************************************************************************************************/
             EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
         } 
-        ptMsg  = ptFind;
         ptFind = ptFind->ptNext;
-        Osal_Msg_Del(ptMsg);
     }
 }
 /* end of file */
