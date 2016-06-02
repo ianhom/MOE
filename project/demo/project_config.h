@@ -29,6 +29,8 @@ extern "C" {
 
 #define __DEBUG_ENABLE                                /* Debug mode is enabled                    */
 
+#define __WANTED_A_LIVE_FOX                           /* Wanted: a live fox.                      */
+
 /*********************************************************
 NOTE: You have four ways to use malloc:
 1. Do not define __MALLOC_OPTION or define __MALLOC_OPTION
