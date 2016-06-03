@@ -265,6 +265,7 @@ void Osal_Run_System()
     for(;;)                               /* The main loop                */
     {
         Osal_Timer_Process();             /* Update all timers            */
+        Osal_Msg_Process();               /* Process messageas            */
         Osal_ProcessPoll();               /* Do polling process if needed */
        
         do
