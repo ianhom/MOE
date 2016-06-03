@@ -4,7 +4,7 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 
 ## TODO
 - [x] Debug timer code
-- [ ] Add message process
+- [x] Add message process
 - [ ] Debug message code 
 - [ ] Design friendly & useful API
 
