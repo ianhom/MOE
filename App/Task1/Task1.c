@@ -63,14 +63,14 @@ uint16 Task1_Process(uint16 u16Evt)
     {
         T_TEST_MSG tMsg;
         tMsg.DATA.u32Data = 0x11223344;
-        Osal_Msg_Send(2,MSG_TYPE_TEST,sizeof(tMsg),&tMsg);
-        DBG_PRINT("This is task 1 process function, Task ID is %d\n", sg_u8TaskID);
+        Osal_Msg_Send(TASK_ALL_TASK,MSG_TYPE_TEST,sizeof(tMsg),&tMsg);
+        DBG_PRINT("\n\n\nTask %d Send a message\n", sg_u8TaskID);
         return (u16Evt ^ EVENT_TEST);
     }
 
     if (u16Evt & EVENT_MSG)
     {
-        ptMsg == (void*)Osal_Msg_Receive(sg_u8TaskID, NULL, &u8MsgType);
+        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, NULL, &u8MsgType);
         switch(u8MsgType)
         {
             case MSG_TYPE_TEST:
