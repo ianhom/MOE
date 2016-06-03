@@ -338,12 +338,14 @@ uint8* Osal_Msg_Process()
     T_MSG_HEAD *ptMsg;
     uint32      u32IntSt;
     
+    /* If it is unnecessary to process message */
     if(OSAL_MSG_POLL_NONE == sg_u8MsgPollFlag)
-    {
+    {   /* Return */
         return SW_OK;
     }
-    
-    sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;
+
+    /* Else, need to process message */    
+    sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Clear the poll flag first */
     DBG_PRINT("Running message process!!\n");
 
     ptFind = sg_ptMsgListHead;
