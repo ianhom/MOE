@@ -17,6 +17,8 @@
 #include "debug.h"
 
 static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg);
+
 
 static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                     /* Head node of messages      */ 
 static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                     /* Tail node of messages      */
@@ -81,14 +83,14 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
             /* Copy the data from user information to the message */
             for(u16Idx = 0; u16Idx < u16Size; u16Idx++)
             {
-                *(pu8Data[u16Idx] = *((uint8*)ptMsg)[u16Idx]);
+                pu8Data[u16Idx] = ((uint8*)ptMsg)[u16Idx];
             }
         }
 #else                                                     /* If the complier DO support flexible array       */
         /* Copy the data from user information to the message */
         for(u16Idx = 0; u16Idx < u16Size; u16Idx++)
         {
-            *(ptMsgHead->au8Data[u16Idx] = *((uint8*)ptMsg)[u16Idx]);
+            ptMsgHead->au8Data[u16Idx] = ((uint8*)ptMsg)[u16Idx];
         }
 #endif        
         return ptMsgHead;
@@ -161,7 +163,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
-    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task        */
+    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task      */
     
     DBG_PRINT("Message is sent successfully!!\n");
     return SW_OK;
@@ -187,7 +189,6 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
 {
     T_MSG_HEAD *ptFind  = sg_ptMsgListHead;
     T_MSG_HEAD *ptFound = NULL;
-    uint8      *ptData  = NULL;
 
     /* Check if the task is valid or NOT                                                        */
     /* The Destination task should NOT be TASK_NO_TASK, that is meaningless                     */
@@ -275,6 +276,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
         else
         {
             ptFound->u8DestTask = u8NextTask;          /* Otherwise, forward such message    */
+            Osal_Event_Set(u8NextTask,EVENT_MSG);      /* Call next task to receive message  */
             DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
         }
 
@@ -283,9 +285,9 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
             sg_u8MsgPollFlag = OSAL_MSG_POLL;          /* Set flag to delete the message     */
         }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
-        return (uint8*)(ptFind + 1);                   /* Return the data of message         */
+        return (uint8*)(ptFound + 1);                   /* Return the data of message         */
 #else
-        return (uint8*)ptFind->au8Data;                /* Return the data of message         */
+        return (uint8*)ptFound->au8Data;                /* Return the data of message         */
 #endif        
     }
    
@@ -320,7 +322,7 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
 }
 
 /******************************************************************************
-* Name       : uint8* Osal_Msg_Process()
+* Name       : uint8 Osal_Msg_Process()
 * Function   : Message process function, distribute "all task message" to each
 *              task, and delete useless message.
 * Input      : None
@@ -332,7 +334,7 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8* Osal_Msg_Process()
+uint8 Osal_Msg_Process()
 {
     T_MSG_HEAD *ptFind;
     T_MSG_HEAD *ptMsg;
@@ -368,6 +370,7 @@ uint8* Osal_Msg_Process()
                 {
                     sg_ptMsgListHead = sg_ptMsgListHead->ptNext; /* Make next one as the head   */
                 }
+                Osal_Msg_Del(ptFind);                            /* Free the deleting node      */
             }
             else/* If such message is NOT the first one */                                                  
             {
@@ -376,8 +379,8 @@ uint8* Osal_Msg_Process()
                 {
                     if(ptMsg->ptNext == ptFind)                  /* If we find the previous one */
                     {
-                        ptMsg->ptNext == ptFind->ptNext;         /* Delete message from list    */
-                        OSAL_FREE(ptFind);                       /* Free the deleting node      */
+                        ptMsg->ptNext = ptFind->ptNext;          /* Delete message from list    */
+                        Osal_Msg_Del(ptFind);                    /* Free the deleting node      */
                         DBG_PRINT("The deleting node is free!!\n");
                         if(ptMsg->ptNext == NULL)                
                         {
@@ -393,6 +396,7 @@ uint8* Osal_Msg_Process()
         } 
         ptFind = ptFind->ptNext;
     }
+    return SW_OK;
 }
 /* end of file */
 
