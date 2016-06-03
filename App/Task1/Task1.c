@@ -13,6 +13,8 @@
 #include "common_head.h"
 #include "project_config.h"
 #include "OSAL.h"
+#include "OSAL_Timer.h"
+#include "OSAL_Msg.h"
 #include "Task1.h"
 #include "debug.h"
 
@@ -54,10 +56,33 @@ void Task1_Init(uint8 u8TaskID)
 ******************************************************************************/
 uint16 Task1_Process(uint16 u16Evt)
 {
+    uint8  u8MsgType;
+    void  *ptMsg;
+
     if (u16Evt & EVENT_TEST)
     {
+        T_TEST_MSG tMsg;
+        tMsg.DATA.u32Data = 0x11223344;
+        Osal_Msg_Send(2,MSG_TYPE_TEST,sizeof(tMsg),&tMsg);
         DBG_PRINT("This is task 1 process function, Task ID is %d\n", sg_u8TaskID);
         return (u16Evt ^ EVENT_TEST);
+    }
+
+    if (u16Evt & EVENT_MSG)
+    {
+        ptMsg == (void*)Osal_Msg_Receive(sg_u8TaskID, NULL, &u8MsgType);
+        switch(u8MsgType)
+        {
+            case MSG_TYPE_TEST:
+            {
+                T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)ptMsg;
+                DBG_PRINT("This is task %d\n",sg_u8TaskID);
+                DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
+                DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
+                DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
+            }
+        }
+        return (u16Evt ^ EVENT_MSG);
     }
     return u16Evt;
 }
