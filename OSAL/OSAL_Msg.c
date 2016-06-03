@@ -18,12 +18,9 @@
 
 static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 
-
 static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                     /* Head node of messages      */ 
 static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                     /* Tail node of messages      */
 static uint8        sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message poll request flag  */
-//static uint8        sg_u8MsgAllFlag  = OSAL_MSG_ALL_FLAG_NONE;   /* Message for all tasks flag */
-
 
 /******************************************************************************
 * Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -61,21 +58,16 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
         ptMsgHead->u8SrcTask  = TASK_CURRENT_TASK;
         if(TASK_ALL_TASK == u8DestTask)
         {
+            ptMsgHead->u8CopyCnt  = MAX_TASK_NUM - 1;     /* Message for all tasks                           */
 #ifdef __WANTED_A_LIVE_FOX
             ptMsgHead->u8DestTask = TASK_CURRENT_TASK % TASK_LAST_TASK + 1; /* Start with the next task      */
             DBG_PRINT("Fox is ready to kill the next one!!\n");
 #else
-            /* If it is the first task which send a message to other tasks */
-            if(TASK_CURRENT_TASK == TASK_FIRST_TASK)
-            {
-                ptMsgHead->u8DestTask = TASK_FIRST_TASK + 1;/* Start with the Second one                     */
-            }
-            else
-            {
-                ptMsgHead->u8DestTask = TASK_FIRST_TASK;  /* Start with the first one                        */
-            }
+            /* Check if it is the first task which sends a message to other tasks */
+            /* If so, start with the second task                                  */
+            /* Otherwise, start with the first task                               */
+            ptMsgHead->u8DestTask = TASK_FIRST_TASK + (!(TASK_CURRENT_TASK - TASK_FIRST_TASK));
 #endif        
-            ptMsgHead->u8CopyCnt  = MAX_TASK_NUM - 1;     /* Message for all tasks                           */
         }
         else
         {
