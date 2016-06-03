@@ -54,6 +54,17 @@ typedef struct _T_MSG_HEAD
 }T_MSG_HEAD;
 
 
+
+typedef struct _T_TEST_MSG
+{
+    union _DATA
+    {
+        uint32 u32Data;
+        uint16 au16Data[2];
+        uint8  au8Data[4];
+    };
+}T_TEST_MSG;
+
 /******************************************************************************
 * Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
