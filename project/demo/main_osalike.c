@@ -46,8 +46,6 @@ int main (void)
     tTm3.pfTmCallback = NULL;
         
     Osal_Timer_Start(&tTm1);
-    Osal_Timer_Start(&tTm2);
-    Osal_Timer_Start(&tTm3);
     
     Osal_Run_System();
  
