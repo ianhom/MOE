@@ -24,28 +24,14 @@ int main (void)
     
     Osal_Init();
 
-    tTm1.u8TaskID     = 0;
-    tTm1.u16Evt       = EVENT_TEST;
-    tTm1.u16Cnt       = OSAL_TMR_INFINITE_CNT;
-    tTm1.u32TmOut     = 1000;
-    tTm1.pfTmCallback = NULL;
-    tTm1.pfTmCallback = NULL;
-
-    tTm2.u8TaskID     = 1;
-    tTm2.u16Evt       = EVENT_TEST;
-    tTm2.u16Cnt       = OSAL_TMR_INFINITE_CNT;
-    tTm2.u32TmOut     = 1000;
-    tTm2.pfTmCallback = NULL;
-    tTm2.pfTmCallback = NULL;
-    
-    tTm3.u8TaskID     = 2;
-    tTm3.u16Evt       = EVENT_TEST;
-    tTm3.u16Cnt       = OSAL_TMR_INFINITE_CNT;
-    tTm3.u32TmOut     = 1000;
-    tTm3.pfTmCallback = NULL;
-    tTm3.pfTmCallback = NULL;
+    tTm.u8TaskID     = 1;
+    tTm.u16Evt       = EVENT_TEST;
+    tTm.u16Cnt       = OSAL_TMR_INFINITE_CNT;
+    tTm.u32TmOut     = 2000;
+    tTm.pfTmCallback = NULL;
+    tTm.pfTmCallback = NULL;
         
-    Osal_Timer_Start(&tTm1);
+    Osal_Timer_Start(&tTm);
     
     Osal_Run_System();
  
