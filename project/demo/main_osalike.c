@@ -14,7 +14,7 @@
 
 
 /********************************************************************/
-int main (void)
+void main (void)
 {   T_TIMER tTm1,tTm2,tTm3;  
 
     DBG_PRINT("\n***** OSAL-like scheduler V0.01 *****\n");
