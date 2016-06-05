@@ -59,13 +59,14 @@ typedef struct _T_MSG_HEAD
 
 typedef struct _T_TEST_MSG
 {
-    union DATA
+    union
     {
         uint32 u32Data;
         uint16 au16Data[2];
         uint8  au8Data[4];
-    };
+    }DATA;
 }T_TEST_MSG;
+
 
 /******************************************************************************
 * Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -83,6 +84,56 @@ typedef struct _T_TEST_MSG
 * Date       : 28th May 2016
 ******************************************************************************/
 uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+
+
+/******************************************************************************
+* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
+* Function   : Receive a message
+* Input      : uint8  u8DestTask    1~254     The destination task number
+* Output:    : uint8 *pu8Type       0~255     Type of message
+* Return     : NULL  Failed.
+*              The pointer of the message 
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 31st May 2016
+******************************************************************************/
+uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
+
+/******************************************************************************
+* Name       : uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+* Function   : Forward a message
+* Input      : void *ptMsg                    The pointer of the message
+*              uint8  u8NextTask    0~254     The next task number which receives 
+*                                             such forwarded message
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: Note: If the u8NextTask is the same with u8DestTask, the next task
+*                    will be set as TASK_NO_TASK, forward the same message to 
+*                    itself is meaningless.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 5th Jun 2016
+******************************************************************************/
+uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask);
+
+
+/******************************************************************************
+* Name       : uint8 Osal_Msg_Process()
+* Function   : Message process function, distribute "all task message" to each
+*              task, and delete useless message.
+* Input      : None
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 31st May 2016
+******************************************************************************/
+uint8 Osal_Msg_Process();
+
 
 
  
