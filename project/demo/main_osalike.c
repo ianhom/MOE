@@ -24,7 +24,7 @@ int main (void)
     
     Osal_Init();
 
-    tTm.u8TaskID     = 1;
+    tTm.u8TaskID     = TASK_FIRST_TASK;
     tTm.u16Evt       = EVENT_TEST;
     tTm.u16Cnt       = OSAL_TMR_INFINITE_CNT;
     tTm.u32TmOut     = 2000;
