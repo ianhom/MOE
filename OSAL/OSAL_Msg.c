@@ -170,31 +170,26 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
 }
 
 /******************************************************************************
-* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask)
-* Function   : Send the message to the destination task.
+* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
+* Function   : Receive a message
 * Input      : uint8  u8DestTask    1~254     The destination task number
-*              uint8  u8NextTask    0~254     The next task number which receives 
-*                                             such forwarded message
 * Output:    : uint8 *pu8Type       0~255     Type of message
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
-* description: Note: If the u8NextTask is the same with u8DestTask, the next task
-*                    will be set as TASK_NO_TASK, forward the same message to 
-*                    itself is meaningless.
+* Return     : NULL  Failed.
+*              The pointer of the message 
+* description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
+uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 {
     T_MSG_HEAD *ptFind  = sg_ptMsgListHead;
     T_MSG_HEAD *ptFound = NULL;
 
-    /* Check if the task is valid or NOT                                                        */
-    /* The Destination task should NOT be TASK_NO_TASK, that is meaningless                     */
-    /* The Destination task should NOT be TASK_ALL_TASK, that is meaningless                    */
-    /* The Next task should NOT be TASK_ALL_TASK, can NOT forward the message for all task here */
-    if((TASK_NO_TASK == u8DestTask ) || (TASK_ALL_TASK == u8DestTask ) ||(TASK_ALL_TASK == u8NextTask))
+    /* Check if the task is valid or NOT                                     */
+    /* The Destination task should NOT be TASK_NO_TASK, that is meaningless  */
+    /* The Destination task should NOT be TASK_ALL_TASK, that is meaningless */
+    if((TASK_NO_TASK == u8DestTask ) || (TASK_ALL_TASK == u8DestTask ))
     {
         DBG_PRINT("Invalid task number when receiving a message!!\n");
         return NULL;
@@ -252,38 +247,26 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
             }                     
 #endif
             Osal_Event_Set(ptFound->u8DestTask,EVENT_MSG);     /* Set MSG event to next task */
-            DBG_PRINT("The message to all task is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
+            DBG_PRINT("The message to all tasks is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
         }
                 
         /* If such message is for all task and this is the last forwarding */
-        else if(1 == ptFound->u8CopyCnt)
-        {
-            ptFound->u8CopyCnt = 0;                            /* Set 0 to copy count        */
-            ptFound->u8DestTask = TASK_NO_TASK;                /* Stop forwarding message    */
-#ifdef __WANTED_A_LIVE_FOX
-            DBG_PRINT("Fox killed all except self %d!!\n", ptFound->u8SrcTask);                    
-#endif
-            DBG_PRINT("The message to all task is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
-        }
-        /* Else if next task is itself     */
-        /* Or there is no more forwarding  */
-        else if((u8DestTask == u8NextTask) || (TASK_NO_TASK == u8NextTask))
-        {
-            ptFound->u8DestTask = TASK_NO_TASK;        /* Stop forward such message          */
-            DBG_PRINT("The message is unnecessary to be forwarded!!\n");
-        }
-        /* Else, need forward the message  */
+        /* Or it is a message for a single task                            */
         else
         {
-            ptFound->u8DestTask = u8NextTask;          /* Otherwise, forward such message    */
-            Osal_Event_Set(u8NextTask,EVENT_MSG);      /* Call next task to receive message  */
-            DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
+            ptFound->u8DestTask = TASK_NO_TASK;         /* Stop forwarding message            */
+            sg_u8MsgPollFlag    = OSAL_MSG_POLL;        /* Set flag to delete the message     */
+            /* If it is a message for all tasks */
+            if(0 != ptFound->u8CopyCnt)
+            {
+#ifdef __WANTED_A_LIVE_FOX
+                DBG_PRINT("Fox killed all except self %d!!\n", ptFound->u8SrcTask);                    
+#endif
+                DBG_PRINT("All tasks have received the message!!\n");
+#endif
+            } 
         }
 
-        if(TASK_NO_TASK == ptFound->u8DestTask)
-        {
-            sg_u8MsgPollFlag = OSAL_MSG_POLL;          /* Set flag to delete the message     */
-        }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
         return (uint8*)(ptFound + 1);                   /* Return the data of message         */
 #else
@@ -294,6 +277,58 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask , uint8 u8NextTask, uint8 *pu8Type)
     DBG_PRINT("No message is found for task %d!!\n",u8DestTask);
     return NULL;
 }
+
+/******************************************************************************
+* Name       : uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+* Function   : Forward a message
+* Input      : void *ptMsg                    The pointer of the message
+*              uint8  u8NextTask    0~254     The next task number which receives 
+*                                             such forwarded message
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: Note: If the u8NextTask is the same with u8DestTask, the next task
+*                    will be set as TASK_NO_TASK, forward the same message to 
+*                    itself is meaningless.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 5th Jun 2016
+******************************************************************************/
+uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+{
+    T_MSG_HEAD *ptFind;
+
+    /* Check if the pointer is invalid or NOT */
+    if(NULL == ptMsg)
+    {
+        DBG_PRINT("Invalid pointer for message!!\n");
+        return SW_ERR;
+    }
+
+    /* The next task should NOT be TASK_ALL_TASK, can NOT forward the message for all task here */
+    /* The next task should NOT be TASK_CURRENT_TASK, can NOT forward the message to itself     */
+    if((TASK_ALL_TASK == u8NextTask) || (TASK_CURRENT_TASK == u8NextTask))
+    {
+        DBG_PRINT("Invalid task number when forwarding a message!!\n");
+        return SW_ERR;
+    }
+
+    ptFind = ((T_MSG_HEAD*)ptMsg - 1);   /* Get the head of the message */
+
+    /* If it is a message to all task, do NOT forward */
+    if(0 != ptFind->u8CopyCnt)
+    {
+        DBG_PRINT("It is a message to all task, do NOT forward!!\n");
+        return SW_ERR;
+    }
+
+    /* Set the next task to receive such message */
+    ptFind->u8DestTask = u8NextTask;
+    Osal_Event_Set(u8NextTask,EVENT_MSG);         /* Call next task to receive message  */
+    DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
+    return SW_OK;
+}
+
 
 /******************************************************************************
 * Name       : static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
