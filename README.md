@@ -9,6 +9,9 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 - [ ] Design friendly & useful API
 
 ## Log
+### 5th Jun 2016
+Finish message works, ready to debug. 
+
 ### 26th May 2016
 Start message works. 
 
