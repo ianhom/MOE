@@ -263,7 +263,6 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
                 DBG_PRINT("Fox killed all except self %d!!\n", ptFound->u8SrcTask);                    
 #endif
                 DBG_PRINT("All tasks have received the message!!\n");
-#endif
             } 
         }
 
