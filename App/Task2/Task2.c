@@ -67,7 +67,7 @@ uint16 Task2_Process(uint16 u16Evt)
 
     if (u16Evt & EVENT_MSG)
     {
-        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, NULL, &u8MsgType);
+        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
         switch(u8MsgType)
         {
             case MSG_TYPE_TEST:
@@ -76,7 +76,10 @@ uint16 Task2_Process(uint16 u16Evt)
                 DBG_PRINT("This is task %d\n",sg_u8TaskID);
                 DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
                 DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
-                DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
+                DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
+                ptTestMsg->DATA.u32Data = 0xaabbccdd;
+                DBG_PRINT("Task %d change the message and forward it\n",sg_u8TaskID);
+                Osal_Msg_Forward(ptMsg,3);
             }
         }
         return (u16Evt ^ EVENT_MSG);
