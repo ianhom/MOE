@@ -1,6 +1,6 @@
 /******************************************************************************
 * File       : Task2.h
-* Function   : To be done.
+* Function   : To be doen.
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
@@ -29,7 +29,7 @@ extern "C" {
 
 
 void Task2_Init(uint8 u8TaskID);
-uint16 Task2_Process(uint16 u16Evt);
+
 
 
 
