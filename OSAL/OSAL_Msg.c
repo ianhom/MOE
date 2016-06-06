@@ -20,9 +20,9 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg);
 
 
-static T_MSG_HEAD  *sg_ptMsgListHead  = NULL;                     /* Head node of messages      */ 
-static T_MSG_HEAD  *sg_ptMsgListTail  = NULL;                     /* Tail node of messages      */
-static uint16       sg_u16MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message poll request flag  */
+static T_MSG_HEAD  *sg_ptMsgListHead = NULL;                     /* Head node of messages      */ 
+static T_MSG_HEAD  *sg_ptMsgListTail = NULL;                     /* Tail node of messages      */
+static uint8        sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message poll request flag  */
 
 /******************************************************************************
 * Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -121,7 +121,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     T_MSG_HEAD *ptMsgNode;
        
     /* Check if the destination task is valid or NOT */
-    if((u8DestTask > MAX_TASK_NUM) && (u8DestTask != TASK_ALL_TASK)||(TASK_NO_TASK == u8DestTask))
+    if((u8DestTask > MAX_TASK_NUM) && (u8DestTask != TASK_ALL_TASK))
     {
         DBG_PRINT("The destination task of the sending message is invalid!!\n");
         return SW_ERR;
@@ -188,8 +188,8 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 
     /* Check if the task is valid or NOT                                     */
     /* The Destination task should NOT be TASK_NO_TASK, that is meaningless  */
-    /* The Destination task should NOT be bigger than the max task number    */
-    if((TASK_NO_TASK == u8DestTask ) || (u8DestTask > MAX_TASK_NUM))
+    /* The Destination task should NOT be TASK_ALL_TASK, that is meaningless */
+    if((TASK_NO_TASK == u8DestTask ) || (TASK_ALL_TASK == u8DestTask ))
     {
         DBG_PRINT("Invalid task number when receiving a message!!\n");
         return NULL;
@@ -255,8 +255,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
         else
         {
             ptFound->u8DestTask = TASK_NO_TASK;         /* Stop forwarding message            */
-            sg_u16MsgPollFlag++;                        /* Set flag to poll message process   */
-
+            sg_u8MsgPollFlag    = OSAL_MSG_POLL;        /* Set flag to delete the message     */
             /* If it is a message for all tasks */
             if(0 != ptFound->u8CopyCnt)
             {
@@ -305,10 +304,9 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
         return SW_ERR;
     }
 
-    /* The next task should NOT be bigger than the max task number                          */
-    /* The next task should NOT be TASK_CURRENT_TASK, can NOT forward the message to itself */
-    /* The next task should NOT be TASK_NO_TASK, it is meaningless                          */
-    if((u8NextTask > MAX_TASK_NUM) || (TASK_CURRENT_TASK == u8NextTask) || (TASK_NO_TASK == u8NextTask))
+    /* The next task should NOT be TASK_ALL_TASK, can NOT forward the message for all task here */
+    /* The next task should NOT be TASK_CURRENT_TASK, can NOT forward the message to itself     */
+    if((TASK_ALL_TASK == u8NextTask) || (TASK_CURRENT_TASK == u8NextTask))
     {
         DBG_PRINT("Invalid task number when forwarding a message!!\n");
         return SW_ERR;
@@ -326,7 +324,6 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
     /* Set the next task to receive such message */
     ptFind->u8DestTask = u8NextTask;
     Osal_Event_Set(u8NextTask,EVENT_MSG);         /* Call next task to receive message  */
-    sg_u16MsgPollFlag--;                          /* Decrease count for poll message    */
     DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
     return SW_OK;
 }
@@ -373,18 +370,18 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
 ******************************************************************************/
 uint8 Osal_Msg_Process()
 {
-    T_MSG_HEAD *ptFind,*ptFound = NULL;
+    T_MSG_HEAD *ptFind;
     T_MSG_HEAD *ptMsg;
     uint32      u32IntSt;
     
     /* If it is unnecessary to process message */
-    if(OSAL_MSG_POLL_NONE == sg_u16MsgPollFlag)
+    if(OSAL_MSG_POLL_NONE == sg_u8MsgPollFlag)
     {   /* Return */
         return SW_OK;
     }
 
     /* Else, need to process message */    
-
+    sg_u8MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Clear the poll flag first */
     DBG_PRINT("Running message process!!\n");
 
     ptFind = sg_ptMsgListHead;
@@ -393,7 +390,6 @@ uint8 Osal_Msg_Process()
         /* If we find a message with no destination task, detele it */
         if(TASK_NO_TASK == ptFind->u8DestTask)
         {
-            ptFound = ptFind;                                   /* Record the deleting node    */
             ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
             /**************************************************************************************************/
             /* If such message is the first one */
@@ -408,6 +404,7 @@ uint8 Osal_Msg_Process()
                 {
                     sg_ptMsgListHead = sg_ptMsgListHead->ptNext; /* Make next one as the head   */
                 }
+                Osal_Msg_Del(ptFind);                            /* Free the deleting node      */
             }
             else/* If such message is NOT the first one */                                                  
             {
@@ -417,6 +414,8 @@ uint8 Osal_Msg_Process()
                     if(ptMsg->ptNext == ptFind)                  /* If we find the previous one */
                     {
                         ptMsg->ptNext = ptFind->ptNext;          /* Delete message from list    */
+                        Osal_Msg_Del(ptFind);                    /* Free the deleting node      */
+                        DBG_PRINT("The deleting node is free!!\n");
                         if(ptMsg->ptNext == NULL)                
                         {
                             sg_ptMsgListTail = ptMsg;            /* Update the tail message     */
@@ -428,20 +427,9 @@ uint8 Osal_Msg_Process()
             }
             /**************************************************************************************************/
             EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-            
-            sg_u16MsgPollFlag--;            /* decrease the polling count */
         } 
         ptFind = ptFind->ptNext;
-
-        /* If the delete  */
-        if(NULL != ptFound)
-        {
-            Osal_Msg_Del(ptFound);           /* Free the deleting node     */
-            DBG_PRINT("The deleting node is free!!\n");
-            ptFound = NULL;
-        }
     }
     return SW_OK;
 }
 /* end of file */
-
