@@ -70,7 +70,7 @@ uint16 Task1_Process(uint16 u16Evt)
 
     if (u16Evt & EVENT_MSG)
     {
-        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, NULL, &u8MsgType);
+        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
         switch(u8MsgType)
         {
             case MSG_TYPE_TEST:
