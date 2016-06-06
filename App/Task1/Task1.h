@@ -26,7 +26,6 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_APP_TASK_1     /* According the set from project_config.h */
 #endif
 
-#define APP_TASK_NAME        Task1
 
 void Task1_Init(uint8 u8TaskID);
 
