@@ -53,6 +53,16 @@ typedef void (*PF_FREE)(void *p);
 #define EVENT_MSG                   (0x0004)                  /* There is a message event                 */
 #define EVENT_INT                   (0x0008)                  /* There is an interrupt event              */
 
+#define PROCESS_NAME(x)             TASK_##x
+#define PROCESS(x)                  uint16 PROCESS_NAME(x)(uint16 u16Evt)
+
+#define EVT_PARAM                   u16Evt
+
+#define EVENT_PROCESS_BEGIN(x)      if(EVT_PARAM & x){
+
+#define EVENT_PROCESS_END(x)        return (EVT_PARAM ^ x);}                             
+
+
 
 void   Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn);
 uint8  Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
