@@ -16,6 +16,7 @@
 #include "debug.h"
 #include "OSAL_App.h"
 #include "OSAL_Timer.h"
+#include "OSAL_Msg.h"
 
 
 static PF_MALLOC sg_pfMalloc = NULL;
@@ -272,7 +273,7 @@ void Osal_Run_System()
         {
             if(au16TaskEvt[u8Idx])        /* Check if events happen for such task */
             {       
-               break;                     /* If so, break loop                    */
+                break;                     /* If so, break loop                    */
             }
             /* If there is NO events for such task, do nothing and continue next task checking */
         }while(++u8Idx < MAX_TASK_NUM);   /* Check all tasks */
@@ -296,7 +297,7 @@ void Osal_Run_System()
            
            ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
            /**************************************************************************************************/
-            au16TaskEvt[u8Idx] = u16Evt;    /* Add the rest events back */
+            au16TaskEvt[u8Idx] |= u16Evt;  /* Add the rest events back */
            /**************************************************************************************************/
            EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
         }
