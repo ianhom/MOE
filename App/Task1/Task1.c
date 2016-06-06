@@ -18,7 +18,8 @@
 #include "Task1.h"
 #include "debug.h"
 
-static PROCESS(APP_TASK_NAME);
+static uint16 Task1_Process(uint16 u16Evt);
+
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
@@ -35,7 +36,7 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 void Task1_Init(uint8 u8TaskID)
 {
     sg_u8TaskID = u8TaskID;        /* Get the task ID */
-    Osal_Reg_Tasks(PROCESS_NAME(Task1));
+    Osal_Reg_Tasks(Task1_Process);
     DBG_PRINT(" APP_TASK_NAME is inited successfully, Task ID is %d\n", sg_u8TaskID);
 
     /*--------------------   Add your init code here   ----------------------*/
@@ -56,7 +57,7 @@ void Task1_Init(uint8 u8TaskID)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-static PROCESS(APP_TASK_NAME)
+static uint16 Task1_Process(uint16 EVT_PARAM)
 {
     uint8  u8MsgType;
     void  *ptMsg;
