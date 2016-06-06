@@ -18,6 +18,7 @@
 #include "Task1.h"
 #include "debug.h"
 
+static PROCESS(APP_TASK_NAME);
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
@@ -33,12 +34,13 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 ******************************************************************************/
 void Task1_Init(uint8 u8TaskID)
 {
-
     sg_u8TaskID = u8TaskID;        /* Get the task ID */
+    Osal_Reg_Tasks(PROCESS_NAME(Task1));
+    DBG_PRINT(" APP_TASK_NAME is inited successfully, Task ID is %d\n", sg_u8TaskID);
 
-    Osal_Reg_Tasks(Task1_Process);
+    /*--------------------   Add your init code here   ----------------------*/
 
-    DBG_PRINT("Task 1 is inited successfully, Task ID is %d\n", sg_u8TaskID);
+    /*-------------------   The end of your init code   ---------------------*/
     
     return;
 }
@@ -54,22 +56,15 @@ void Task1_Init(uint8 u8TaskID)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint16 Task1_Process(uint16 u16Evt)
+static PROCESS(APP_TASK_NAME)
 {
     uint8  u8MsgType;
     void  *ptMsg;
-
-    if (u16Evt & EVENT_TEST)
-    {
-        T_TEST_MSG tMsg;
-        tMsg.DATA.u32Data = 0x11223344;
-        Osal_Msg_Send(TASK_ALL_TASK,MSG_TYPE_TEST,sizeof(tMsg),&tMsg);
-        DBG_PRINT("\n\n\nTask %d Send a message\n", sg_u8TaskID);
-        return (u16Evt ^ EVENT_TEST);
-    }
-
-    if (u16Evt & EVENT_MSG)
-    {
+/******************************************************************************/
+/* Process for message event                                                  */
+/******************************************************************************/
+    EVENT_PROCESS_BEGIN(EVENT_MSG); 
+    /*-----------------   Add your event process code here   -----------------*/
         ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
         switch(u8MsgType)
         {
@@ -82,9 +77,29 @@ uint16 Task1_Process(uint16 u16Evt)
                 DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
             }
         }
-        return (u16Evt ^ EVENT_MSG);
-    }
-    return u16Evt;
+    /*----------------  The end of your event process code  ------------------*/
+    EVENT_PROCESS_END(EVENT_MSG);
+/******************************************************************************/
+
+
+
+/******************************************************************************/
+/* Process for test event                                                     */
+/******************************************************************************/
+    EVENT_PROCESS_BEGIN(EVENT_TEST);
+    /*-----------------   Add your event process code here   -----------------*/
+        T_TEST_MSG tMsg;
+        tMsg.DATA.u32Data = 0x11223344;
+        for(uint8 u8Idx = 0; u8Idx < 100; u8Idx++)
+        {
+            Osal_Msg_Send(3,MSG_TYPE_TEST,sizeof(tMsg),&tMsg);
+        }
+        DBG_PRINT("\n\n\nTask %d Send a message\n", sg_u8TaskID);
+    /*----------------  The end of your event process code  ------------------*/
+    EVENT_PROCESS_END(EVENT_TEST);
+/******************************************************************************/
+
+    return 0;
 }
 
 /* End of file */
