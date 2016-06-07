@@ -443,4 +443,38 @@ uint8 Osal_Msg_Process()
     }
     return SW_OK;
 }
+
+uint16 Osal_Msg_Max_Cnt()
+{
+    uint16      u16Cnt = 0;
+    uint8       u8Type = 0;
+    T_TEST_MSG  tMsg;
+    T_MSG_HEAD *ptMsg  = (T_MSG_HEAD*)Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+    while(!ptMsg)
+    {
+         u16Cnt++;
+         ptMsg  = (T_MSG_HEAD*)Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+    }
+    DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
+
+    ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+    while(ptMsg)
+    {
+        ptMsg = Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+    }
+
+    DBG_PRINT("%d messages are ready to be deleted!!\n", sg_u16MsgPollFlag);
+    Osal_Msg_Process();
+    if(NULL == sg_ptMsgListHead)
+    {   
+        DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
+        DBG_PRINT("All messages are deleted!!\n");
+    }
+    else
+    {
+        DBG_PRINT("All messages are NOT deleted!!\n");
+    }
+    return u16Cnt;
+}
 /* end of file */
+
