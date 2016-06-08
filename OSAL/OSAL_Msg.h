@@ -66,6 +66,7 @@ typedef struct _T_TEST_MSG
         uint8  au8Data[4];
     }DATA;
 }T_TEST_MSG;
+uint16 Osal_Msg_Max_Cnt();
 
 
 /******************************************************************************
@@ -134,6 +135,46 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 ******************************************************************************/
 uint8 Osal_Msg_Process();
 
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Total_Cnt()
+* Function   : Get the max number of total messages in message link list.
+* Input      : None
+* Output:    : None
+* Return     : The max number of total messages in message link list.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Total_Cnt();
+
+
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Read_Cnt()
+* Function   : Get the max number of read messages
+* Input      : None
+* Output:    : None
+* Return     : The max number of read messages
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 8th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Read_Cnt();
+
+
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Unread_Cnt()
+* Function   : Get the max number of unread messages
+* Input      : None
+* Output:    : None
+* Return     : The max number of unread messages
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Unread_Cnt();
 
 
  
