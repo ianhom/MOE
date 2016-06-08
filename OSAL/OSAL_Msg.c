@@ -556,6 +556,68 @@ uint16 Osal_Msg_Unread_Cnt()
     return u16Cnt;
 }
 
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Test_General()
+* Function   : General test for message
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Test_General()
+{  
+    uint16      u16Cnt;
+    uint8       u8Type = 0;
+    T_TEST_MSG  tMsg;
+    T_MSG_HEAD *ptMsg  = NULL;
+
+    Osal_Msg_Max_Cnt();
+    
+    for (uint8 u8Idx = 0; u8Idx < 10; u8Idx++)
+    {
+        Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+    }
+    
+    if(10 != Osal_Msg_Total_Cnt())
+    {
+        DBG_PRINT("Total message count is wrong!!\n");
+    }
+
+    for (uint8 u8Idx = 0; u8Idx < 6; u8Idx++)
+    {
+        ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+    }
+
+    if(6 != Osal_Msg_Read_Cnt())
+    {
+        DBG_PRINT("Read message count is wrong!!\n");
+    }
+
+    if(4 != Osal_Msg_Unread_Cnt())
+    {
+        DBG_PRINT("Unead message count is wrong!!\n");
+    }
+
+    Osal_Msg_Process();
+    
+    if(4 != Osal_Msg_Total_Cnt())
+    {
+        DBG_PRINT("Total message count after deteling is wrong!!\n");
+    }
+    
+    for (uint8 u8Idx = 0; u8Idx < 4; u8Idx++)
+    {
+        Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+    }
+    Osal_Msg_Process();
+    if(0 != Osal_Msg_Total_Cnt())
+    {
+        DBG_PRINT("Total message count after deteling is wrong!!\n");
+    }
+}
 
 
 
