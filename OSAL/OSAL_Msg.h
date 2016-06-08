@@ -176,6 +176,18 @@ uint16 Osal_Msg_Read_Cnt();
 ******************************************************************************/
 uint16 Osal_Msg_Unread_Cnt();
 
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Test_General()
+* Function   : General test for message
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Test_General();
 
  
 #ifdef __cplusplus
