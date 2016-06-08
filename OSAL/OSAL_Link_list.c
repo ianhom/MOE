@@ -191,6 +191,44 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
     return ptFind;
 }
 
+/******************************************************************************
+* Name       : uint16 Osal_Timer_Cnt()
+* Function   : Get the count of timers
+* Input      : None
+* Output:    : None
+* Return     : uint16   The count of timers
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
+uint16 Osal_Link_list_Cnt(void **pptHead)
+{
+    T_TIMER_NODE *ptFind;
+    uint16 u16Cnt = 0;
+    uint32 u32IntSt;
+
+    /* If the input node pointer is invalid  */
+    if ((NULL ==  pptHead) || (NULL == *pptHead))                         
+    {
+        DBG_PRINT("Invalid pointer when node deteling");
+        return NULL;                        /* Return NULL, no node to be deleted    */
+    }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptFind = *pptHead;              /* Get the head timer         */
+    while(ptFind)                   /* If such timer is avaliable */
+    {
+        u16Cnt++;                   /* Increase the count         */
+        ptFind = ptFind->ptNext;    /* Check the next one         */
+    }
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+    DBG_PRINT("The count of the Nodes is %d\n",u16Cnt);
+    return u16Cnt;
+}
+
 
 /* end of file */
 
