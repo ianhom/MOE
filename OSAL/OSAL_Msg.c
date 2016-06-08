@@ -18,6 +18,7 @@
 
 static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg);
+static uint16 Osal_Msg_Max_Cnt();
 
 
 static T_MSG_HEAD  *sg_ptMsgListHead  = NULL;                     /* Head node of messages      */ 
@@ -444,7 +445,19 @@ uint8 Osal_Msg_Process()
     return SW_OK;
 }
 
-uint16 Osal_Msg_Max_Cnt()
+
+/******************************************************************************
+* Name       : static uint16 Osal_Msg_Max_Cnt()
+* Function   : Get the max number of messages which can be created
+* Input      : None
+* Output:    : None
+* Return     : The max number of messages
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+static uint16 Osal_Msg_Max_Cnt()
 {
     uint16      u16Cnt = 0;
     uint8       u8Type = 0;
@@ -476,5 +489,75 @@ uint16 Osal_Msg_Max_Cnt()
     }
     return u16Cnt;
 }
+
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Total_Cnt()
+* Function   : Get the max number of total messages in message link list.
+* Input      : None
+* Output:    : None
+* Return     : The max number of total messages in message link list.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Total_Cnt()
+{
+    uint16      u16Cnt = 0;
+    T_MSG_HEAD *ptMsg  = sg_ptMsgListHead;
+    
+    /* Check if message exist or NOT  */
+    while(ptMsg)
+    {
+        u16Cnt++;              /* Increase the count */
+        ptMsg = ptMsg->ptNext; /* Check next one     */
+    }
+    DBG_PRINT("There are %d messages!\n", u16Cnt);
+    return u16Cnt;
+}
+
+
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Read_Cnt()
+* Function   : Get the max number of read messages
+* Input      : None
+* Output:    : None
+* Return     : The max number of read messages
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 8th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Read_Cnt()
+{
+    DBG_PRINT("There are %d read messages!\n", sg_u16MsgPollFlag);
+    return sg_u16MsgPollFlag;
+}
+
+
+/******************************************************************************
+* Name       : uint16 Osal_Msg_Unread_Cnt()
+* Function   : Get the max number of unread messages
+* Input      : None
+* Output:    : None
+* Return     : The max number of unread messages
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th Jun 2016
+******************************************************************************/
+uint16 Osal_Msg_Unread_Cnt()
+{
+    uint16      u16Cnt = 0;    
+    
+    u16Cnt = Osal_Msg_Total_Cnt() - Osal_Msg_Read_Cnt();
+
+    DBG_PRINT("There are %d unread messages!\n", u16Cnt);
+    return u16Cnt;
+}
+
+
+
+
 /* end of file */
 
