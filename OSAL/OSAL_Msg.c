@@ -473,7 +473,7 @@ static uint16 Osal_Msg_Max_Cnt()
     ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     while(ptMsg)
     {
-        ptMsg = Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+        ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     }
 
     DBG_PRINT("%d messages are ready to be deleted!!\n", sg_u16MsgPollFlag);
