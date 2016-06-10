@@ -557,7 +557,7 @@ uint16 Osal_Msg_Unread_Cnt()
 }
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Test_General()
+* Name       : void Osal_Msg_Test_General()
 * Function   : General test for message
 * Input      : None
 * Output:    : None
@@ -567,12 +567,10 @@ uint16 Osal_Msg_Unread_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Test_General()
+void Osal_Msg_Test_General()
 {  
-    uint16      u16Cnt;
     uint8       u8Type = 0;
     T_TEST_MSG  tMsg;
-    T_MSG_HEAD *ptMsg  = NULL;
 
     Osal_Msg_Max_Cnt();
     
@@ -588,7 +586,7 @@ uint16 Osal_Msg_Test_General()
 
     for (uint8 u8Idx = 0; u8Idx < 6; u8Idx++)
     {
-        ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+        Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     }
 
     if(6 != Osal_Msg_Read_Cnt())
@@ -617,6 +615,7 @@ uint16 Osal_Msg_Test_General()
     {
         DBG_PRINT("Total message count after deteling is wrong!!\n");
     }
+    return;
 }
 
 
