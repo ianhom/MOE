@@ -26,8 +26,8 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_OSAL_QUEUE         /* According the set from project_config.h */
 #endif
 
-#define OSAL_QUEUE_LAST_FREE(p)        ((p)->pu8Addr + (p)->u8End * (p)->u8MaxCnt)
-#define OSAL_QUEUE_FIRST_USED(p)       ((p)->pu8Addr + (p)->u8Begin * (p)->u8MaxCnt)
+#define OSAL_QUEUE_LAST_FREE(p)        ((p)->pu8Addr + (p)->u8End * (p)->u8Len)
+#define OSAL_QUEUE_FIRST_USED(p)       ((p)->pu8Addr + (p)->u8Begin * (p)->u8Len)
 
 
 typedef struct _T_QUEUE_INFO
@@ -63,9 +63,9 @@ uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue);
 
 uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue);
 
-uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len);
+uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len);
 
-uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len);
+uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len);
 
 /******************************************************************************
 * Name       : uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
