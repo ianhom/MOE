@@ -17,144 +17,59 @@
 #include "debug.h"
 
 /******************************************************************************
-* Name       : uint8 Osal_Queue_Create(uint8 u8Len, uint8 u8Num)
-* Function   : Create a queue and return the queue number
-* Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
-* Output:    : None
+* Name       : uint8 Osal_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
+* Function   : Create a queue
+* Input      : uint8         u8Len          The length of each block in the queue
+*              uint8         u8Cnt          The count of blocks in th queue
+* Output:    : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 2nd Jun 2016
+* Date       : 10th Jun 2016
 ******************************************************************************/
-T_QUEUE_INFO* Osal_Queue_Create(T_QUEUE_INFO* ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
+uint8 Osal_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
 {
-    uint32        u32IntSt;
-    uint16        u16Size     = u8Len * u8Cnt;
+    uint32 u32IntSt;
+    uint16 u16Size = u8Len * u8Cnt;
 
     /* If the buffer size is 0, return NULL */
     if(0 == u16Size)
     {
         DBG_PRINT("The length of buffer is invalid!!\n");
-        return NULL;
+        return SW_ERR;
     }
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptQueueInfo->pu8Addr  = (uint8*)OSAL_MALLOC(u16Size);
-    ptQueueInfo->u8Begin  = 0;
-    ptQueueInfo->u8End    = 0;
-    ptQueueInfo->u8Len    = u8Len;
-    ptQueueInfo->u8MaxCnt = u8Cnt;
-    ptQueueInfo->u8Cnt    = 0;
+    ptQueueInfo->pu8Addr  = (uint8*)OSAL_MALLOC(u16Size);  /* Create data space  */
+    ptQueueInfo->u8Begin  = 0;                             /* Init begin pointer */
+    ptQueueInfo->u8End    = 0;                             /* Init end pointer   */
+    ptQueueInfo->u8Cnt    = 0;                             /* Init block count   */
+    ptQueueInfo->u8Len    = u8Len;                         /* Set block length   */
+    ptQueueInfo->u8MaxCnt = u8Cnt;                         /* Set block count    */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
-
-    return ptQueueInfo;
-
-}
-
-uint8 Osal_Queue_Inc(T_QUEUE_INFO *ptQueue)
-{
-    uint32        u32IntSt;
-    /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
-
-    if(SW_ERR == Osal_Queue_Is_Free(ptQueue))
-    {
-        return SW_ERR;
-    }
-
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
-    ptQueue->u8End = (ptQueue->u8End + 1) % ptQueue->u8MaxCnt;
-    ptQueue->u8Cnt++;
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
-
+  
+    DBG_PRINT("Create a queue successfully!!\n");
     return SW_OK;
+
 }
-
-uint8 Osal_Queue_Dec(T_QUEUE_INFO *ptQueue)
-{
-    uint32        u32IntSt;
-    /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
-
-    if(SW_OK == Osal_Queue_Is_Empty(ptQueue))
-    {
-        return SW_ERR;
-    }
-
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
-    ptQueue->u8Begin = (ptQueue->u8Begin + 1) % ptQueue->u8MaxCnt;
-    ptQueue->u8Cnt--;
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */   
-
-    return SW_OK;
-}
-
-uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
-{
-    /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
-
-    if(ptQueue->u8Cnt >= ptQueue->u8MaxCnt)
-    {
-        DBG_PRINT("The queue is full!!\n");
-        return SW_ERR;
-    }
-    DBG_PRINT("The queue is NOT full!!\n");
-    return SW_OK;
-}
-
-uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue)
-{
-    /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
-
-    if(0 != ptQueue->u8Cnt)
-    {
-        DBG_PRINT("The queue is NOT empty!!\n");
-        return SW_ERR;
-    }
-    DBG_PRINT("The queue is empty!!\n");
-    return SW_OK;
-}
-
 
 /******************************************************************************
-* Name       : uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
-* Function   : Create a queue and return the queue number
-* Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
-* Output:    : None
+* Name       : uint8 Osal_Queue_Delete(T_QUEUE_INFO *ptQueueInfo)
+* Function   : Delete a queue
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+* Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 2nd Jun 2016
+* Date       : 10th Jun 2016
 ******************************************************************************/
-uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
+uint8 Osal_Queue_Delete(T_QUEUE_INFO *ptQueueInfo)
 {
     uint32 u32IntSt;
 
@@ -174,7 +89,161 @@ uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
     return SW_OK;
 }
 
-uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
+
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Inc(T_QUEUE_INFO *ptQueue)
+* Function   : Update the end pointer of used block.
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
+uint8 Osal_Queue_Inc(T_QUEUE_INFO *ptQueue)
+{
+    uint32 u32IntSt;
+    /* If the pointer of queue info is invalid */
+    if(NULL == ptQueue)
+    {
+        DBG_PRINT("Invalid pointer of queue informtion!!\n");
+        return SW_ERR;
+    }
+
+    /* Check if the queue is free or NOT */
+    if(SW_ERR == Osal_Queue_Is_Free(ptQueue))
+    {
+        return SW_ERR;
+    }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptQueue->u8End = (ptQueue->u8End + 1) % ptQueue->u8MaxCnt;  /* Update end pointer */
+    ptQueue->u8Cnt++;                                           /* Update used count  */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
+
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Inc(T_QUEUE_INFO *ptQueue)
+* Function   : Update the begin pointer of used block.
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
+uint8 Osal_Queue_Dec(T_QUEUE_INFO *ptQueue)
+{
+    uint32 u32IntSt;
+    /* If the pointer of queue info is invalid */
+    if(NULL == ptQueue)
+    {
+        DBG_PRINT("Invalid pointer of queue informtion!!\n");
+        return SW_ERR;
+    }
+
+    /* Check if the queue is empty or NOT */
+    if(SW_OK == Osal_Queue_Is_Empty(ptQueue))
+    {
+        return SW_ERR;
+    }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    ptQueue->u8Begin = (ptQueue->u8Begin + 1) % ptQueue->u8MaxCnt;  /* Update the begin pointer */
+    ptQueue->u8Cnt--;                                               /* Update the used count    */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */   
+
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
+* Function   : Check if the queue is free
+* Input      : T_QUEUE_INFO* ptQueueInfo    The pointer of queue information data structure
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
+uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
+{
+    /* If the pointer of queue info is invalid */
+    if(NULL == ptQueue)
+    {
+        DBG_PRINT("Invalid pointer of queue informtion!!\n");
+        return SW_ERR;
+    }
+
+    /* If the used count is NOT less then the max count */
+    if(ptQueue->u8Cnt >= ptQueue->u8MaxCnt)
+    {
+        DBG_PRINT("The queue is full!!\n");
+        return SW_ERR;
+    }
+    DBG_PRINT("The queue is NOT full!!\n");
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue)
+* Function   : Check if the queue is empty
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
+uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue)
+{
+    /* If the pointer of queue info is invalid */
+    if(NULL == ptQueue)
+    {
+        DBG_PRINT("Invalid pointer of queue informtion!!\n");
+        return SW_ERR;
+    }
+
+    /* If the used count is NOT 0 */
+    if(0 != ptQueue->u8Cnt)
+    {
+        DBG_PRINT("The queue is NOT empty!!\n");
+        return SW_ERR;
+    }
+    DBG_PRINT("The queue is empty!!\n");
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
+* Function   : Write into the queue with the desired data
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+*              uint8        *pu8Data        The pointer of data to be writen
+*              uint8         u8Len          The length of data to b ewriten
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: NOTE: When this function is called, Osal_Queue_Inc() should NOT be
+*              called again because it will be done inside of such function.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
+uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 {
     uint32 u32IntSt;
 
@@ -201,10 +270,27 @@ uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
 
+    Osal_Queue_Inc(ptQueueInfo);  
+
     return SW_OK;
     
 }
 
+/******************************************************************************
+* Name       : uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
+* Function   : Write into the queue with the desired data
+* Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
+*              uint8        *pu8Data        The pointer of data to be writen
+*              uint8         u8Len          The length of data to b ewriten
+* Output:    : uint8        *pu8Data        The pointer of data to be writen
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: NOTE: When this function is called, Osal_Queue_Dec() should NOT be
+*              called again because it will be done inside of such function.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
 uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 {
     uint32 u32IntSt;
@@ -232,11 +318,24 @@ uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
 
+    Osal_Queue_Dec(ptQueueInfo); 
+
     return SW_OK;
     
 }
 
 
+/******************************************************************************
+* Name       : void Osal_Queue_Test_General()
+* Function   : General test for queue
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 11th Jun 2016
+******************************************************************************/
 void Osal_Queue_Test_General()
 {
     static T_QUEUE_INFO sg_tQueue;
@@ -244,21 +343,20 @@ void Osal_Queue_Test_General()
     static uint8 sg_au8DataR[4] = {0};
     
     Osal_Queue_Create(&sg_tQueue,4,5);
+    DBG_PRINT("A queue with 4-byte-length, 5-blocks is created!!\n ");
 
+    /* Fill up the queue with test data */
     while(SW_OK == Osal_Queue_Is_Free(&sg_tQueue))
     {
         Osal_Queue_Write(&sg_tQueue, sg_au8DataW,sizeof(sg_au8DataW));
-        Osal_Queue_Inc(&sg_tQueue);
     }
-    Osal_Queue_Inc(&sg_tQueue);
     
+    /* Empty the queue */
     while(SW_OK != Osal_Queue_Is_Empty(&sg_tQueue))
     {
         Osal_Queue_Read(&sg_tQueue, sg_au8DataR,sizeof(sg_au8DataR));
-        Osal_Queue_Dec(&sg_tQueue);
     }    
     
-    Osal_Queue_Dec(&sg_tQueue);
     return;
 }
 
