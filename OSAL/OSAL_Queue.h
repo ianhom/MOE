@@ -63,6 +63,9 @@ uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue);
 
 uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue);
 
+uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len);
+
+uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len);
 
 /******************************************************************************
 * Name       : uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
