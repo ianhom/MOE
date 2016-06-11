@@ -29,6 +29,16 @@ extern "C" {
 
 
 
+typedef struct _T_QUEUE_INFO
+{
+    uint8 *pu8Addr;                         /* Address of the queue */
+    uint8  u8Begin;
+    uint8  u8End;
+    uint8  u8No;                            /* Number of the queue  */
+    uint8  u8Len;
+    uint8  u8Cnt;
+}T_QUEUE_INFO;
+
  
 #ifdef __cplusplus
 }
