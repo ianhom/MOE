@@ -26,7 +26,8 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_OSAL_QUEUE         /* According the set from project_config.h */
 #endif
 
-
+#define OSAL_QUEUE_LAST_FREE(p)        (p->pu8Addr + p->u8End * p->u8CntMax)
+#define OSAL_QUEUE_FIRST_USED(p)       (p->pu8Addr + p->u8Begin * p->u8CntMax)
 
 
 typedef struct _T_QUEUE_INFO
@@ -34,8 +35,8 @@ typedef struct _T_QUEUE_INFO
     uint8 *pu8Addr;                         /* Address of the queue */
     uint8  u8Begin;
     uint8  u8End;
-    uint8  u8No;                            /* Number of the queue  */
     uint8  u8Len;
+    uint8  u8MaxCnt;
     uint8  u8Cnt;
 }T_QUEUE_INFO;
 
