@@ -174,7 +174,7 @@ uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
     return SW_OK;
 }
 
-uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
+uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 {
     uint32 u32IntSt;
 
@@ -205,7 +205,7 @@ uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
     
 }
 
-uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
+uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 {
     uint32 u32IntSt;
 
@@ -240,21 +240,21 @@ uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
 void Osal_Queue_Test_General()
 {
     static T_QUEUE_INFO sg_tQueue;
+    static uint8 sg_au8DataW[4] = {4,3,2,1};
+    static uint8 sg_au8DataR[4] = {0};
     
-    Osal_Queue_Create(&sg_tQueue,5,5);
+    Osal_Queue_Create(&sg_tQueue,4,5);
 
     while(SW_OK == Osal_Queue_Is_Free(&sg_tQueue))
     {
-        for(uint8 u8Idx = 0; u8Idx < 5; u8Idx++)
-        {
-            OSAL_QUEUE_LAST_FREE(&sg_tQueue)[u8Idx] = u8Idx + 1;
-        }
+        Osal_Queue_Write(&sg_tQueue, sg_au8DataW,sizeof(sg_au8DataW));
         Osal_Queue_Inc(&sg_tQueue);
     }
     Osal_Queue_Inc(&sg_tQueue);
     
     while(SW_OK != Osal_Queue_Is_Empty(&sg_tQueue))
     {
+        Osal_Queue_Read(&sg_tQueue, sg_au8DataR,sizeof(sg_au8DataR));
         Osal_Queue_Dec(&sg_tQueue);
     }    
     
