@@ -156,7 +156,7 @@ uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue)
 ******************************************************************************/
 uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
 {
-    uint32        u32IntSt;
+    uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
     if(NULL == ptQueueInfo)
@@ -172,9 +172,70 @@ uint8 Osal_Queue_Delete(T_QUEUE_INFO* ptQueueInfo)
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
 
     return SW_OK;
-
-
 }
+
+uint8 Osal_Queue_Write(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
+{
+    uint32 u32IntSt;
+
+    /* If the pointer of queue information is invalid */
+    if((NULL == ptQueueInfo) || (NULL == pu8Data))
+    {
+        DBG_PRINT("Invalid pointer of queue information or data!!\n");
+        return SW_ERR;
+    }
+    
+    /* Check if the length is wrong */
+    if(u8Len > ptQueueInfo->u8Len)
+    {
+        DBG_PRINT("Invalid length to be writen!!\n");
+        return SW_ERR;
+    }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    for(uint8 u8Idx = 0; u8Idx < u8Len; u8Idx++)
+    {
+        OSAL_QUEUE_LAST_FREE(ptQueueInfo)[u8Idx] = pu8Data[u8Idx];
+    }
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
+
+    return SW_OK;
+    
+}
+
+uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 pu8Data, uint8 u8Len)
+{
+    uint32 u32IntSt;
+
+    /* If the pointer of queue information is invalid */
+    if((NULL == ptQueueInfo) || (NULL == pu8Data))
+    {
+        DBG_PRINT("Invalid pointer of queue information or data!!\n");
+        return SW_ERR;
+    }
+    
+    /* Check if the length is wrong */
+    if(u8Len > ptQueueInfo->u8Len)
+    {
+        DBG_PRINT("Invalid length to be read!!\n");
+        return SW_ERR;
+    }
+
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    for(uint8 u8Idx = 0; u8Idx < u8Len; u8Idx++)
+    {
+         pu8Data[u8Idx] = OSAL_QUEUE_LAST_FREE(ptQueueInfo)[u8Idx];
+    }
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
+
+    return SW_OK;
+    
+}
+
 
 void Osal_Queue_Test_General()
 {
@@ -190,6 +251,14 @@ void Osal_Queue_Test_General()
         }
         Osal_Queue_Inc(&sg_tQueue);
     }
+    Osal_Queue_Inc(&sg_tQueue);
+    
+    while(SW_OK != Osal_Queue_Is_Empty(&sg_tQueue))
+    {
+        Osal_Queue_Dec(&sg_tQueue);
+    }    
+    
+    Osal_Queue_Dec(&sg_tQueue);
     return;
 }
 
