@@ -248,7 +248,7 @@ uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
-    if((NULL == ptQueueInfo) || (NULL == pu8Data))
+    if((NULL == ptQueueInfo)||(NULL == ptQueueInfo->pu8Addr) || (NULL == pu8Data))
     {
         DBG_PRINT("Invalid pointer of queue information or data!!\n");
         return SW_ERR;
@@ -296,7 +296,7 @@ uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
-    if((NULL == ptQueueInfo) || (NULL == pu8Data))
+    if((NULL == ptQueueInfo)||(NULL == ptQueueInfo->pu8Addr) || (NULL == pu8Data))
     {
         DBG_PRINT("Invalid pointer of queue information or data!!\n");
         return SW_ERR;
