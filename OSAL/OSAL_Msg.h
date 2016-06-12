@@ -56,17 +56,24 @@ typedef struct _T_MSG_HEAD
 }T_MSG_HEAD;
 
 
-
+/*******************************************************************************
+* Structure  : T_TEST_MSG
+* Description: Structure of test message.
+* Memebers   : uint32 u32Data                 4-byte format data
+*              uint16 au16Data[2]             2-byte format data
+*              uint8  au8Data[4]              1-byte format data
+*******************************************************************************/
 typedef struct _T_TEST_MSG
 {
     union
     {
-        uint32 u32Data;
-        uint16 au16Data[2];
-        uint8  au8Data[4];
+        uint32 u32Data;                       /* 4-byte format data */
+        uint16 au16Data[2];                   /* 2-byte format data */
+        uint8  au8Data[4];                    /* 1-byte format data */
     }DATA;
 }T_TEST_MSG;
-uint16 Osal_Msg_Max_Cnt();
+
+
 
 
 /******************************************************************************
