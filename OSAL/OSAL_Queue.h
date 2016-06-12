@@ -1,7 +1,23 @@
 /******************************************************************************
 * File       : OSAL_Queue.h
 * Function   : General queue function.
-* description: To be done.          
+* description: This module realize common queue operations, You can create your 
+*              own queue in task space or use  Osal_Queue_Create() create a queue
+*              with malloc. Both method need a queue information data structure
+*              to record basic information used for queue operation. 
+*              Osal_Queue_is_Free() should be called before you fill data into
+*              the buffer block, and Osal_Queue_is_Empty() should be called 
+*              before you read data from the queue.
+*              You can fill the buffer block by yourself with the MARCO 
+*              OSAL_QUEUE_LAST_FREE(p), or read data from queue with the MARCO
+*              OSAL_QUEUE_FIRST_USED(p), please remember to increase / decrease
+*              the queue after buffer block wirting / reading. 
+*              Otherwise, you can prepare the writing data and call Osal_Queue_Write()
+*              to write the data into the queue without calling increase operation.
+*              Also, you can prepare a empty array to store the reading data by 
+*              calling Osal_Queue_Read() without do extra decrease operation.
+*              Besides, this module provide a general test function which can be
+*              used for testing.             
 * Version    : V1.00
 * Author     : Ian
 * Date       : 10th Jun 2016
