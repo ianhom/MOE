@@ -5,10 +5,17 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 ## TODO
 - [x] Debug timer code
 - [x] Add message process
-- [ ] Debug message code 
+- [x] Debug message code 
+- [x] Queue process
+- [ ] Queue debug
+- [ ] HAL process
+- [ ] HAL debug
 - [ ] Design friendly & useful API
 
 ## Log
+### 12th Jun 2016
+Improve & complete queue process
+
 ### 6th Jun 2016
 Solve the #5 issue. 
 
