@@ -391,7 +391,7 @@ void Osal_Queue_Test_General()
     }
     
     /* Empty the queue */
-    while(SW_OK != Osal_Queue_Is_Empty(&sg_tQueue))
+    while(SW_OK == Osal_Queue_Is_Not_Empty(&sg_tQueue))
     {
         Osal_Queue_Read(&sg_tQueue, sg_au8DataR,sizeof(sg_au8DataR));
     }    
