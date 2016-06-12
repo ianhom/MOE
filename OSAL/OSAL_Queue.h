@@ -5,19 +5,23 @@
 *              own queue in task space or use  Osal_Queue_Create() create a queue
 *              with malloc. Both method need a queue information data structure
 *              to record basic information used for queue operation. 
-*              Osal_Queue_is_Free() should be called before you fill data into
-*              the buffer block, and Osal_Queue_is_Empty() should be called 
-*              before you read data from the queue.
-*              You can fill the buffer block by yourself with the MARCO 
-*              OSAL_QUEUE_LAST_FREE(p), or read data from queue with the MARCO
-*              OSAL_QUEUE_FIRST_USED(p), please remember to increase / decrease
-*              the queue after buffer block wirting / reading. 
-*              Otherwise, you can prepare the writing data and call Osal_Queue_Write()
-*              to write the data into the queue without calling increase operation.
-*              Also, you can prepare a empty array to store the reading data by 
-*              calling Osal_Queue_Read() without do extra decrease operation.
+*
+*              There are two method to use the queue:
+*              1。Use the simply API: Osal_Queue_Write() to fill the prepared
+*                 data into the queue without checking free buffer block and queue
+*                 increase operation; Osal_Queue_Read() to read the data from the
+*                 queue into the prepared array without check 0-buffer-block and 
+*                 decrease operation.
+*              2. For more efficient use, You can fill the buffer block by yourself
+*                 with the MARCO OSAL_QUEUE_LAST_FREE(p), or read data from queue 
+*                 with the MARCO OSAL_QUEUE_FIRST_USED(p), please remember to 
+*                 check queue is free/queue is NOT empty BEFORE wirting/reading 
+*                 by calling Osal_Qeueu_Is_Free()/Osal_Queue_Is_NOT_Empty(); And
+*                 increase/decrease the queue AFTER buffer block wirting/reading
+*                 by calling Osal_Queue_Inc()/Osal_Queue_Dec.
+*
 *              Besides, this module provide a general test function which can be
-*              used for testing.             
+*              used for testing.                
 * Version    : V1.00
 * Author     : Ian
 * Date       : 10th Jun 2016
@@ -131,8 +135,8 @@ uint8 Osal_Queue_Dec(T_QUEUE_INFO *ptQueue);
 * Function   : Check if the queue is free
 * Input      : T_QUEUE_INFO* ptQueueInfo    The pointer of queue information data structure
 * Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Return     : SW_OK   Free.
+*              SW_ERR  Not free.
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
@@ -141,18 +145,18 @@ uint8 Osal_Queue_Dec(T_QUEUE_INFO *ptQueue);
 uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue);
 
 /******************************************************************************
-* Name       : uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue)
-* Function   : Check if the queue is empty
+* Name       : uint8 Osal_Queue_Is_Not_Empty(T_QUEUE_INFO *ptQueue)
+* Function   : Check if the queue is NOT empty
 * Input      : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
 * Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Return     : SW_OK   Not empty.
+*              SW_ERR  Empty.
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
 ******************************************************************************/
-uint8 Osal_Queue_Is_Empty(T_QUEUE_INFO *ptQueue);
+uint8 Osal_Queue_Is_Not_Empty(T_QUEUE_INFO *ptQueue);
 
 /******************************************************************************
 * Name       : uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
