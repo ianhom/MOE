@@ -1,7 +1,7 @@
 # API Description of OSAL-Like
 
 ## Introduction
-OSAL-Like is a rebuild scheduler from OSAL of z-stack(TI ZigBee stack). Following features are realised:
+**OSAL-Like** is a rebuild scheduler from OSAL of z-stack(TI ZigBee stack). Following features are realised:
 - Basic scheduler;
 - Multi-task with priority;
 - Event driven.
