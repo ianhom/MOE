@@ -16,6 +16,7 @@
 #include "OSAL_Link_List.h"
 #include "debug.h"
 
+
 /******************************************************************************
 * Name       : static T_TIMER_NODE* Osal_Timer_Add()
 * Function   : Add a timer node
@@ -34,9 +35,7 @@ void* Osal_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
     /* If the input node pointer is invalid  */
     if ((NULL ==  ptNode) \
      || (NULL ==  pptHead) \
-     || (NULL ==  pptTail) \
-     || (NULL == *pptHead) \
-     || (NULL == *pptTail))                         
+     || (NULL ==  pptTail))                         
     {                        
         DBG_PRINT("Invalid pointer when node deteling");
         return NULL;                  /* Return NULL, no node to be added */
@@ -63,6 +62,8 @@ void* Osal_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
     return ptNode;
 
 }
+
+
 
 /******************************************************************************
 * Name       : static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
@@ -149,6 +150,50 @@ void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
+void *Osal_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
+{
+    void * ptFind;
+
+    /* If the input node pointer is invalid  */
+    if ((NULL == ptNode) || (NULL == *pptHead) || (NULL == pptHead))                         
+    {
+        DBG_PRINT("Invalid pointer when node deteling");
+        return NULL;                 /* Return NULL, no node to be deleted    */
+    }
+
+    if(NULL != pptPre)
+    {
+        *pptPre = NULL;
+    }
+    ptFind = *pptHead;                /* Get the head node of timers          */
+    while(ptFind)                     /* If such node is avaliable            */
+    {                                
+        if(ptFind == ptNode)          /* And if it is the searched node       */
+        {
+            DBG_PRINT("Find the node!!\n");
+            break;                    /* Find it and break the loop           */
+        }
+        if(NULL != pptPre)
+        {
+            *pptPre = ptFind;
+        }
+        ptFind = ptFind->ptNext;      /* Update the node pointer              */
+    }
+    return ptFind;
+}
+
+/******************************************************************************
+* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Function   : Try to find a node.
+* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
+* Output:    : None
+* Return     : NULL           Fail to find the node.
+*              T_TIMER_NODE*  The pointer of the founed node.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 6th May 2016
+******************************************************************************/
 void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void Node, void **pptPre)
 {
     void  *ptFind;
@@ -190,6 +235,7 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
     }
     return ptFind;
 }
+
 
 /******************************************************************************
 * Name       : uint16 Osal_Timer_Cnt()
