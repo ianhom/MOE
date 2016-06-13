@@ -4,7 +4,7 @@
 OSAL-Like is a rebuild scheduler from OSAL of z-stack(TI ZigBee stack). Following features are realised:
 - Basic scheduler;
 - Multi-task with priority;
-- Event drivrn.
+- Event driven.
 - Software Timer.
 - Messages.
 - Queue operation for general use.
