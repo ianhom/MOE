@@ -44,7 +44,10 @@
 * Output:    : T_QUEUE_INFO *ptQueueInfo    The pointer of queue information data structure
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* description: This function is used to create a quque with malloc, the created
+*              queue located in heap space. Also you could create your own queue
+*              in your task space with T_QUEUE_INFO type, both way can use queue
+*              operation functions: write/read/increase/deccrease.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 10th Jun 2016
