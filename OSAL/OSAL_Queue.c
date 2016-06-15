@@ -48,6 +48,8 @@
 *              queue located in heap space. Also you could create your own queue
 *              in your task space with T_QUEUE_INFO type, both way can use queue
 *              operation functions: write/read/increase/deccrease.
+*              If the queue which created by this function is unnecessary, please
+*              Call Osal_Queue_Delete() to delete it.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 10th Jun 2016
@@ -87,7 +89,9 @@ uint8 Osal_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* description: This function is used to free the queue which is created by 
+*              Osal_Queue_Create(), NOTE: Please do NOT call this function to 
+*              free user queue located in task space (task static RAM usually).
 * Version    : V1.00
 * Author     : Ian
 * Date       : 10th Jun 2016
