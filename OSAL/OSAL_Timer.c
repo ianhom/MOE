@@ -114,7 +114,7 @@ T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm)
     T_TIMER_NODE* ptNode;
     uint32 u32IntSt;
 
-    if(0 == ptTm->u16Cnt)                                 /* If the start count is 0            */
+    if((NULL == ptTm) || (0 == ptTm->u16Cnt))             /* If the start count is 0            */
     {
         return NULL;                                      /* Unnecessary to start the timer     */
     }
@@ -442,6 +442,13 @@ static uint16 Osal_Timer_Test_Max_Cnt()
 
     T_TIMER_NODE *ptNode = (T_TIMER_NODE*)(&sg_ptTmHead); /* Make it a non-NULL value       */
 
+    T_TIMER tTm;
+    /* Set time parameter */
+    tTm.u8TaskID = 0;
+    tTm.u16Evt   = 0;
+    tTm.u16Cnt   = 1;
+    tTm.u32TmOut = 10;
+
     DBG_PRINT("**IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**\n");
     DBG_PRINT("Warning: This test function is just show how many timers can be allocated in heap space.\n");
     
@@ -450,7 +457,7 @@ static uint16 Osal_Timer_Test_Max_Cnt()
     /* Check how many timers can be added */
     for (u16Idx = 0; ptNode != NULL ; u16Idx++)
     {
-        ptNode = Osal_Timer_Start(0, 0, 1, 10);            /* Set 10ms timeout for each timer */
+        ptNode = Osal_Timer_Start(&tTm);                  /* Set 10ms timeout for each timer */
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -476,10 +483,17 @@ static uint8 Osal_Timer_Test_StartStop()
     T_TIMER_NODE *ptNode;
     uint32 u32IntSt;
 
+    T_TIMER tTm;
+    /* Set time parameter */
+    tTm.u8TaskID = 0;
+    tTm.u16Evt   = 0;
+    tTm.u16Cnt   = 1;
+    tTm.u32TmOut = 10;
+
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/    
     DBG_PRINT("Try to start timer for 10ms\n"); 
-    ptNode = Osal_Timer_Start(0, 0, 1, 10);             /* Start a timer               */
+    ptNode = Osal_Timer_Start(&tTm);                    /* Start a timer               */
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to start a timer!!\n");       
@@ -510,7 +524,8 @@ static uint8 Osal_Timer_Test_StartStop()
     Osal_Timer_Process();                               /* To delete the stopped timer */
 
     DBG_PRINT("Try to start another timer for 5000ms\n"); 
-    ptNode = Osal_Timer_Start(0, 0, 1, 5000);           /* Start a timer               */
+    tTm.u32TmOut = 5000;
+    ptNode = Osal_Timer_Start(&tTm);                    /* Start a timer               */
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to start a timer!!\n");       
@@ -533,7 +548,8 @@ static uint8 Osal_Timer_Test_StartStop()
     } 
 
     DBG_PRINT("Start a 10-times 1 second timer!!\n");
-    ptNode = Osal_Timer_Start(0, 0, 10, 1000);           /* Start a timer               */
+    tTm.u32TmOut = 1000;
+    ptNode = Osal_Timer_Start(&tTm);                    /* Start a timer               */
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
     {
         DBG_PRINT("Failed to start a timer!!\n");       
