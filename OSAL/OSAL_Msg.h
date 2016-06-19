@@ -30,7 +30,7 @@ extern "C" {
 #define OSAL_MSG_POLL               (1)               /* Need to poll message process            */
 
 #define MSG_TYPE_TEST               (1)               /* The message type for test               */
-
+#define MSG_TYPE_QUEUE              (2)               /* The message type for queue              */
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
 * Description: Structure of message head.
@@ -73,7 +73,15 @@ typedef struct _T_TEST_MSG
     }DATA;
 }T_TEST_MSG;
 
-
+/*******************************************************************************
+* Structure  : T_QUEUE_MSG
+* Description: Structure of queue message.
+* Memebers   : T_QUEUE_INFO *ptQueue         Pointer of queue information
+*******************************************************************************/
+typedef struct _T_QUEUE_MSG
+{
+    T_QUEUE_INFO *ptQueue;
+}T_QUEUE_MSG;
 
 
 /******************************************************************************
