@@ -13,8 +13,8 @@
 *                 queue into the prepared array without check 0-buffer-block and 
 *                 decrease operation.
 *              2. For more efficient use, You can fill the buffer block by yourself
-*                 with the MARCO OSAL_QUEUE_LAST_FREE(p), or read data from queue 
-*                 with the MARCO OSAL_QUEUE_FIRST_USED(p), please remember to 
+*                 with the MACRO OSAL_QUEUE_LAST_FREE(p), or read data from queue 
+*                 with the MACRO OSAL_QUEUE_FIRST_USED(p), please remember to 
 *                 check queue is free/queue is NOT empty BEFORE wirting/reading 
 *                 by calling Osal_Qeueu_Is_Free()/Osal_Queue_Is_NOT_Empty(); And
 *                 increase/decrease the queue AFTER buffer block wirting/reading
@@ -124,7 +124,10 @@ uint8 Osal_Queue_Delete(T_QUEUE_INFO *ptQueueInfo)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* description: This function increases the end buffer pointer of the queue, please
+*              call this function after free buffer checking and wirting operation.
+*              NOTE: Do NOT call such function if  "Osal_Queue_Write()" function is
+*              called.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
@@ -163,7 +166,10 @@ uint8 Osal_Queue_Inc(T_QUEUE_INFO *ptQueue)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* description: This function increases the start buffer pointer of the queue, please
+*              call this function after empty buffer checking and reading operation.
+*              NOTE: Do NOT call such function if  "Osal_Queue_Read()" function is
+*              called.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
