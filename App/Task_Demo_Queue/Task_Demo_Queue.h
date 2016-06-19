@@ -32,6 +32,9 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_APP_TASK__DEMO_QUEUE     /* According the set from project_config.h */
 #endif
 
+#define TASK_DEMO_QUEUE_BUF_NUM              (5)
+#define TASK_DEMO_QUEUE_BUF_SIZE             (10)
+
 void Task_Demo_Queue_Init(uint8 u8TaskID);
 
 
