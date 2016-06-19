@@ -24,6 +24,12 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt);
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
+static uint8 sg_au8Queue[TASK_DEMO_QUEUE_BUF_NUM * TASK_DEMO_QUEUE_BUF_SIZE] = {0};
+static uint8 sg_au8DataW[TASK_DEMO_QUEUE_BUF_SIZE] = {1,2,3,4,5,6,7,8,9,10};
+static uint8 sg_au8DataR[TASK_DEMO_QUEUE_BUF_SIZE] = {0,0,0,0,0,0,0,0,0,0};
+
+static T_QUEUE_INFO sg_tQueue1,sg_tQueue2;
+
 /******************************************************************************
 * Name       : void Task_Demo_Queue_Init(uint8 u8TaskID)
 * Function   : Init task_Demo_Queue
@@ -42,7 +48,27 @@ void Task_Demo_Queue_Init(uint8 u8TaskID)
     DBG_PRINT("Task Demo Queue is inited successfully, Task ID is %d\n", sg_u8TaskID);
 
     /*--------------------   Add your init code here   ----------------------*/
+    /* Init queue 1 which is located in task space */
+    sg_tQueue1.pu8Addr  = sg_au8Queue;
+    sg_tQueue1.u8Len    = TASK_DEMO_QUEUE_BUF_SIZE;
+    sg_tQueue1.u8MaxCnt = TASK_DEMO_QUEUE_BUF_NUM;
+    sg_tQueue1.u8Begin  = 0;
+    sg_tQueue1.u8End    = 0;
+    sg_tQueue1.u8Cnt    = 0;
+    
+    /* Init queue 2 by queue API */
+    Osal_Queue_Create(&sg_tQueue2, TASK_DEMO_QUEUE_BUF_SIZE, TASK_DEMO_QUEUE_BUF_NUM);
 
+    /* Init timer */
+    T_TIMER tTm;
+    tTm.u8TaskID     = sg_u8TaskID;
+    tTm.u16Evt       = EVENT_TIMER;
+    tTm.u16Cnt       = OSAL_TMR_INFINITE_CNT;
+    tTm.u32TmOut     = 1000;
+    tTm.pfTmCallback = NULL;
+    tTm.pPara        = NULL;
+
+    Osal_Timer_Start(&tTm);
     /*-------------------   The end of your init code   ---------------------*/
     
     return;
@@ -61,15 +87,64 @@ void Task_Demo_Queue_Init(uint8 u8TaskID)
 ******************************************************************************/
 static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
 {
-    uint8  u8MsgType;
+    uint8  u8MsgType,u8Idx;
     void  *ptMsg;
+
+/******************************************************************************/
+/* Process for timer event                                                    */
+/******************************************************************************/
+    EVENT_PROCESS_BEGIN(EVENT_TIMER);
+    /*-----------------   Add your event process code here   -----------------*/
+        /* Queue 1 writing */
+        if(SW_OK == Osal_Queue_Is_Free(&sg_tQueue1))
+        {   /* If free buff is available */
+            for (u8Idx = 0; u8Idx < sizeof(sg_au8DataW); u8Idx++)
+            {   /* Write the data into the buffer */
+                OSAL_QUEUE_LAST_FREE(&sg_tQueue1)[u8Idx] = sg_au8DataW[u8Idx];
+            }
+            Osal_Queue_Inc(&sg_tQueue1);  /* Update the queue */
+            DBG_PRINT("Queue 1 writing successfully!!\n");
+        }
+        else /* If queue is NOT free */
+        {
+            DBG_PRINT("Queue 1 is NOT free!!\n");
+        }
+
+        /**********************************************************************/
+        /* Queue 2 writing */
+        if(SW_OK == Osal_Queue_Write(&sg_tQueue2, sg_au8DataW, sizeof(sg_au8DataW)))
+        {   /* If free buff is available */
+            DBG_PRINT("Queue 2 writing successfully!!\n");
+        }
+        else /* If queue is NOT free */
+        {
+            DBG_PRINT("Queue 2 is NOT free!!\n");
+        }
+
+        sg_au8DataW[0]++;
+    /*----------------  The end of your event process code  ------------------*/
+    EVENT_PROCESS_END(EVENT_TIMER);
+/******************************************************************************/
+
 
 /******************************************************************************/
 /* Process for message event                                                  */
 /******************************************************************************/
     EVENT_PROCESS_BEGIN(EVENT_MSG); 
     /*-----------------   Add your event process code here   -----------------*/
-       
+        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
+        while(ptMsg)
+        {   
+            switch(u8MsgType)
+            {
+                case MSG_TYPE_QUEUE:
+                {
+                    T_QUEUE_MSG *ptQueueMsg = (T_TEST_MSG*)ptMsg;
+                    break;
+                }
+            }
+            ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
+        }
     /*----------------  The end of your event process code  ------------------*/
     EVENT_PROCESS_END(EVENT_MSG);
 /******************************************************************************/
