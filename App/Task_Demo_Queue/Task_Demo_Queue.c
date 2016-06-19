@@ -110,6 +110,8 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
             DBG_PRINT("Queue 1 is NOT free!!\n");
         }
 
+        Osal_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
+
         /**********************************************************************/
         /* Queue 2 writing */
         if(SW_OK == Osal_Queue_Write(&sg_tQueue2, sg_au8DataW, sizeof(sg_au8DataW)))
@@ -120,6 +122,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
         {
             DBG_PRINT("Queue 2 is NOT free!!\n");
         }
+        Osal_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
 
         sg_au8DataW[0]++;
     /*----------------  The end of your event process code  ------------------*/
