@@ -208,7 +208,9 @@ uint8 Osal_Queue_Dec(T_QUEUE_INFO *ptQueue)
 * Output:    : None
 * Return     : SW_OK   Free.
 *              SW_ERR  Not Free.
-* description: To be done.
+* description: This function checks if queue is free or NOT by used buffer blocks.
+*              Please call this function before queue writing except calling API 
+*              "Osal_Queue_Write()".
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
@@ -239,7 +241,9 @@ uint8 Osal_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
 * Output:    : None
 * Return     : SW_OK   Not empty.
 *              SW_ERR  Empty.
-* description: To be done.
+* description: This function checks if queue is Not empty or NOT by used buffer 
+*              blocks. Please call this function before queue writing except 
+*              calling API "Osal_Queue_Read()".
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
@@ -272,7 +276,9 @@ uint8 Osal_Queue_Is_Not_Empty(T_QUEUE_INFO *ptQueue)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: NOTE: When this function is called, Osal_Queue_Inc() should NOT be
+* description: This function checks if the queue is free or NOT before data writing,
+*              and increases the queue after data writing inside.
+*              NOTE: When this function is called, Osal_Queue_Inc() should NOT be
 *              called again because it will be done inside of such function.
 * Version    : V1.00
 * Author     : Ian
@@ -327,7 +333,9 @@ uint8 Osal_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 * Output:    : uint8        *pu8Data        The pointer of data to be writen
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: NOTE: When this function is called, Osal_Queue_Dec() should NOT be
+* description: This function checks if the queue is not empty or NOT before data
+*              reading, and decreases the queue after data reading inside.
+*              NOTE: When this function is called, Osal_Queue_Dec() should NOT be
 *              called again because it will be done inside of such function.
 * Version    : V1.00
 * Author     : Ian
@@ -383,7 +391,8 @@ uint8 Osal_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* description: This function is just used for testing, Please do NOT call it
+*              in your application codes.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 11th Jun 2016
