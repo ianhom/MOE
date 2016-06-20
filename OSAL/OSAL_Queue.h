@@ -71,6 +71,16 @@ typedef struct _T_QUEUE_INFO
     uint8  u8MaxCnt;                   /* The count of total blocks           */
 }T_QUEUE_INFO;
 
+/*******************************************************************************
+* Structure  : T_QUEUE_MSG
+* Description: Structure of queue message.
+* Memebers   : T_QUEUE_INFO *ptQueue         Pointer of queue information
+*******************************************************************************/
+typedef struct _T_QUEUE_MSG
+{
+    T_QUEUE_INFO *ptQueue;
+}T_QUEUE_MSG;
+
 
 /******************************************************************************
 * Name       : uint8 Osal_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
