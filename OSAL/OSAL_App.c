@@ -18,6 +18,7 @@
 #include "Task1.h"
 #include "Task2.h"
 #include "Task3.h"
+#include "Task_Demo_Queue.h"
 
 
 /******************************************************************************
@@ -36,18 +37,19 @@
 ******************************************************************************/
 void Osal_Tasks_Init()
 {
-    uint8 u8TaskID = 0;            /* Task No. starts from 0, higher number ==> lower priority       */
+    uint8 u8TaskID = 1;            /* Task No. starts from 0, higher number ==> lower priority       */
 
     /*****************************************************************************************************/
     /*****************************************************************************************************/
     Task1_Init(u8TaskID++);        /* Task 1 init operation, Please add your init task function here */
     Task2_Init(u8TaskID++);        /* Task 2 init operation, Please add your init task function here */
     Task3_Init(u8TaskID++);        /* Task 3 inti operation, Please add your init task function here */
+    Task_Demo_Queue_Init(u8TaskID++);
     /******************************************************************************************************/
     /******************************************************************************************************/
 
     /* If the inited tasks count is NOT equals to the max number of all tasks */
-    if (u8TaskID != MAX_TASK_NUM)
+    if (u8TaskID != MAX_TASK_NUM + 1)
     {
         DBG_PRINT("Task number ERROR!!\n");
         while(1);                  /* Enter forever loop */
