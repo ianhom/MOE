@@ -32,10 +32,22 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_APP_TASK__DEMO_QUEUE     /* According the set from project_config.h */
 #endif
 
-#define TASK_DEMO_QUEUE_BUF_NUM              (5)
-#define TASK_DEMO_QUEUE_BUF_SIZE             (10)
+#define TASK_DEMO_QUEUE_BUF_NUM              (5)                /* Number of buffer blocks    */
+#define TASK_DEMO_QUEUE_BUF_SIZE             (10)               /* Size of each buffer blocks */
 
+/******************************************************************************
+* Name       : void Task_Demo_Queue_Init(uint8 u8TaskID)
+* Function   : Init task_Demo_Queue
+* Input      : To be done.
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 19th Jun 2016
+******************************************************************************/
 void Task_Demo_Queue_Init(uint8 u8TaskID);
+
 
 
 
