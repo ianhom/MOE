@@ -145,15 +145,15 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
                 {
                     T_QUEUE_MSG *ptQueueMsg = (T_QUEUE_MSG*)ptMsg;
                     /* Queue 1 reading */
-                    if(&sg_tQueue1 == ptMsg->ptQueue)
+                    if(&sg_tQueue1 == ptQueueMsg->ptQueue)
                     {   /* If used buffer is available */
-                        if(SW_OK ==Osal_Queue_Is_Not_Empty(ptMsg->ptQueue))
+                        if(SW_OK ==Osal_Queue_Is_Not_Empty(ptQueueMsg->ptQueue))
                         {   /* Read the data from queue */
                             for(u8Idx = 0; u8Idx < sizeof(sg_au8DataR); u8Idx++)
                             {
-                                sg_au8DataR[u8Idx] = OSAL_QUEUE_FIRST_USED(ptMsg->ptQueue);
+                                sg_au8DataR[u8Idx] = OSAL_QUEUE_FIRST_USED(ptQueueMsg->ptQueue)[u8Idx];
                             }
-                            Osal_Queue_Dec(ptMsg->ptQueue);  /* Update the queue */
+                            Osal_Queue_Dec(ptQueueMsg->ptQueue);  /* Update the queue */
                             DBG_PRINT("Queue 1 reading successfully!!\n");
                         }
                         else/* If it a empty queue */
@@ -164,9 +164,9 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
  
                     /**********************************************************/
                     /* Queue 2 reading */
-                    else if(&sg_tQueue2 == ptMsg->ptQueue)
+                    else if(&sg_tQueue2 == ptQueueMsg->ptQueue)
                     {   /* If reading is successful */
-                        if(SW_OK == Osal_Queue_Read(ptMsg->ptQueue, sg_au8DataR, sizeof(sg_au8DataR)))
+                        if(SW_OK == Osal_Queue_Read(ptQueueMsg->ptQueue, sg_au8DataR, sizeof(sg_au8DataR)))
                         {
                             DBG_PRINT("Queue 2 reading successfully!!\n");
                         }
