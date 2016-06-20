@@ -73,15 +73,7 @@ typedef struct _T_TEST_MSG
     }DATA;
 }T_TEST_MSG;
 
-/*******************************************************************************
-* Structure  : T_QUEUE_MSG
-* Description: Structure of queue message.
-* Memebers   : T_QUEUE_INFO *ptQueue         Pointer of queue information
-*******************************************************************************/
-typedef struct _T_QUEUE_MSG
-{
-    T_QUEUE_INFO *ptQueue;
-}T_QUEUE_MSG;
+
 
 
 /******************************************************************************
