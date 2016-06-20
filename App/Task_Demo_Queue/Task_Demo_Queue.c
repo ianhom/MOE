@@ -16,8 +16,9 @@
 #include "project_config.h"
 #include "OSAL.h"
 #include "OSAL_Timer.h"
-#include "OSAL_Msg.h"
+#include "OSAL_Queue.h"
 #include "Task_Demo_Queue.h"
+#include "OSAL_Msg.h"
 #include "debug.h"
 
 static uint16 Task_Demo_Queue_Process(uint16 u16Evt);
@@ -146,7 +147,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
                     /* Queue 1 reading */
                     if(&sg_tQueue1 == ptMsg->ptQueue)
                     {   /* If used buffer is available */
-                        if(SW_OK ==Osal_Queue_Is_Not_Empty(ptMsg->ptQueue)
+                        if(SW_OK ==Osal_Queue_Is_Not_Empty(ptMsg->ptQueue))
                         {   /* Read the data from queue */
                             for(u8Idx = 0; u8Idx < sizeof(sg_au8DataR); u8Idx++)
                             {
