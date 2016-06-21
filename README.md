@@ -10,6 +10,7 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 - [ ] Queue debug
 - [ ] HAL process
 - [ ] HAL debug
+- [ ] Sperate event
 - [ ] Design friendly & useful API
 
 ## Log
