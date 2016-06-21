@@ -1,4 +1,4 @@
-#OSAL-files
+#MOE-files
 
 ## Introduction
 The folder contains all core files of "OSAL-like". It includes OSAL scheduler, OSAL timer, OSAL message and so on.
