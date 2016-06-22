@@ -15,7 +15,7 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs.
 
 ## Log
 ### 22rd Jun 2016
-Re-design the events and scheduler, name it MOE :sunglass:
+Re-design the events and scheduler, name it MOE :sunglasses:
 
 ### 12th Jun 2016
 Improve & complete queue process
