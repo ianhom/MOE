@@ -1,58 +1,58 @@
-# API Description of OSAL-Like
+# API Description of MOE
 
 ## Introduction
-**OSAL-Like** is a rebuild scheduler from OSAL of z-stack(TI ZigBee stack). Following features are realised:
+**MOE** is an event-driven scheduler system for 8/16/32-bit MCUs. . Following features are realised:
 - Basic scheduler;
-- Multi-task with priority;
+- Multi-task;
 - Event driven.
 - Software Timer.
 - Messages.
 - Queue operation for general use.
 - And so on....   
 
-This document contains all description of OSAL-Like API, and help user for task coding.
+This document contains all description of MOE API, and help user for task coding.
 
 ## Description
 To be done...
-### OSAL Basic
+### MOE Basic
 To be done...
-#### void Osal_Init()
+#### void Moe_Init()
 To be done...
-#### void Osal_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
+#### void Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
 To be done...
-#### voidOsal_Run_System()
+#### void Moe_Run_System()
 To be done...
-#### uint8 Osal_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+#### uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 To be done...
-#### uint8Osal_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
+#### uint8 Moe_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 To be done...
-#### uint8Osal_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
+#### uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 To be done...
-#### uint8 Osal_Get_Acktive_Task()
+#### uint8 Moe_Get_Acktive_Task()
 To be done...
-#### void Osal_Reg_Malloc_Free()
+#### void Moe_Reg_Malloc_Free()
 To be done...
-#### void* Osal_Malloc(uint32 u32Size)
+#### void* Moe_Malloc(uint32 u32Size)
 To be done...
-#### void Osal_Free(void *p)
+#### void Moe_Free(void *p)
 To be done...   
 
 ------------   
 
-### OSAL Timer
+### MOE Timer
 To be done...   
 
 ------------   
 
-### OSAL Message
+### MOE Message
 To be done...   
 
 ------------   
 
-### OSAL Queue
+### MOE Queue
 To be done...   
 
 -------------   
 
-### OSAL Link List
+### MOE Link List
 To be done...
