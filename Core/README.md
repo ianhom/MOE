@@ -1,7 +1,7 @@
 #MOE-files
 
 ## Introduction
-The folder contains all core files of "OSAL-like". It includes OSAL scheduler, OSAL timer, OSAL message and so on.
+The folder contains all core files of "MOE". It includes MOE scheduler, MOE timer, MOE message, MOE event, MOE queue and so on.
 
 ## Log
 ### 26th May 2016
