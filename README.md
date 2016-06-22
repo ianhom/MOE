@@ -1,6 +1,6 @@
-# OSAL-like
+# MOE
 ## Introduce
-OSAL is a good scheduler and I‘d like to try to re-build it and use it in future
+MOE is an event-driven scheduler system for 8/16/32-bit MCUs. 
 
 ## TODO
 - [x] Debug timer code
@@ -14,6 +14,9 @@ OSAL is a good scheduler and I‘d like to try to re-build it and use it in futu
 - [ ] Design friendly & useful API
 
 ## Log
+### 22rd Jun 2016
+Re-design the events and scheduler, name it MOE :sunglass:
+
 ### 12th Jun 2016
 Improve & complete queue process
 
