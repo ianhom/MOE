@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : OSAL_Msg.h
+* File       : MOE_Msg.h
 * Function   : Provide message services.
 * description: To be done.           
 * Version    : V1.00
@@ -9,28 +9,28 @@
 *               1    26/May/2016    Ian           Create
 ******************************************************************************/
 
-#ifndef _OSAL_MSG_H_
-#define _OSAL_MSG_H_
+#ifndef _MOE_MSG_H_
+#define _MOE_MSG_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Check if specified option is set for debugging */
-#ifndef __DEBUG_MODE_OSAL_MSG                    
+#ifndef __DEBUG_MODE_MOE_MSG                    
 #define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
 #else
 #ifdef __DEBUG_MODE
 #undef __DEBUG_MODE
 #endif
-#define __DEBUG_MODE      __DEBUG_MODE_OSAL_MSG       /* According the set from project_config.h */
+#define __DEBUG_MODE      __DEBUG_MODE_MOE_MSG        /* According the set from project_config.h */
 #endif
 
-#define OSAL_MSG_POLL_NONE          (0)               /* Unnecessary to poll message process     */
-#define OSAL_MSG_POLL               (1)               /* Need to poll message process            */
+#define MOE_MSG_POLL_NONE          (0)                /* Unnecessary to poll message process     */
+#define MOE_MSG_POLL               (1)                /* Need to poll message process            */
 
-#define MSG_TYPE_TEST               (1)               /* The message type for test               */
-#define MSG_TYPE_QUEUE              (2)               /* The message type for queue              */
+#define MSG_TYPE_TEST              (1)                /* The message type for test               */
+#define MSG_TYPE_QUEUE             (2)                /* The message type for queue              */
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
 * Description: Structure of message head.
@@ -77,7 +77,7 @@ typedef struct _T_TEST_MSG
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
+* Name       : uint8 Moe_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
 * Input      : uint8  u8DestTask    1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
@@ -91,11 +91,11 @@ typedef struct _T_TEST_MSG
 * Author     : Ian
 * Date       : 28th May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 
 
 /******************************************************************************
-* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
+* Name       : uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 * Function   : Receive a message
 * Input      : uint8  u8DestTask    1~254     The destination task number
 * Output:    : uint8 *pu8Type       0~255     Type of message
@@ -106,10 +106,10 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
+uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+* Name       : uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 * Function   : Forward a message
 * Input      : void *ptMsg                    The pointer of the message
 *              uint8  u8NextTask    0~254     The next task number which receives 
@@ -124,11 +124,11 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
 * Author     : Ian
 * Date       : 5th Jun 2016
 ******************************************************************************/
-uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask);
+uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Process()
+* Name       : uint8 Moe_Msg_Process()
 * Function   : Message process function, distribute "all task message" to each
 *              task, and delete useless message.
 * Input      : None
@@ -140,10 +140,10 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Process();
+uint8 Moe_Msg_Process();
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Total_Cnt()
+* Name       : uint16 Moe_Msg_Total_Cnt()
 * Function   : Get the max number of total messages in message link list.
 * Input      : None
 * Output:    : None
@@ -153,11 +153,11 @@ uint8 Osal_Msg_Process();
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Total_Cnt();
+uint16 Moe_Msg_Total_Cnt();
 
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Read_Cnt()
+* Name       : uint16 Moe_Msg_Read_Cnt()
 * Function   : Get the max number of read messages
 * Input      : None
 * Output:    : None
@@ -167,11 +167,11 @@ uint16 Osal_Msg_Total_Cnt();
 * Author     : Ian
 * Date       : 8th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Read_Cnt();
+uint16 Moe_Msg_Read_Cnt();
 
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Unread_Cnt()
+* Name       : uint16 Moe_Msg_Unread_Cnt()
 * Function   : Get the max number of unread messages
 * Input      : None
 * Output:    : None
@@ -181,10 +181,10 @@ uint16 Osal_Msg_Read_Cnt();
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Unread_Cnt();
+uint16 Moe_Msg_Unread_Cnt();
 
 /******************************************************************************
-* Name       : void Osal_Msg_Test_General()
+* Name       : void Moe_Msg_Test_General()
 * Function   : General test for message
 * Input      : None
 * Output:    : None
@@ -194,14 +194,14 @@ uint16 Osal_Msg_Unread_Cnt();
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-void Osal_Msg_Test_General();
+void Moe_Msg_Test_General();
 
  
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _OSAL_MSG_H_ */
+#endif /* _MOE_MSG_H_ */
 
 /* End of file */
 
