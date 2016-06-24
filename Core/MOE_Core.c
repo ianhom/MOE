@@ -22,6 +22,7 @@
 
 static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
+static PF_POLL   sg_pfPoll   = NULL;
 
 
 static uint8 sg_u8ActiveTask = TASK_NO_TASK;            /* Save the current active task number            */
@@ -101,56 +102,6 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 }
 
 
-
-
-/******************************************************************************
-* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint16 Event)
-* Function   : To be done
-* Input      : uint8  u8TaskID
-*              uint16 u16Evt
-* Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-uint8 Moe_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
-{  
-    uint8  u8Idx;
-    uint32 u32IntSt;
-
-    if(TASK_ALL_TASK == u8TaskID)   /* If it is an event for all tasks */
-    {
-        DBG_PRINT("It is an event for all tasks\n");
-        ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-        /**************************************************************************************************/
-        for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
-        {
-            au16TaskEvt[u8Idx] &= (~u16Evt);           /* Clear all tasks with the event */
-        }
-        /**************************************************************************************************/
-        EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-        return SW_OK;
-    }
-
-    /* Check if the task ID is invalid or NOT */
-    if(u8TaskID > MAX_TASK_NUM)
-    {   /* If task ID is wrong, return error */
-        return SW_ERR;
-    }
-    
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
-    au16TaskEvt[u8TaskID - 1] &= (~u16Evt);
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-
-    return SW_OK;
-}
-
-
 /******************************************************************************
 * Name       : void Moe_Init()
 * Function   : Init all tasks
@@ -165,18 +116,31 @@ uint8 Moe_Event_Clr(uint8 u8TaskID, uint16 u16Evt)
 * Author     : Ian
 * Date       : 29th Apr 2016
 ******************************************************************************/
-void Moe_Init()
+uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 {
     uint32 u8Idx;    
    
     sg_tEvt.u8Task = TASK_NO_TASK;
     sg_tEvt.u8Evt  = EVENT_NONE;
     
+    /* Check if the input parameter is invalid or NOT */
+    if (NULL == pfSysTm)
+    {   
+        DBG_PRINT("Init input parameter is invalid!!\n");
+        return SW_ERR;    /* If invalid, return error */   
+    }
+
     /* Init the task events list with NO EVENT                */
     Moe_Memset((uint8*)au16TaskEvt, EVENT_NONE, sizeof(uint8)*MAX_TASK_NUM);
    
     /* Init the task process function pointer table with NULL */
     Moe_Memset((uint8*)sg_apfTaskFn, NULL, sizeof(uint16*)*MAX_TASK_NUM);
+
+    /* Get poll process function */
+    sg_pfPoll = pfPoll;
+
+    /* Init timer */
+    Moe_Timer_Init(pfSysTm);
 
     /* Init event mechanism */
     Moe_Event_Init();
@@ -197,22 +161,6 @@ void Moe_Init()
     return;
 }
 
-/******************************************************************************
-* Name       : void Moe_ProcessPoll()
-* Function   : To be done.
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_ProcessPoll()
-{
-    /* To be done... */
-    return;
-}
 
 
 /******************************************************************************
@@ -226,19 +174,21 @@ void Moe_ProcessPoll()
 * Author     : Ian
 * Date       : 28th Apr 2016
 ******************************************************************************/
-void Moe_Run_System()
+void Moe_Run()
 {
     while(1)                             /* The main loop                */
     {
         Moe_Timer_Process();             /* Update all timers            */
         Moe_Msg_Process();               /* Process messageas            */
-        Moe_ProcessPoll();               /* Do polling process if needed */
-
-        if(Moe_Event_Get(&sg_tEvt))
+        if (sg_pfPoll)
         {
-            sg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt);    /* Call the task process function */
-            sg_tEvt.u8Task = TASK_NO_TASK;             /* Finish task processing and cancel active task mark */
-            
+            sg_pfPoll();                 /* Do polling process if needed */
+        }
+
+        if(Moe_Event_Get(&sg_tEvt))      /* Check events                 */
+        {
+            sg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
+            sg_tEvt.u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
         }
     }
     return;
@@ -324,42 +274,6 @@ void Moe_Free(void *p)
     /* A malloc function to be done here later */
     return;    
 }
-
-
-uint8 Moe_Process_Task(uint8 u8Task)
-{   
-    uint8  u8Idx;
-    uint16 u16Evt;
-    uint32 u32IntSt;
-
-    if((TASK_NO_TASK == u8Task) ||(u8Task > MAX_TASK_NUM))
-    {
-        return SW_ERR;
-    }
-
-    u8Idx = u8Task - 1;
-
-
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
-    u16Evt = au16TaskEvt[u8Idx];    /* Get the event             */
-    au16TaskEvt[u8Idx] = 0;         /* Clean the event temporary */
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-    
-    sg_u8ActiveTask = u8Task;                   /* Save the active task number    */
-    u16Evt = (sg_apfTaskFn[u8Idx](u16Evt));     /* Call the task process function */
-    sg_u8ActiveTask = TASK_NO_TASK;             /* Finish task processing and cancel active task mark */
-    
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
-    au16TaskEvt[u8Idx] |= u16Evt;   /* Add the rest events back */
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
-
-    return SW_OK;
-}
-
 
 
 /* End of file */
