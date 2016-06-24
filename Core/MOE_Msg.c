@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : OSAL_Msg.c
+* File       : MOE_Msg.c
 * Function   : Provide message services.
 * description: To be done.          
 * Version    : V1.00
@@ -12,21 +12,22 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "OSAL.h"
-#include "OSAL_Msg.h"
+#include "MOE_Core.h"
+#include "MOE_Msg.h"
 #include "debug.h"
+#include "MOE_Event.h"
 
-static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
-static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg);
-static uint16 Osal_Msg_Max_Cnt();
+static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg);
+static uint16 Moe_Msg_Max_Cnt();
 
 
 static T_MSG_HEAD  *sg_ptMsgListHead  = NULL;                     /* Head node of messages      */ 
 static T_MSG_HEAD  *sg_ptMsgListTail  = NULL;                     /* Tail node of messages      */
-static uint16       sg_u16MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message poll request flag  */
+static uint16       sg_u16MsgPollFlag = MOE_MSG_POLL_NONE;        /* Message poll request flag  */
 
 /******************************************************************************
-* Name       : T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
+* Name       : T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Create a message
 * Input      : uint8  u8DestTask    1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
@@ -40,7 +41,7 @@ static uint16       sg_u16MsgPollFlag = OSAL_MSG_POLL_NONE;       /* Message pol
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
@@ -48,7 +49,7 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptMsgHead = (T_MSG_HEAD*)OSAL_MALLOC(u16Size + sizeof(T_MSG_HEAD));
+    ptMsgHead = (T_MSG_HEAD*)MOE_MALLOC(u16Size + sizeof(T_MSG_HEAD));
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -102,7 +103,7 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 }
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
+* Name       : uint8 Moe_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
 * Input      : uint8  u8DestTask    1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
@@ -116,7 +117,7 @@ static T_MSG_HEAD* Osal_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16
 * Author     : Ian
 * Date       : 28th May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {    
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgNode;
@@ -142,7 +143,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
         return SW_ERR;
     }
 
-    ptMsgNode = Osal_Msg_Create(u8DestTask, u8MsgType, u16Size, ptMsg);
+    ptMsgNode = Moe_Msg_Create(u8DestTask, u8MsgType, u16Size, ptMsg);
     if(NULL == ptMsgNode)
     {
         DBG_PRINT("Message is NOT created!!\n");
@@ -164,14 +165,14 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     
-    Osal_Event_Set(u8DestTask,EVENT_MSG);        /* Set a message event to call destination task      */
+    Moe_Event_Set(u8DestTask,EVENT_MSG,MOE_EVENT_NORMAL);/* Set a message event to call destination task      */
     
     DBG_PRINT("Message is sent successfully!!\n");
     return SW_OK;
 }
 
 /******************************************************************************
-* Name       : uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
+* Name       : uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 * Function   : Receive a message
 * Input      : uint8  u8DestTask    1~254     The destination task number
 * Output:    : uint8 *pu8Type       0~255     Type of message
@@ -182,7 +183,7 @@ uint8 Osal_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptM
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
+uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 {
     T_MSG_HEAD *ptFind  = sg_ptMsgListHead;
     T_MSG_HEAD *ptFound = NULL;
@@ -216,7 +217,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
             else                                       /* If we have found one before        */
             {
                 DBG_PRINT("There are more messages for task %d!!\n",u8DestTask);
-                Osal_Event_Set(u8DestTask ,EVENT_MSG); /* Set message event for next receive */
+                Moe_Event_Set(u8DestTask ,EVENT_MSG, MOE_EVENT_NORMAL); /* Set message event for next receive */
                 break;                                 /* Stop following message checking    */
             }
         }
@@ -247,7 +248,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
                 ptFound->u8DestTask++;                         /* Forward to the next task   */  
             }                     
 #endif
-            Osal_Event_Set(ptFound->u8DestTask,EVENT_MSG);     /* Set MSG event to next task */
+            Moe_Event_Set(ptFound->u8DestTask,EVENT_MSG,MOE_EVENT_NORMAL);/* Set MSG event to next task */
             DBG_PRINT("The message to all tasks is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
         }
                 
@@ -280,7 +281,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 }
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+* Name       : uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 * Function   : Forward a message
 * Input      : void *ptMsg                    The pointer of the message
 *              uint8  u8NextTask    0~254     The next task number which receives 
@@ -295,7 +296,7 @@ uint8* Osal_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 * Author     : Ian
 * Date       : 5th Jun 2016
 ******************************************************************************/
-uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
+uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 {
     T_MSG_HEAD *ptFind;
 
@@ -326,15 +327,15 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 
     /* Set the next task to receive such message */
     ptFind->u8DestTask = u8NextTask;
-    Osal_Event_Set(u8NextTask,EVENT_MSG);         /* Call next task to receive message  */
-    sg_u16MsgPollFlag--;                          /* Decrease count for poll message    */
+    Moe_Event_Set(u8NextTask,EVENT_MSG,MOE_EVENT_NORMAL); /* Call next task to receive message  */
+    sg_u16MsgPollFlag--;                                  /* Decrease count for poll message    */
     DBG_PRINT("The message is forwarded to task %d\n",u8NextTask);
     return SW_OK;
 }
 
 
 /******************************************************************************
-* Name       : static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
+* Name       : static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 * Function   : Detele a message
 * Input      : T_MSG_HEAD *ptMsg  The message to be deteled.
 * Output:    : None
@@ -345,7 +346,7 @@ uint8 Osal_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
+static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 {
     /* Check if the pointer of message to be deteled is invalid or NOT */
     if(NULL == ptMsg)
@@ -355,12 +356,12 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
     }
     
     DBG_PRINT("Delete the message now.\n");
-    OSAL_FREE(ptMsg);
+    MOE_FREE(ptMsg);
     return ptMsg;
 }
 
 /******************************************************************************
-* Name       : uint8 Osal_Msg_Process()
+* Name       : uint8 Moe_Msg_Process()
 * Function   : Message process function, distribute "all task message" to each
 *              task, and delete useless message.
 * Input      : None
@@ -372,14 +373,14 @@ static T_MSG_HEAD* Osal_Msg_Del(T_MSG_HEAD *ptMsg)
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8 Osal_Msg_Process()
+uint8 Moe_Msg_Process()
 {
     T_MSG_HEAD *ptFind,*ptFound = NULL;
     T_MSG_HEAD *ptMsg;
     uint32      u32IntSt;
     
     /* If it is unnecessary to process message */
-    if(OSAL_MSG_POLL_NONE == sg_u16MsgPollFlag)
+    if(MOE_MSG_POLL_NONE == sg_u16MsgPollFlag)
     {   /* Return */
         return SW_OK;
     }
@@ -437,7 +438,7 @@ uint8 Osal_Msg_Process()
         /* If the delete  */
         if(NULL != ptFound)
         {
-            Osal_Msg_Del(ptFound);           /* Free the deleting node     */
+            Moe_Msg_Del(ptFound);           /* Free the deleting node     */
             DBG_PRINT("The deleting node is free!!\n");
             ptFound = NULL;
         }
@@ -447,7 +448,7 @@ uint8 Osal_Msg_Process()
 
 
 /******************************************************************************
-* Name       : static uint16 Osal_Msg_Max_Cnt()
+* Name       : static uint16 Moe_Msg_Max_Cnt()
 * Function   : Get the max number of messages which can be created
 * Input      : None
 * Output:    : None
@@ -457,27 +458,27 @@ uint8 Osal_Msg_Process()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-static uint16 Osal_Msg_Max_Cnt()
+static uint16 Moe_Msg_Max_Cnt()
 {
     uint16      u16Cnt = 0;
     uint8       u8Type = 0;
     T_TEST_MSG  tMsg;
-    T_MSG_HEAD *ptMsg  = (T_MSG_HEAD*)Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+    T_MSG_HEAD *ptMsg  = (T_MSG_HEAD*)Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
     while(!ptMsg)
     {
          u16Cnt++;
-         ptMsg  = (T_MSG_HEAD*)Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+         ptMsg  = (T_MSG_HEAD*)Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
     }
     DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
 
-    ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+    ptMsg = (T_MSG_HEAD*)Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     while(ptMsg)
     {
-        ptMsg = (T_MSG_HEAD*)Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+        ptMsg = (T_MSG_HEAD*)Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     }
 
     DBG_PRINT("%d messages are ready to be deleted!!\n", sg_u16MsgPollFlag);
-    Osal_Msg_Process();
+    Moe_Msg_Process();
     if(NULL == sg_ptMsgListHead)
     {   
         DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
@@ -491,7 +492,7 @@ static uint16 Osal_Msg_Max_Cnt()
 }
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Total_Cnt()
+* Name       : uint16 Moe_Msg_Total_Cnt()
 * Function   : Get the max number of total messages in message link list.
 * Input      : None
 * Output:    : None
@@ -501,7 +502,7 @@ static uint16 Osal_Msg_Max_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Total_Cnt()
+uint16 Moe_Msg_Total_Cnt()
 {
     uint16      u16Cnt = 0;
     T_MSG_HEAD *ptMsg  = sg_ptMsgListHead;
@@ -518,7 +519,7 @@ uint16 Osal_Msg_Total_Cnt()
 
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Read_Cnt()
+* Name       : uint16 Moe_Msg_Read_Cnt()
 * Function   : Get the max number of read messages
 * Input      : None
 * Output:    : None
@@ -528,7 +529,7 @@ uint16 Osal_Msg_Total_Cnt()
 * Author     : Ian
 * Date       : 8th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Read_Cnt()
+uint16 Moe_Msg_Read_Cnt()
 {
     DBG_PRINT("There are %d read messages!\n", sg_u16MsgPollFlag);
     return sg_u16MsgPollFlag;
@@ -536,7 +537,7 @@ uint16 Osal_Msg_Read_Cnt()
 
 
 /******************************************************************************
-* Name       : uint16 Osal_Msg_Unread_Cnt()
+* Name       : uint16 Moe_Msg_Unread_Cnt()
 * Function   : Get the max number of unread messages
 * Input      : None
 * Output:    : None
@@ -546,18 +547,18 @@ uint16 Osal_Msg_Read_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Osal_Msg_Unread_Cnt()
+uint16 Moe_Msg_Unread_Cnt()
 {
     uint16      u16Cnt = 0;    
     
-    u16Cnt = Osal_Msg_Total_Cnt() - Osal_Msg_Read_Cnt();
+    u16Cnt = Moe_Msg_Total_Cnt() - Moe_Msg_Read_Cnt();
 
     DBG_PRINT("There are %d unread messages!\n", u16Cnt);
     return u16Cnt;
 }
 
 /******************************************************************************
-* Name       : void Osal_Msg_Test_General()
+* Name       : void Moe_Msg_Test_General()
 * Function   : General test for message
 * Input      : None
 * Output:    : None
@@ -567,51 +568,51 @@ uint16 Osal_Msg_Unread_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-void Osal_Msg_Test_General()
+void Moe_Msg_Test_General()
 {  
     uint8       u8Type = 0;
     T_TEST_MSG  tMsg;
 
-    Osal_Msg_Max_Cnt();
+    Moe_Msg_Max_Cnt();
     
     for (uint8 u8Idx = 0; u8Idx < 10; u8Idx++)
     {
-        Osal_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+        Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
     }
     
-    if(10 != Osal_Msg_Total_Cnt())
+    if(10 != Moe_Msg_Total_Cnt())
     {
         DBG_PRINT("Total message count is wrong!!\n");
     }
 
     for (uint8 u8Idx = 0; u8Idx < 6; u8Idx++)
     {
-        Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+        Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     }
 
-    if(6 != Osal_Msg_Read_Cnt())
+    if(6 != Moe_Msg_Read_Cnt())
     {
         DBG_PRINT("Read message count is wrong!!\n");
     }
 
-    if(4 != Osal_Msg_Unread_Cnt())
+    if(4 != Moe_Msg_Unread_Cnt())
     {
         DBG_PRINT("Unead message count is wrong!!\n");
     }
 
-    Osal_Msg_Process();
+    Moe_Msg_Process();
     
-    if(4 != Osal_Msg_Total_Cnt())
+    if(4 != Moe_Msg_Total_Cnt())
     {
         DBG_PRINT("Total message count after deteling is wrong!!\n");
     }
     
     for (uint8 u8Idx = 0; u8Idx < 4; u8Idx++)
     {
-        Osal_Msg_Receive(TASK_FIRST_TASK, &u8Type);
+        Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
     }
-    Osal_Msg_Process();
-    if(0 != Osal_Msg_Total_Cnt())
+    Moe_Msg_Process();
+    if(0 != Moe_Msg_Total_Cnt())
     {
         DBG_PRINT("Total message count after deteling is wrong!!\n");
     }
