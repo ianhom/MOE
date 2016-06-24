@@ -39,6 +39,7 @@ extern "C" {
 
 typedef void* (*PF_MALLOC)(uint32 u32Size);
 typedef void (*PF_FREE)(void *p);
+typedef void (*PF_POLL)(void);
 
 /* MOE MACRO */
 #define TASK_NO_TASK                (0x00)                    /* Task number which means there is no task */
@@ -90,12 +91,9 @@ typedef void (*PF_FREE)(void *p);
 
 
 void   Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn);
-uint8  Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
-
-uint8  Moe_Event_Clr(uint8 u8TaskID, uint16 u16Evt);
+uint8  Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);a
 void   Moe_Init();
-void   Moe_ProcessPoll();
-void   Moe_Run_System();
+void   Moe_Run();
 uint8  Moe_Get_Acktive_Task();
 void   Moe_Reg_Malloc_Free();
 void*  Moe_Malloc(uint32 u32Size);
