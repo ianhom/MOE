@@ -1,6 +1,6 @@
 /******************************************************************************
-* File       : OSAL_App.c
-* Function   : This file is an interface for user to add tasks to OSAL.
+* File       : MOE_App.c
+* Function   : This file is an interface for user to add tasks to MOE.
 *              This file should be modified according to your tasks.
 * description: To be done.          
 * Version    : V1.00
@@ -13,7 +13,7 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "OSAL_App.h"
+#include "MOE_App.h"
 #include "debug.h"
 #include "Task1.h"
 #include "Task2.h"
@@ -22,7 +22,7 @@
 
 
 /******************************************************************************
-* Name       : void Osal_Tasks_Init()
+* Name       : void Moe_Tasks_Init()
 * Function   : Init all tasks
 * Input      : None
 * Output:    : None
@@ -35,7 +35,7 @@
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-void Osal_Tasks_Init()
+void Moe_Tasks_Init()
 {
     uint8 u8TaskID = 1;            /* Task No. starts from 0, higher number ==> lower priority       */
 
@@ -43,8 +43,8 @@ void Osal_Tasks_Init()
     /*****************************************************************************************************/
     Task1_Init(u8TaskID++);        /* Task 1 init operation, Please add your init task function here */
     Task2_Init(u8TaskID++);        /* Task 2 init operation, Please add your init task function here */
-    Task3_Init(u8TaskID++);        /* Task 3 inti operation, Please add your init task function here */
-    Task_Demo_Queue_Init(u8TaskID++);
+//    Task3_Init(u8TaskID++);        /* Task 3 inti operation, Please add your init task function here */
+//    Task_Demo_Queue_Init(u8TaskID++);
     /******************************************************************************************************/
     /******************************************************************************************************/
 
