@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : OSAL_Link_list.c 
+* File       : MOE_Link_list.c
 * Function   : General link list function.
 * description: To be done.          
 * Version    : V1.00
@@ -12,13 +12,13 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "OSAL.h"
-#include "OSAL_Link_List.h"
+#include "MOE_Core.h"
+#include "MOE_Link_List.h"
 #include "debug.h"
 
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE* Osal_Timer_Add()
+* Name       : static T_TIMER_NODE* Moe_Timer_Add()
 * Function   : Add a timer node
 * Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
 * Output:    : None
@@ -29,7 +29,7 @@
 * Author     : Ian
 * Date       : 2nd Jun 2016
 ******************************************************************************/
-void* Osal_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
+void* Moe_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
 {
     uint32 u32IntSt;
     /* If the input node pointer is invalid  */
@@ -66,7 +66,7 @@ void* Osal_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
 
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE* Osal_Timer_Del(T_TIMER_NODE* ptNode)
+* Name       : static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE* ptNode)
 * Function   : Delete a timer node
 * Input      : T_TIMER_NODE* ptNode  The timer node to be delete.
 * Output:    : None
@@ -77,7 +77,7 @@ void* Osal_Link_List_Add(void **pptHead, void **pptTail, void* ptNode)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
+void* Moe_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
 {
     void* ptFind;
     uint32 u32IntSt;
@@ -108,7 +108,7 @@ void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
         {
             *pptHead = (*pptHead)->ptNext;      /* Make head pointing to the next node   */
         }
-        OSAL_FREE(ptNode);                      /* Free the deleting node                */
+        MOE_FREE(ptNode);                       /* Free the deleting node                */
         DBG_PRINT("The deleting node is free!!\n");
         return ptNode;                          
     }    
@@ -120,7 +120,7 @@ void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
         if (ptFind->ptNext == ptNode)           /* Check if the next node is the one     */
         {
             ptFind->ptNext = ptNode->ptNext;    /* Delete the node                       */
-            OSAL_FREE(ptNode);                  /* Free the deleting node                */
+            MOE_FREE(ptNode);                   /* Free the deleting node                */
             DBG_PRINT("The deleting node is free!!\n");
             if(NULL == ptFind->ptNext)          /* If the tail node is deleted           */
             {
@@ -139,7 +139,7 @@ void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
 
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Name       : static T_TIMER_NODE *Moe_Timer_Find(T_TIMER_NODE* ptNode)
 * Function   : Try to find a node.
 * Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
 * Output:    : None
@@ -150,7 +150,7 @@ void* Osal_Link_list_Del(void **pptHead, void **pptTail, void* ptNode)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-void *Osal_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
+void *Moe_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
 {
     void * ptFind;
 
@@ -158,7 +158,7 @@ void *Osal_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
     if ((NULL == ptNode) || (NULL == *pptHead) || (NULL == pptHead))                         
     {
         DBG_PRINT("Invalid pointer when node deteling");
-        return NULL;                 /* Return NULL, no node to be deleted    */
+        return NULL;                  /* Return NULL, no node to be deleted   */
     }
 
     if(NULL != pptPre)
@@ -183,7 +183,7 @@ void *Osal_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
 }
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
+* Name       : static T_TIMER_NODE *Moe_Timer_Find(T_TIMER_NODE* ptNode)
 * Function   : Try to find a node.
 * Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
 * Output:    : None
@@ -194,7 +194,7 @@ void *Osal_Link_list_Find(void **pptHead, void* ptNode, void **pptPre)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void Node, void **pptPre)
+void *Moe_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,uint8 u8Node, void **pptPre)
 {
     void  *ptFind;
     uint8  u8Idx,u8Flag = 1;
@@ -203,7 +203,7 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
     if ((NULL == *pptHead) || (NULL == pptHead))                         
     {
         DBG_PRINT("Invalid pointer when node deteling");
-        return NULL;                 /* Return NULL, no node to be deleted    */
+        return NULL;                  /* Return NULL, no node to be deleted   */
     }
 
     if(NULL != pptPre)
@@ -215,14 +215,14 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
     {                   
         for(u8Idx = 0; u8Idx < u8Size; u8Idx++)
         {
-            if(*((uint8*)ptFind+u16OffSet+u8Idx) != (uint8)(Node >>(u8Idx * 8)))
+            if(*((uint8*)ptFind+u16OffSet+u8Idx) != (uint8)(u8Node >>(u8Idx * 8)))
             {
                 u8Flag = 0;
-                break
+                break;
             }
         }
                   
-        if(0 == u8Flag)          /* And if it is the searched node       */
+        if(0 == u8Flag)               /* And if it is the searched node       */
         {
             DBG_PRINT("Find the node!!\n");
             break;                    /* Find it and break the loop           */
@@ -238,7 +238,7 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
 
 
 /******************************************************************************
-* Name       : uint16 Osal_Timer_Cnt()
+* Name       : uint16 Moe_Timer_Cnt()
 * Function   : Get the count of timers
 * Input      : None
 * Output:    : None
@@ -248,7 +248,7 @@ void *Osal_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,void No
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint16 Osal_Link_list_Cnt(void **pptHead)
+uint16 Moe_Link_list_Cnt(void **pptHead)
 {
     T_TIMER_NODE *ptFind;
     uint16 u16Cnt = 0;
@@ -258,7 +258,7 @@ uint16 Osal_Link_list_Cnt(void **pptHead)
     if ((NULL ==  pptHead) || (NULL == *pptHead))                         
     {
         DBG_PRINT("Invalid pointer when node deteling");
-        return NULL;                        /* Return NULL, no node to be deleted    */
+        return NULL;                /* Return NULL, no node to be deleted    */
     }
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
