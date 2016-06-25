@@ -21,7 +21,9 @@ extern "C" {
 #endif
 
 /* Configure Zone */
-#define MAX_TASK_NUM                         (3)      /* Max number of tasks                      */
+#define MAX_TASK_NUM                         (2)      /* Max number of tasks                      */
+
+#define MAX_QUEUE_EVT_NUM                    (MAX_TASK_NUM * 10)
  
 #define __FLEXIBLE_ARRAY_NOT_SUPPORTED                /* Complier does NOT support flexible array */
 
@@ -46,34 +48,36 @@ NOTE: You have four ways to use malloc:
    your own malloc and free function, however, if you use
    the same name with "malloc" and "free", whole project
    use your malloc and free just like situation 2.
-4. Define __MALLOC_OPTION as __MALLOC_OSAL, the Osal_Malloc
-   and Osal_Free will be used.
+4. Define __MALLOC_OPTION as __MALLOC_MOE, the Moe_Malloc
+   and Moe_Free will be used.
 
 Options for __MALLOC_OPTION:
     __MALLOC_STD             Use standard malloc and free 
-    __MALLOC_OSAL            Use OSAL malloc and free     
+    __MALLOC_MOE            Use MOE malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
 #define __MALLOC_OPTION                 __MALLOC_STD      /* Use standard malloc and free funciton  */
 
 
 #ifdef __DEBUG_ENABLE
-#define __DEBUG_MODE_MAIN               __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL               __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_APP           __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_TIMER         __DEBUG_NONE  //__DEBUG_NONE  
-#define __DEBUG_MODE_OSAL_LINK_LIST     __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_QUEUE         __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_OSAL_MSG           __DEBUG_BASIC_INFO 
-#define __DEBUG_MODE_APP_TASK_1         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_2         __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_3         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_MAIN                  __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE                   __DEBUG_NONE  //__DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_APP               __DEBUG_NONE  //__DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE  //__DEBUG_NONE  
+#define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_MSG               __DEBUG_BASIC_INFO 
+#define __DEBUG_MODE_APP_TASK_1            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
+#define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
+#define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_MOE_EVENT             __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #endif
 
                            
 #if (__MALLOC_OPTION == __MALLOC_MY)         /* If you want to use your malloc and free */
-#define OSAL_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
-#define OSAL_FREE(p)        My_Free(p)       /* Add your free function here             */
+#define MOE_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
+#define MOE_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
 
 
