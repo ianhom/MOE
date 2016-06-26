@@ -1,39 +1,73 @@
 /*
- * File:        osalike.c
+ * File:        Moeike.c
  * Purpose:        Main process
  *
  */
 #include "common.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "osalike.h"
+#include "Moe_main.h"
 #include "debug.h"
-#include "OSAL.h"
-#include "OSAL_Timer.h"
+#include "MOE_Core.h"
+#include "MOE_Timer.h"
+#include "MOE_Msg.h"
+#include "MOE_Queue.h"
 #include "KL25_Lpt_Time.h"
-
+#include "Btn_SM_Config.h"
+#include "Btn_SM_Module.h"
 
 /********************************************************************/
-void main (void)
-{   T_TIMER tTm1,tTm2,tTm3;  
 
-    DBG_PRINT("\n***** OSAL-like scheduler V0.01 *****\n");
-    
+uint8 Btn_St_Get(uint8 u8Ch)
+{
+    uint8 u8Temp;
+    if(u8Ch == 1)
+    {
+        u8Temp = (!(GPIOA_PDIR & (1 << 5)));
+    }
+    if(u8Ch == 2)
+    {
+        u8Temp = (!(GPIOA_PDIR & (1 << 4)));
+    }
+    if(u8Ch == 3)
+    {
+        u8Temp = (!(GPIOA_PDIR & (1 << 12)));
+    }
+    return  u8Temp;
+}
+
+uint16 System_Time(void)
+{
+    uint16 u16Temp = (uint16)App_GetSystemTime_ms();
+    return u16Temp;
+}
+
+void Gpio_Init()
+{
+    PORTA_PCR12 = PORT_PCR_MUX(0x1);
+    PORTA_PCR5  = PORT_PCR_MUX(0x1);
+    PORTA_PCR4  = PORT_PCR_MUX(0x1);
+    GPIOA_PDDR  &= ~(1 << 12);
+    GPIOA_PDDR  &= ~(1 << 5);
+    GPIOA_PDDR  &= ~(1 << 4);
+}
+
+void Poll_Process()
+{
+    return;
+}
+
+int main (void)
+{   
+
+    Gpio_Init();
     Timer_Init();
-    Osal_Timer_Init(App_GetSystemTime_ms);
-    
-    Osal_Init();
 
-    tTm.u8TaskID     = TASK_FIRST_TASK;
-    tTm.u16Evt       = EVENT_TEST;
-    tTm.u16Cnt       = OSAL_TMR_INFINITE_CNT;
-    tTm.u32TmOut     = 2000;
-    tTm.pfTmCallback = NULL;
-    tTm.pfTmCallback = NULL;
-        
-    Osal_Timer_Start(&tTm);
+    DBG_PRINT("\n***** MOE scheduler V0.01 *****\n");
+
+    Moe_Init(App_GetSystemTime_ms, Poll_Process);   
     
-    Osal_Run_System();
+    Moe_Run();
  
 }
 /********************************************************************/
