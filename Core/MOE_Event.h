@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : OSAL_Timer.h
+* File       : MOE_Timer.h
 * Function   : Provide timer services.
 * description: To be done.           
 * Version    : V1.00
@@ -30,12 +30,16 @@ extern "C" {
 /* MACRO */
 #define MOE_EVENT_BLK_RM_THRD    ((((sg_u16BlkCnt << 1) - 3) * MAX_QUEUE_EVT_NUM) >> 1)
 
+#define MOE_EVENT_URGENT         (1)
+#define MOE_EVENT_NORMAL         (0)
+
 
 typedef struct _T_EVENT
 {
     uint8 u8Task;
     uint8 u8Evt;
 }T_EVENT;
+
 
 typedef struct _T_EVENT_QUEUE
 {
@@ -45,107 +49,13 @@ typedef struct _T_EVENT_QUEUE
 
 
 
+uint8 Moe_Event_Init();
 
-/******************************************************************************
-* Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
-* Function   : Init OSAL timer
-* Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
-* Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm);
+uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg);
 
-/******************************************************************************
-* Name       : T_TIMER_NODE* Osal_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
-* Function   : Start a timer
-* Input      : T_TIMER *ptTm     Pointer of timers set by user.
-* Output:    : None
-* Return     : NULL           Fail to start a timer.
-*              T_TIMER_NODE*  The pointer of the timer which is started.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Start(T_TIMER *ptTm);
-
-/******************************************************************************
-* Name       : T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode)
-* Function   : Stop a started timer.
-* Input      : T_TIMER_NODE* ptNode  The pointer of node to be stopped
-* Output:    : None
-* Return     : NULL           Fail to stop a timer.
-*              T_TIMER_NODE*  The pointer of the timer which is stopped.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Stop(T_TIMER_NODE* ptNode);
+uint16 Moe_Event_Get(T_EVENT *ptEvt);
 
 
-
-
-/******************************************************************************
-* Name       : static T_TIMER_NODE *Osal_Timer_Find(T_TIMER_NODE* ptNode)
-* Function   : Try to find a node.
-* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
-* Output:    : None
-* Return     : NULL           Fail to find the node.
-*              T_TIMER_NODE*  The pointer of the founed node.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-T_TIMER_NODE* Osal_Timer_Restart(T_TIMER_NODE* ptNode);
-
-
-/******************************************************************************
-* Name       : uint8 Osal_Timer_Process(void)
-* Function   : Main process for timer updating.
-* Input      : None
-* Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-uint8 Osal_Timer_Process(void);
-
-/******************************************************************************
-* Name       : uint16 Osal_Timer_Test_Cnt()
-* Function   : Get the count of timers
-* Input      : None
-* Output:    : None
-* Return     : uint16   The count of timers
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-uint16 Osal_Timer_Test_Cnt();
-
-/******************************************************************************
-* Name       : void Osal_Timer_Test_General()
-* Function   : General test
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done
-*              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
-* Version    : V1.00
-* Author     : Ian
-* Date       : 9th May 2016
-******************************************************************************/
-void Osal_Timer_Test_General();
 
 
  
@@ -153,7 +63,7 @@ void Osal_Timer_Test_General();
 }
 #endif
 
-#endif /* _OSAL_TIMER_H_ */
+#endif /* _MOE_EVENT_H_ */
 
 /* End of file */
 
