@@ -12,17 +12,15 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "OSAL.h"
+#include "MOE_Core.h"
 #include "MOE_Event.h"
 #include "debug.h"
 
-static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt);
+static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg);
 
 
-
-
-static uint16 sg_u16EvtFisrt  = 0;
-static uint16 sg_u16EvtCnt    = 0;
+static uint16 sg_u16EvtFisrt   = 0;
+static uint16 sg_u16EvtCnt     = 0;
 #ifndef __FLEXIBLE_EVENT_QUEUE
 static T_EVENT sg_atEvtQueue[MAX_QUEUE_EVT_NUM] = {0};
 #else
@@ -34,8 +32,8 @@ static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Timer_Init(PF_TIMER_SRC pfSysTm)
-* Function   : Init OSAL timer
+* Name       : uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm)
+* Function   : Init MOE timer
 * Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
 * Output:    : None
 * Return     : SW_OK   Successful.
@@ -51,7 +49,7 @@ uint8 Moe_Event_Init()
 #ifndef __FLEXIBLE_EVENT_QUEUE
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    Osal_Memset((uint8*)sg_atEvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
+    Moe_Memset((uint8*)sg_atEvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     return SW_OK;
@@ -65,7 +63,7 @@ uint8 Moe_Event_Init()
  
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_ptEvtHead = OSAL_MALLOC(sizeof(T_EVENT_QUEUE));
+    sg_ptEvtHead = MOE_MALLOC(sizeof(T_EVENT_QUEUE));
     if(NULL == sg_ptEvtHead)
     {
         u8Return = SW_ERR;
@@ -75,7 +73,7 @@ uint8 Moe_Event_Init()
 
         sg_ptEvtTail = sg_ptEvtHead;
         sg_ptEvtHead->ptNext = NULL;
-        Osal_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
+        Moe_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
         sg_u16BlkCnt++;
         u8Return = SW_OK;
     }
@@ -88,7 +86,7 @@ uint8 Moe_Event_Init()
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint16 Event)
 * Function   : To be done
 * Input      : uint8  u8TaskID
 *              uint16 u16Evt
@@ -100,13 +98,10 @@ uint8 Moe_Event_Init()
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg) 
 {  
     uint8  u8Idx;
-    uint16 u16EvtLast,u16Blk,u16OffSet;
     uint32 u32IntSt;
-    T_EVENT_QUEUE *ptEvtQueue;
-    T_EVENT       *ptEvt;
 
     if(TASK_ALL_TASK == u8TaskID)   /* If it is an event for all tasks */
     {
@@ -115,7 +110,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
         /**************************************************************************************************/
         for(u8Idx = 1; u8Idx <= MAX_TASK_NUM; u8Idx++)
         {
-            Moe_Event_Setting(u8Idx, u16Evt);
+            Moe_Event_Setting(u8Idx, u16Evt,u8Urg);
         }
         /**************************************************************************************************/
         EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -130,7 +125,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    Moe_Event_Setting(u8TaskID, u16Evt);
+    Moe_Event_Setting(u8TaskID, u16Evt,u8Urg);
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -138,7 +133,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 }
 
 
-static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt)
+static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 {
     uint16 u16EvtLast;
 #ifdef __FLEXIBLE_EVENT_QUEUE
@@ -150,7 +145,23 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt)
         return SW_ERR;
     }
 
-    u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % sg_u16EvtCntMax;
+    if(MOE_EVENT_URGENT == u8Urg)
+    {
+        if(0 == sg_u16EvtFisrt)
+        {
+            u16EvtLast = sg_u16EvtCntMax - 1;
+        }
+        else
+        {
+            u16EvtLast = sg_u16EvtFisrt - 1;
+        }
+        sg_u16EvtFisrt = u16EvtLast;
+    }
+    else
+    {
+        u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % sg_u16EvtCntMax;
+    }
+
     u16Blk     = u16EvtLast % MAX_QUEUE_EVT_NUM;
     u16OffSet  = u16EvtLast / MAX_QUEUE_EVT_NUM;
     while(u16Blk)
@@ -165,14 +176,14 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt)
 
     if(sg_u16EvtCnt == sg_u16EvtCntMax)
     {
-        sg_ptEvtTail->ptNext = (T_EVENT_QUEUE*)OSAL_MALLOC(sizeof(T_EVENT_QUEUE));
+        sg_ptEvtTail->ptNext = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
         if(NULL == sg_ptEvtTail->ptNext)
         {
             return SW_ERR;
         }
         sg_ptEvtTail = sg_ptEvtTail->ptNext;
         sg_ptEvtTail->ptNext = NULL;
-        Osal_Memset(sg_ptEvtTail->au8EvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
+        Moe_Memset(sg_ptEvtTail->au8EvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
         sg_u16EvtCntMax += MAX_QUEUE_EVT_NUM;
     }
 #else
@@ -180,7 +191,23 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt)
     {
         return SW_ERR;
     }
-    u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;
+
+    if(MOE_EVENT_URGENT == u8Urg)
+    {
+        if(0 == sg_u16EvtFisrt)
+        {
+            u16EvtLast = MAX_QUEUE_EVT_NUM - 1;
+        }
+        else
+        {
+            u16EvtLast = sg_u16EvtFisrt - 1;
+        }
+        sg_u16EvtFisrt = u16EvtLast;
+    }
+    else
+    {
+        u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;    
+    }
     sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;
     sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;
     sg_u16EvtCnt++;
@@ -191,7 +218,7 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt)
 
 
 /******************************************************************************
-* Name       : uint8 Osal_Event_Set(uint8 u8TaskID, uint16 Event)
+* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint16 Event)
 * Function   : To be done
 * Input      : uint8  u8TaskID
 *              uint16 u16Evt
@@ -216,7 +243,7 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
         return 0;
     }
 
-    if(0 == sg_u16EvtCnt)
+    if(0 == sg_u16EvtCnt) 
     {
         return 0;
     }
@@ -235,7 +262,7 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     ptEvt->u8Evt   = ptEvtQueue->atEvtQueue[u16OffSet].u8Evt;
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_u16EvtFisrt = (sg_u16EvtFisrt + 1) % sg_u16EvtCntMax;
+    sg_u16EvtFisrt   = (sg_u16EvtFisrt + 1) % sg_u16EvtCntMax;
     sg_u16EvtCnt--;
 
     if((sg_u16BlkCnt > 1)\
@@ -253,7 +280,7 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
         }
         ptTemp = ptEvtQueue->ptNext;
         ptEvtQueue->ptNext = NULL;
-        OSAL_FREE(ptTemp);
+        MOE_FREE(ptTemp);
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -262,14 +289,14 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     ptEvt->u8Task  = sg_atEvtQueue[sg_u16EvtFisrt].u8Task;
     ptEvt->u8Evt   = sg_atEvtQueue[sg_u16EvtFisrt].u8Evt;
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/    
-    sg_u16EvtFisrt = (sg_u16EvtFisrt + 1) % MAX_QUEUE_EVT_NUM;
-    sg_u16EvtCnt--
+    /**************************************************************************************************/
+    sg_u16EvtFisrt   = (sg_u16EvtFisrt + 1) % MAX_QUEUE_EVT_NUM;
+    sg_u16EvtCnt--;
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
 #endif
-    return SW_OK;
+    return (uint16)ptEvt->u8Task;
 }
 
 
