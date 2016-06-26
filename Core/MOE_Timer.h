@@ -26,7 +26,11 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_MOE_TIMER     /* According the set from project_config.h */
 #endif
 
+#ifndef PF_TIMER_SRC
+#define PF_TIMER_SRC PF_TIMER_SRC
 typedef uint32 (*PF_TIMER_SRC)(void);
+#endif
+
 typedef uint32 (*PF_TIMER_CB)(void *pPara);
 
 /*******************************************************************************
@@ -89,7 +93,6 @@ uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm);
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-
 T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 
 /******************************************************************************
