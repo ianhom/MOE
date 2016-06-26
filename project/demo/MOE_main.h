@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : osalike.h
+* File       : Moe_main.h
 * Function   : To be doen.
 * description: To be done.          
 * Version    : V1.00
@@ -9,8 +9,8 @@
 *               1    24/May/2016    Ian           Create
 ******************************************************************************/
 
-#ifndef _OSAL_LIKE_H_
-#define _OSAL_LIKE_H_
+#ifndef _MOE_MAIN_H_
+#define _MOE_MAIN_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +32,7 @@ extern "C" {
 }
 #endif
 
-#endif /* _OSAL_LIKE_H */
+#endif /* _MOE_MAIN_H */
 
 /* End of file */
 
