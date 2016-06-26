@@ -13,6 +13,7 @@
 #include "common_head.h"
 #include "project_config.h"
 #include "MOE_Core.h"
+#include "MOE_Event.h"
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
 #include "Task1.h"
@@ -21,6 +22,7 @@
 static uint16 Task1_Process(uint8 u8Evt);
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
+static uint16 sg_u16FP = 0;
 
 /******************************************************************************
 * Name       : void Task1_Init(uint8 u8TaskID)
@@ -59,15 +61,31 @@ void Task1_Init(uint8 u8TaskID)
 ******************************************************************************/
 static uint16 Task1_Process(uint8 u8Evt)
 {   
-
+#if (0)
     TASK_EVENT_PROCESS_LIST_START;
-    EVENT_PROCESS(EVENT_DELAY,ms);
+    MOE_EVT_ENTRY(EVENT_TIMER);
+    MOE_EVT_ENTRY(EVENT_MSG);
+    MOE_EVT_ENTRY(EVENT_TEST);
     TASK_EVENT_PROCESS_LIST_END;
 
     DBG_PRINT("Hello\n");
-    MOE_DELAY(3000,ms);  
+    MOE_DELAY(3000,EVENT_DELAY);  
+
     DBG_PRINT("Goodbye\n");
+
  
+    MOE_EVT_PROCESS(EVENT_MSG);
+
+
+
+    MOE_EVT_PROCESS(EVENT_TEST);
+
+
+
+    MOE_EVT_PROCESS(EVENT_TIMER);
+
+
+#endif
 
 #if (0)
 
