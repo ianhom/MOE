@@ -24,9 +24,6 @@ static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
 static PF_POLL   sg_pfPoll   = NULL;
 
-
-static uint8 sg_u8ActiveTask = TASK_NO_TASK;            /* Save the current active task number            */
-
 static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
 
 uint16 au16TaskEvt[MAX_TASK_NUM];                       /* Create a event list for tasks                  */
@@ -158,7 +155,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
         }
     }
    
-    return;
+    return SW_OK;
 }
 
 
