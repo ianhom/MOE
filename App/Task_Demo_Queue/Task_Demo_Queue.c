@@ -14,14 +14,15 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
-#include "OSAL.h"
-#include "OSAL_Timer.h"
-#include "OSAL_Queue.h"
+#include "MOE_Core.h"
+#include "MOE_Event.h"
+#include "MOE_Timer.h"
+#include "MOE_Queue.h"
 #include "Task_Demo_Queue.h"
-#include "OSAL_Msg.h"
+#include "MOE_Msg.h"
 #include "debug.h"
 
-static uint16 Task_Demo_Queue_Process(uint16 u16Evt);
+static uint16 Task_Demo_Queue_Process(uint8 u8Evt);
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
@@ -45,7 +46,7 @@ static T_QUEUE_INFO sg_tQueue1,sg_tQueue2;
 void Task_Demo_Queue_Init(uint8 u8TaskID)
 {
     sg_u8TaskID = u8TaskID;        /* Get the task ID */
-    Osal_Reg_Tasks(Task_Demo_Queue_Process);
+    Moe_Reg_Tasks(Task_Demo_Queue_Process);
     DBG_PRINT("Task Demo Queue is inited successfully, Task ID is %d\n", sg_u8TaskID);
 
     /*--------------------   Add your init code here   ----------------------*/
@@ -58,18 +59,18 @@ void Task_Demo_Queue_Init(uint8 u8TaskID)
     sg_tQueue1.u8Cnt    = 0;
     
     /* Init queue 2 by queue API */
-    Osal_Queue_Create(&sg_tQueue2, TASK_DEMO_QUEUE_BUF_SIZE, TASK_DEMO_QUEUE_BUF_NUM);
+    Moe_Queue_Create(&sg_tQueue2, TASK_DEMO_QUEUE_BUF_SIZE, TASK_DEMO_QUEUE_BUF_NUM);
 
     /* Init timer */
     T_TIMER tTm;
     tTm.u8TaskID     = sg_u8TaskID;
     tTm.u16Evt       = EVENT_TIMER;
-    tTm.u16Cnt       = OSAL_TMR_INFINITE_CNT;
+    tTm.u16Cnt       = MOE_TMR_INFINITE_CNT;
     tTm.u32TmOut     = 1000;
     tTm.pfTmCallback = NULL;
     tTm.pPara        = NULL;
 
-    Osal_Timer_Start(&tTm);
+    Moe_Timer_Start(&tTm);
     /*-------------------   The end of your init code   ---------------------*/
     
     return;
@@ -86,7 +87,7 @@ void Task_Demo_Queue_Init(uint8 u8TaskID)
 * Author     : Ian
 * Date       : 19th Jun 2016
 ******************************************************************************/
-static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
+static uint16 Task_Demo_Queue_Process(uint8 u8Evt)
 {
     uint8  u8MsgType,u8Idx;
     void  *ptMsg;
@@ -97,13 +98,13 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
     EVENT_PROCESS_BEGIN(EVENT_TIMER);
     /*-----------------   Add your event process code here   -----------------*/
         /* Queue 1 writing */
-        if(SW_OK == Osal_Queue_Is_Free(&sg_tQueue1))
+        if(SW_OK == Moe_Queue_Is_Free(&sg_tQueue1))
         {   /* If free buff is available */
             for (u8Idx = 0; u8Idx < sizeof(sg_au8DataW); u8Idx++)
             {   /* Write the data into the buffer */
-                OSAL_QUEUE_LAST_FREE(&sg_tQueue1)[u8Idx] = sg_au8DataW[u8Idx];
+                MOE_QUEUE_LAST_FREE(&sg_tQueue1)[u8Idx] = sg_au8DataW[u8Idx];
             }
-            Osal_Queue_Inc(&sg_tQueue1);  /* Update the queue */
+            Moe_Queue_Inc(&sg_tQueue1);  /* Update the queue */
             DBG_PRINT("Queue 1 writing successfully!!\n");
         }
         else /* If queue is NOT free */
@@ -111,11 +112,11 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
             DBG_PRINT("Queue 1 is NOT free!!\n");
         }
 
-        Osal_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
+        Moe_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
 
         /**********************************************************************/
         /* Queue 2 writing */
-        if(SW_OK == Osal_Queue_Write(&sg_tQueue2, sg_au8DataW, sizeof(sg_au8DataW)))
+        if(SW_OK == Moe_Queue_Write(&sg_tQueue2, sg_au8DataW, sizeof(sg_au8DataW)))
         {   /* If free buff is available */
             DBG_PRINT("Queue 2 writing successfully!!\n");
         }
@@ -123,7 +124,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
         {
             DBG_PRINT("Queue 2 is NOT free!!\n");
         }
-        Osal_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
+        Moe_Msg_Send(sg_u8TaskID,MSG_TYPE_QUEUE,sizeof(T_QUEUE_MSG*),&sg_tQueue1);
 
         sg_au8DataW[0]++;
     /*----------------  The end of your event process code  ------------------*/
@@ -136,7 +137,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
 /******************************************************************************/
     EVENT_PROCESS_BEGIN(EVENT_MSG); 
     /*-----------------   Add your event process code here   -----------------*/
-        ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
+        ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
         while(ptMsg)
         {   
             switch(u8MsgType)
@@ -147,13 +148,13 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
                     /* Queue 1 reading */
                     if(&sg_tQueue1 == ptQueueMsg->ptQueue)
                     {   /* If used buffer is available */
-                        if(SW_OK ==Osal_Queue_Is_Not_Empty(ptQueueMsg->ptQueue))
+                        if(SW_OK ==Moe_Queue_Is_Not_Empty(ptQueueMsg->ptQueue))
                         {   /* Read the data from queue */
                             for(u8Idx = 0; u8Idx < sizeof(sg_au8DataR); u8Idx++)
                             {
-                                sg_au8DataR[u8Idx] = OSAL_QUEUE_FIRST_USED(ptQueueMsg->ptQueue)[u8Idx];
+                                sg_au8DataR[u8Idx] = MOE_QUEUE_FIRST_USED(ptQueueMsg->ptQueue)[u8Idx];
                             }
-                            Osal_Queue_Dec(ptQueueMsg->ptQueue);  /* Update the queue */
+                            Moe_Queue_Dec(ptQueueMsg->ptQueue);  /* Update the queue */
                             DBG_PRINT("Queue 1 reading successfully!!\n");
                         }
                         else/* If it a empty queue */
@@ -166,7 +167,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
                     /* Queue 2 reading */
                     else if(&sg_tQueue2 == ptQueueMsg->ptQueue)
                     {   /* If reading is successful */
-                        if(SW_OK == Osal_Queue_Read(ptQueueMsg->ptQueue, sg_au8DataR, sizeof(sg_au8DataR)))
+                        if(SW_OK == Moe_Queue_Read(ptQueueMsg->ptQueue, sg_au8DataR, sizeof(sg_au8DataR)))
                         {
                             DBG_PRINT("Queue 2 reading successfully!!\n");
                         }
@@ -182,7 +183,7 @@ static uint16 Task_Demo_Queue_Process(uint16 u16Evt)
                     break;
                 }
             }
-            ptMsg = (void*)Osal_Msg_Receive(sg_u8TaskID, &u8MsgType);
+            ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
         }
     /*----------------  The end of your event process code  ------------------*/
     EVENT_PROCESS_END(EVENT_MSG);
