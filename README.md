@@ -10,10 +10,13 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs.
 - [ ] Queue debug
 - [ ] HAL process
 - [ ] HAL debug
-- [ ] Sperate event
+- [x] Sperate event
 - [ ] Design friendly & useful API
 
 ## Log
+### 27th Jun 2016
+Add message never receiving check.
+
 ### 22rd Jun 2016
 Re-design the events and scheduler, name it MOE :sunglasses:
 
