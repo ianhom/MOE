@@ -15,9 +15,10 @@
 #include "MOE_Core.h"
 #include "debug.h"
 #include "MOE_App.h"
+#include "MOE_Event.h"
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
-#include "MOE_Event.h"
+
 
 
 static PF_MALLOC sg_pfMalloc = NULL;
@@ -26,9 +27,7 @@ static PF_POLL   sg_pfPoll   = NULL;
 
 static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
 
-uint16 au16TaskEvt[MAX_TASK_NUM];                       /* Create a event list for tasks                  */
-
-T_EVENT sg_tEvt;
+static T_EVENT sg_tEvt;
 
 
 /******************************************************************************
@@ -126,9 +125,6 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
         DBG_PRINT("Init input parameter is invalid!!\n");
         return SW_ERR;    /* If invalid, return error */   
     }
-
-    /* Init the task events list with NO EVENT                */
-    Moe_Memset((uint8*)au16TaskEvt, EVENT_NONE, sizeof(uint8)*MAX_TASK_NUM);
    
     /* Init the task process function pointer table with NULL */
     Moe_Memset((uint8*)sg_apfTaskFn, NULL, sizeof(uint16*)*MAX_TASK_NUM);
@@ -138,6 +134,9 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 
     /* Init timer */
     Moe_Timer_Init(pfSysTm);
+
+    /* Init message */
+    Moe_Msg_Init();
 
     /* Init event mechanism */
     Moe_Event_Init();
@@ -185,6 +184,7 @@ void Moe_Run()
         if(Moe_Event_Get(&sg_tEvt))      /* Check events                 */
         {
             sg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
+            Moe_Msg_Never_Rcv_Check(sg_tEvt.u8Task, sg_tEvt.u8Task);
             sg_tEvt.u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
         }
     }
@@ -206,6 +206,23 @@ uint8 Moe_Get_Acktive_Task()
 {
     return sg_tEvt.u8Task;
 }
+
+/******************************************************************************
+* Name       : uint8 Moe_Get_Acktive_Evt()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8 Moe_Get_Acktive_Evt()
+{
+    return sg_tEvt.u8Evt;
+}
+
 
 /******************************************************************************
 * Name       : void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
