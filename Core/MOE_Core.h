@@ -125,6 +125,19 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll);
 void Moe_Run();
 
 /******************************************************************************
+* Name       : uint8 Moe_Get_Acktive_Evt()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8 Moe_Get_Acktive_Evt();
+
+/******************************************************************************
 * Name       : uint8 Moe_Get_Acktive_Task()
 * Function   : To be done.
 * Input      : None
