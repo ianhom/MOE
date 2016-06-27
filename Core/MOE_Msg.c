@@ -209,17 +209,9 @@ uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
     {
         if(ptFind->u8DestTask == u8DestTask)           /* If the message is found            */
         {
-            if(NULL == ptFound)                        /* If we have NOT found anyone before */
-            {
-                DBG_PRINT("A new message is found!!\n");
-                ptFound = ptFind;                      /* Set such as the one we found       */
-            }
-            else                                       /* If we have found one before        */
-            {
-                DBG_PRINT("There are more messages for task %d!!\n",u8DestTask);
-                Moe_Event_Set(u8DestTask ,EVENT_MSG, MOE_EVENT_NORMAL); /* Set message event for next receive */
-                break;                                 /* Stop following message checking    */
-            }
+            DBG_PRINT("A new message is found!!\n");
+            ptFound = ptFind;                          /* Set such as the one we found       */
+            break;                                     /* Stop following message checking    */
         }
         ptFind = ptFind->ptNext;                       /* Continue check next message        */
     }
