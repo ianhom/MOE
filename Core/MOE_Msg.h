@@ -29,8 +29,25 @@ extern "C" {
 #define MOE_MSG_POLL_NONE          (0)                /* Unnecessary to poll message process     */
 #define MOE_MSG_POLL               (1)                /* Need to poll message process            */
 
+#define MOE_MSG_RCV_DONE           (1)                /* Task has received the message           */
+#define MOE_MSG_RCV_DONE_NONE      (0)                /* Task has NOT received the message       */
+
 #define MSG_TYPE_TEST              (1)                /* The message type for test               */
 #define MSG_TYPE_QUEUE             (2)                /* The message type for queue              */
+
+/******************************************************************************
+* Name       : void Moe_Msg_Init()
+* Function   : Init message function
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: This function init the receive_done_flag array with all 0
+* Version    : V1.00
+* Author     : Ian
+* Date       : 27 Jun 2016
+******************************************************************************/
+void Moe_Msg_Init();
+
 /*******************************************************************************
 * Structure  : T_MSG_HEAD
 * Description: Structure of message head.
@@ -108,6 +125,7 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
 ******************************************************************************/
 uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
 
+
 /******************************************************************************
 * Name       : uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 * Function   : Forward a message
@@ -141,6 +159,21 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 * Date       : 31st May 2016
 ******************************************************************************/
 uint8 Moe_Msg_Process();
+
+/******************************************************************************
+* Name       : void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
+* Function   : Check is the message is received or NOT after the EVENT_MSG task
+*              process. 
+* Input      : uint8     u8Task   1~254      Task number
+*              uint8     u8Evt    0~255      Event number
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 27th Jun 2016
+******************************************************************************/
+void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt);
 
 /******************************************************************************
 * Name       : uint16 Moe_Msg_Total_Cnt()
