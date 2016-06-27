@@ -13,9 +13,10 @@
 #include "common_head.h"
 #include "project_config.h"
 #include "MOE_Core.h"
+#include "MOE_Event.h"
 #include "MOE_Msg.h"
 #include "debug.h"
-#include "MOE_Event.h"
+
 
 static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg);
@@ -25,6 +26,25 @@ static uint16 Moe_Msg_Max_Cnt();
 static T_MSG_HEAD  *sg_ptMsgListHead  = NULL;                     /* Head node of messages      */ 
 static T_MSG_HEAD  *sg_ptMsgListTail  = NULL;                     /* Tail node of messages      */
 static uint16       sg_u16MsgPollFlag = MOE_MSG_POLL_NONE;        /* Message poll request flag  */
+
+static uint8        sg_au8RcvDone[MAX_TASK_NUM] = {0};
+
+/******************************************************************************
+* Name       : void Moe_Msg_Init()
+* Function   : Init message function
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: This function init the receive_done_flag array with all 0
+* Version    : V1.00
+* Author     : Ian
+* Date       : 27 Jun 2016
+******************************************************************************/
+void Moe_Msg_Init()
+{
+    Moe_Memset(sg_au8RcvDone, 0, sizeof(sg_au8RcvDone));
+    return;
+}
 
 /******************************************************************************
 * Name       : T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
@@ -171,6 +191,7 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
     return SW_OK;
 }
 
+
 /******************************************************************************
 * Name       : uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 * Function   : Receive a message
@@ -203,6 +224,8 @@ uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
         DBG_PRINT("Invalid pointer for message type!!\n");
         return NULL;
     }
+
+    sg_au8RcvDone[u8DestTask - 1] = MOE_MSG_RCV_DONE;
 
     /* Try to find the message */
     while(ptFind != NULL)
@@ -268,7 +291,7 @@ uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
 #endif        
     }
    
-    DBG_PRINT("No message is found for task %d!!\n",u8DestTask);
+    DBG_PRINT("No message is found for task %d!!\n", u8DestTask);
     return NULL;
 }
 
@@ -436,6 +459,38 @@ uint8 Moe_Msg_Process()
         }
     }
     return SW_OK;
+}
+
+
+/******************************************************************************
+* Name       : void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
+* Function   : Check is the message is received or NOT after the EVENT_MSG task
+*              process. 
+* Input      : uint8     u8Task   1~254      Task number
+*              uint8     u8Evt    0~255      Event number
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 27th Jun 2016
+******************************************************************************/
+void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
+{   
+    uint8 u8Temp;
+ 
+    /* If it is a message event */
+    if((EVENT_MSG == u8Evt)&&((TASK_NO_TASK != u8Task)&&(TASK_ALL_TASK != u8Task)))
+    {   /* If the message has NOT been received after task process */
+        if(MOE_MSG_RCV_DONE_NONE == sg_au8RcvDone[u8Task - 1])
+        {   /* Received the message as a dummy reading */
+            Moe_Msg_Receive(u8Task,&u8Temp);
+        }
+        /* Clear the flag of received */
+        sg_au8RcvDone[u8Task - 1] = MOE_MSG_RCV_DONE_NONE;
+    }    
+
+    return;
 }
 
 
