@@ -19,7 +19,7 @@
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
 
-
+extern const PF_TASK_INIT cg_apfTaskInit[MAX_TASK_NUM];
 
 static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
@@ -139,7 +139,15 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
     Moe_Event_Init();
     
     /* Init all tasks */
-    Moe_Tasks_Init();
+    for(sg_tEvt.u8Task = 1; sg_tEvt.u8Task <= MAX_TASK_NUM; sg_tEvt.u8Task++)
+    {
+        if(NULL == cg_apfTaskInit[sg_tEvt.u8Task - 1])
+        {
+            DBG_PRINT("Task function pointer table is wrong\n");
+            while(1);                  /* Enter forever loop */
+        }
+        cg_apfTaskInit[sg_tEvt.u8Task - 1](sg_tEvt.u8Task);
+    }
 
     /* Check all task process function pointers are registered */
     for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
