@@ -13,6 +13,8 @@
 #include "type_def.h"
 #include "common_head.h"
 #include "project_config.h"
+#include "MOE_Core.h"
+#include "MOE_Event.h"
 #include "MOE_App.h"
 #include "debug.h"
 #include "Task1.h"
@@ -20,7 +22,7 @@
 #include "Task3.h"
 #include "Task_Demo_Queue.h"
 
-
+static uint8 *sg_pu8Task;
 /******************************************************************************
 * Name       : void Moe_Tasks_Init()
 * Function   : Init all tasks
@@ -37,19 +39,20 @@
 ******************************************************************************/
 void Moe_Tasks_Init()
 {
-    uint8 u8TaskID = 1;            /* Task No. starts from 0, higher number ==> lower priority       */
+     sg_pu8Task = Moe_Get_Acktive_Task_Pointer();
+    *sg_pu8Task = 1;            /* Task No. starts from 0, higher number ==> lower priority       */
 
     /*****************************************************************************************************/
     /*****************************************************************************************************/
-    Task1_Init(u8TaskID++);        /* Task 1 init operation, Please add your init task function here */
-    Task2_Init(u8TaskID++);        /* Task 2 init operation, Please add your init task function here */
+    Task1_Init(*sg_pu8Task++);     /* Task 1 init operation, Please add your init task function here */
+//    Task2_Init(u8TaskID++);        /* Task 2 init operation, Please add your init task function here */
 //    Task3_Init(u8TaskID++);        /* Task 3 inti operation, Please add your init task function here */
 //    Task_Demo_Queue_Init(u8TaskID++);
     /******************************************************************************************************/
     /******************************************************************************************************/
 
     /* If the inited tasks count is NOT equals to the max number of all tasks */
-    if (u8TaskID != MAX_TASK_NUM + 1)
+    if ( (*sg_pu8Task) != MAX_TASK_NUM + 1)
     {
         DBG_PRINT("Task number ERROR!!\n");
         while(1);                  /* Enter forever loop */
