@@ -54,12 +54,6 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 #define TASK_LAST_TASK              MAX_TASK_NUM              /* Task number of the last one              */
 #define TASK_CURRENT_TASK           Moe_Get_Acktive_Task()    /* Task number of current one               */
 
-#define EVENT_NONE                  (0x0000)                  /* There is no events                       */
-#define EVENT_TEST                  (0x0001)                  /* There is a test event                    */
-#define EVENT_TIMER                 (0x0002)                  /* There is a timer event                   */
-#define EVENT_MSG                   (0x0004)                  /* There is a message event                 */
-#define EVENT_INT                   (0x0008)                  /* There is an interrupt event              */
-#define EVENT_DELAY                 (0x0010)
 
     
 /******************************************************************************
@@ -149,6 +143,19 @@ uint8 Moe_Get_Acktive_Evt();
 * Date       : 3rd May 2016
 ******************************************************************************/
 uint8 Moe_Get_Acktive_Task();
+
+/******************************************************************************
+* Name       : uint8* Moe_Get_Acktive_Task_Pointer()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8* Moe_Get_Acktive_Task_Pointer();
 
 /******************************************************************************
 * Name       : void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
