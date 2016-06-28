@@ -27,7 +27,7 @@ static PF_POLL   sg_pfPoll   = NULL;
 
 static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
 
-static T_EVENT sg_tEvt;
+T_EVENT sg_tEvt;
 
 
 /******************************************************************************
@@ -115,9 +115,6 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 {
     uint32 u8Idx;    
-   
-    sg_tEvt.u8Task = TASK_NO_TASK;
-    sg_tEvt.u8Evt  = EVENT_NONE;
     
     /* Check if the input parameter is invalid or NOT */
     if (NULL == pfSysTm)
@@ -154,6 +151,9 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
         }
     }
    
+    sg_tEvt.u8Task = TASK_NO_TASK;
+    sg_tEvt.u8Evt  = EVENT_NONE;
+
     return SW_OK;
 }
 
@@ -206,6 +206,23 @@ uint8 Moe_Get_Acktive_Task()
 {
     return sg_tEvt.u8Task;
 }
+
+/******************************************************************************
+* Name       : uint8* Moe_Get_Acktive_Task_Pointer()
+* Function   : To be done.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8* Moe_Get_Acktive_Task_Pointer()
+{
+    return &(sg_tEvt.u8Task);
+}
+
 
 /******************************************************************************
 * Name       : uint8 Moe_Get_Acktive_Evt()
