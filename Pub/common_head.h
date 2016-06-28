@@ -18,8 +18,9 @@ extern "C" {
 #endif
 
 
-/* Definition of process function for tasks */
-typedef uint16 (*PF_TASK_PROCESS)(uint8 u8Evt);
+/* Definition of init and process function for tasks */
+typedef void (*PF_TASK_INIT)(uint8 u8Task);
+typedef uint8 (*PF_TASK_PROCESS)(uint8 u8Evt);
 
 #define __DEBUG_NONE                0      /* No need to printf                                */
 #define __DEBUG_BASIC_INFO          1      /* Provide basic printf function                    */
