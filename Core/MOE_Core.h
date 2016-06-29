@@ -54,22 +54,16 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 #define TASK_LAST_TASK              MAX_TASK_NUM              /* Task number of the last one              */
 #define TASK_CURRENT_TASK           Moe_Get_Acktive_Task()    /* Task number of current one               */
 
+#define MOE_MANDATORY_INIT()          if(TASK_NO_TASK == sg_u8TaskID)\
+                                    {\
+                                        sg_u8TaskID = Moe_Get_Acktive_Task();\
+                                    }\
+                                    else\
+                                    {\
+                                        DBG_PRINT("Task is already inited!!");\
+                                        return SW_ERR;\
+                                    }
 
-    
-/******************************************************************************
-* Name       : void Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
-* Function   : Register task process function into the table.
-* Input      : PF_TASK_PROCESS pfTaskFn    Task process function pointer
-* Output:    : None
-* Return     : None
-* description: 1. Check if the input function pointer is invalid.
-*              2. Check if the registered task number is invalid.
-*              3. Store the function pointer into the table.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn);
 
 /******************************************************************************
 * Name       : void Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
@@ -145,19 +139,6 @@ uint8 Moe_Get_Acktive_Evt();
 uint8 Moe_Get_Acktive_Task();
 
 /******************************************************************************
-* Name       : uint8* Moe_Get_Acktive_Task_Pointer()
-* Function   : To be done.
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-uint8* Moe_Get_Acktive_Task_Pointer();
-
-/******************************************************************************
 * Name       : void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
 * Function   : To be done.
 * Input      : None
@@ -226,6 +207,30 @@ void Moe_Free(void *p);
 #define EVENT_PROCESS_BEGIN(x)      if(EVT_PARAM & x){
 
 #define EVENT_PROCESS_END(x)        return (EVT_PARAM ^ x);}    
+
+
+    TASK_EVENT_PROCESS_LIST_START;
+    MOE_EVT_ENTRY(EVENT_TIMER);
+    MOE_EVT_ENTRY(EVENT_MSG);
+    MOE_EVT_ENTRY(EVENT_TEST);
+    TASK_EVENT_PROCESS_LIST_END;
+
+    DBG_PRINT("Hello\n");
+    MOE_DELAY(3000,EVENT_DELAY);  
+
+    DBG_PRINT("Goodbye\n");
+
+ 
+    MOE_EVT_PROCESS(EVENT_MSG);
+
+
+
+    MOE_EVT_PROCESS(EVENT_TEST);
+
+
+
+    MOE_EVT_PROCESS(EVENT_TIMER);
+
 
 #endif
 
