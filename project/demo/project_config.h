@@ -13,15 +13,29 @@
 #ifndef _PROJECT_CONFIG_H_
 #define _PROJECT_CONFIG_H_
 
-#include <stdio.h>
-#include <stdlib.h>
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+
 /* Configure Zone */
-#define MAX_TASK_NUM                         (2)      /* Max number of tasks                      */
+uint8 Task1_Process(uint8 u8Evt);
+uint8 Task2_Process(uint8 u8Evt);
+uint8 Task3_Process(uint8 u8Evt);
+
+/* Add your task process here */
+static const PF_TASK_PROCESS cg_apfTaskFn[] = 
+{
+    Task1_Process,
+    Task2_Process,
+    Task3_Process
+};
+
+#define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks                      */
 
 #define MAX_QUEUE_EVT_NUM                    (MAX_TASK_NUM * 10)
  
@@ -56,7 +70,7 @@ Options for __MALLOC_OPTION:
     __MALLOC_MOE            Use MOE malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
-#define __MALLOC_OPTION                 __MALLOC_STD      /* Use standard malloc and free funciton  */
+#define __MALLOC_OPTION                    __MALLOC_STD      /* Use standard malloc and free funciton  */
 
 
 #ifdef __DEBUG_ENABLE
@@ -66,7 +80,7 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE  //__DEBUG_NONE  
 #define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_MSG               __DEBUG_BASIC_INFO 
+#define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_APP_TASK_1            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
@@ -79,6 +93,9 @@ Options for __MALLOC_OPTION:
 #define MOE_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define MOE_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
+
+
+
 
 
 #ifdef __cplusplus
