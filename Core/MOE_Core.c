@@ -19,52 +19,11 @@
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
 
-extern const PF_TASK_INIT cg_apfTaskInit[MAX_TASK_NUM];
-
 static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
 static PF_POLL   sg_pfPoll   = NULL;
 
-static PF_TASK_PROCESS sg_apfTaskFn[MAX_TASK_NUM];      /* Create a list of process function of all tasks */
-
-T_EVENT sg_tEvt;
-
-
-/******************************************************************************
-* Name       : void Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
-* Function   : Register task process function into the table.
-* Input      : PF_TASK_PROCESS pfTaskFn    Task process function pointer
-* Output:    : None
-* Return     : None
-* description: 1. Check if the input function pointer is invalid.
-*              2. Check if the registered task number is invalid.
-*              3. Store the function pointer into the table.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_Reg_Tasks(PF_TASK_PROCESS pfTaskFn)
-{
-    static uint8 s_u8RegTaskCnt = 0;  /* Start the index of task process function array */
-
-    /* Check if the input task process function pointer is invalid or NOT */
-    if(NULL == pfTaskFn)
-    {
-        DBG_PRINT("The process function of Task %d is invalid \n", (s_u8RegTaskCnt+1));
-        return;
-    }
-
-    /* If the inited tasks count is NOT lower than the max number of all tasks */
-    if (s_u8RegTaskCnt > MAX_TASK_NUM)
-    {
-        DBG_PRINT("Task number ERROR!!\n");
-        while(1);                  /* Enter forever loop */
-    }
-
-    sg_apfTaskFn[s_u8RegTaskCnt++] = pfTaskFn;  /* Save the task process function pointer into the task table */
-
-    return;
-}
+static T_EVENT sg_tEvt;
 
 /******************************************************************************
 * Name       : void Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
@@ -114,8 +73,6 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 ******************************************************************************/
 uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 {
-    uint32 u8Idx;    
-    
     /* Check if the input parameter is invalid or NOT */
     if (NULL == pfSysTm)
     {   
@@ -123,9 +80,6 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
         return SW_ERR;    /* If invalid, return error */   
     }
    
-    /* Init the task process function pointer table with NULL */
-    Moe_Memset((uint8*)sg_apfTaskFn, NULL, sizeof(uint16*)*MAX_TASK_NUM);
-
     /* Get poll process function */
     sg_pfPoll = pfPoll;
 
@@ -139,24 +93,10 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
     Moe_Event_Init();
     
     /* Init all tasks */
+    sg_tEvt.u8Evt  = EVENT_INIT;
     for(sg_tEvt.u8Task = 1; sg_tEvt.u8Task <= MAX_TASK_NUM; sg_tEvt.u8Task++)
     {
-        if(NULL == cg_apfTaskInit[sg_tEvt.u8Task - 1])
-        {
-            DBG_PRINT("Task function pointer table is wrong\n");
-            while(1);                  /* Enter forever loop */
-        }
-        cg_apfTaskInit[sg_tEvt.u8Task - 1](sg_tEvt.u8Task);
-    }
-
-    /* Check all task process function pointers are registered */
-    for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
-    {   /* If the pointer is NULL */
-        if(NULL == sg_apfTaskFn[u8Idx])
-        {
-            DBG_PRINT("Task function pointer table is wrong\n");
-            while(1);                  /* Enter forever loop */
-        }
+        cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt);
     }
    
     sg_tEvt.u8Task = TASK_NO_TASK;
@@ -191,7 +131,7 @@ void Moe_Run()
 
         if(Moe_Event_Get(&sg_tEvt))      /* Check events                 */
         {
-            sg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
+            cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
             Moe_Msg_Never_Rcv_Check(sg_tEvt.u8Task, sg_tEvt.u8Task);
             sg_tEvt.u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
         }
@@ -216,23 +156,6 @@ uint8 Moe_Get_Acktive_Task()
 }
 
 /******************************************************************************
-* Name       : uint8* Moe_Get_Acktive_Task_Pointer()
-* Function   : To be done.
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-uint8* Moe_Get_Acktive_Task_Pointer()
-{
-    return &(sg_tEvt.u8Task);
-}
-
-
-/******************************************************************************
 * Name       : uint8 Moe_Get_Acktive_Evt()
 * Function   : To be done.
 * Input      : None
@@ -247,7 +170,6 @@ uint8 Moe_Get_Acktive_Evt()
 {
     return sg_tEvt.u8Evt;
 }
-
 
 /******************************************************************************
 * Name       : void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
