@@ -22,46 +22,16 @@
 #include "Task3.h"
 #include "Task_Demo_Queue.h"
 
-static uint8 *sg_pu8Task;
-/******************************************************************************
-* Name       : void Moe_Tasks_Init()
-* Function   : Init all tasks
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: Init all tasks and pass the task ID into the tasks.
-*              If the inited tasks count is NOT equals to the Max
-*              number of tasks, it will enter forever loop to indicate
-*              that error.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_Tasks_Init()
+/* Add your task process here */
+const PF_TASK_PROCESS cg_apfTaskFn[] = 
 {
-     sg_pu8Task = Moe_Get_Acktive_Task_Pointer();
-    *sg_pu8Task = 1;            /* Task No. starts from 0, higher number ==> lower priority       */
+    Task1_Process
+};
 
-    /*****************************************************************************************************/
-    /*****************************************************************************************************/
-    Task1_Init(*sg_pu8Task++);     /* Task 1 init operation, Please add your init task function here */
-//    Task2_Init(u8TaskID++);        /* Task 2 init operation, Please add your init task function here */
-//    Task3_Init(u8TaskID++);        /* Task 3 inti operation, Please add your init task function here */
-//    Task_Demo_Queue_Init(u8TaskID++);
-    /******************************************************************************************************/
-    /******************************************************************************************************/
+/* Calculate the total task number */
+const uint8 cg_u8TaskNum = sizeof(cg_apfTaskFn)/sizeof(PF_TASK_PROCESS);
 
-    /* If the inited tasks count is NOT equals to the max number of all tasks */
-    if ( (*sg_pu8Task) != MAX_TASK_NUM + 1)
-    {
-        DBG_PRINT("Task number ERROR!!\n");
-        while(1);                  /* Enter forever loop */
-    }
-    /* If the inited tasks count is right, then continue */
-   
-    return;
-}
-
+#if (0)
 /* End of file */
 
 
