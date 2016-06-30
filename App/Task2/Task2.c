@@ -19,113 +19,94 @@
 #include "Task2.h"
 #include "debug.h"
 
-static uint16 Task2_Process(uint8 u8Evt);
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
-* Name       : void Task2_Init(uint8 u8TaskID)
-* Function   : Init task2
-* Input      : To be done.
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Task2_Init(uint8 u8TaskID)
-{
-    sg_u8TaskID = u8TaskID;        /* Get the task ID */
-    Moe_Reg_Tasks(Task2_Process);
-    DBG_PRINT("Task 2 is inited successfully, Task ID is %d\n", sg_u8TaskID);
-
-    /*--------------------   Add your init code here   ----------------------*/
-    T_TIMER tTmr;
-    tTmr.pfTmCallback = NULL;
-    tTmr.pPara        = NULL;
-    tTmr.u16Cnt       = 0Xffff;
-    tTmr.u16Evt       = EVENT_TIMER;
-    tTmr.u32TmOut     = 200;
-    tTmr.u8TaskID     = sg_u8TaskID;
-
-    Moe_Timer_Start(&tTmr);
-
-    /*-------------------   The end of your init code   ---------------------*/
-    return;
-}
-
-/******************************************************************************
-* Name       : uint16 Task2_Process(uint16 u16Evt)
+* Name       : uint8 Task2_Process(uint8 u8Evt)
 * Function   : Task 2 process
-* Input      : To be done
+* Input      : uint8 u8Evt  1~254     Event for the task
 * Output:    : None
-* Return     : To be done
+* Return     : SW_OK   Successful operation
+*            : SW_ERR  Failed operation
+*              1~254   Event which is not processed.
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-static uint16 Task2_Process(uint8 u8Evt)
-{
-    uint8  u8MsgType;
-    void  *ptMsg;
-
-    if (u8Evt == EVENT_TIMER)
+uint8 Task2_Process(uint8 u8Evt)
+{   
+    /* Check which event should be processed */
+    switch (u8Evt)
     {
-        DBG_PRINT("I am task2\n");
-        goto MARK_EVENT_DELAY;
-    }
-    DBG_PRINT("haha\n");
-MARK_EVENT_DELAY: DBG_PRINT("wwwww\n");
-#if (0)
-
-/******************************************************************************/
-/* Process for message event                                                  */
-/******************************************************************************/
-    EVENT_PROCESS_BEGIN(EVENT_MSG); 
-    /*-----------------   Add your event process code here   -----------------*/
-        ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
-        while(ptMsg)
+        /* If it is a timer event */
+        case EVENT_PERIODIC:       
         {
-            switch(u8MsgType)
-            {
-                case MSG_TYPE_TEST:
-                {
-                    T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)ptMsg;
-                    DBG_PRINT("This is task %d\n",sg_u8TaskID);
-                    DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
-                    DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
-                    DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
-                    ptTestMsg->DATA.u32Data = 0xaabbccdd;
-                    DBG_PRINT("Task %d change the message and forward it\n",sg_u8TaskID);
-                    Moe_Msg_Forward(ptMsg,2);
-                }
-            }
-            ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
+            DBG_PRINT("I am task 2 and I am working!!\n");
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
-    /*----------------  The end of your event process code  ------------------*/
-    EVENT_PROCESS_END(EVENT_MSG);
-/******************************************************************************/
 
+        /* If it is a message event */
+        case EVENT_MSG+10:       
+        {
+            uint8  u8MsgType;
+            void  *ptMsg;
+            static uint8 sg_u8Cnt = 0;
 
-/******************************************************************************/
-/* Process for test event                                                     */
-/******************************************************************************/
-    EVENT_PROCESS_BEGIN(EVENT_TEST);
-    /*-----------------   Add your event process code here   -----------------*/
+            ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
+            while(ptMsg)
+            {   sg_u8Cnt++;
+                switch(u8MsgType)
+                {
+                    case MSG_TYPE_TEST:
+                    {
+                        T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)ptMsg;
+                        DBG_PRINT("This is task %d\n",sg_u8TaskID);
+                        DBG_PRINT("Get %d messages\n",sg_u8Cnt);
+                        DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
+                        DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
+                        DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
+                    }
+                }
+                ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
+            }
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
-        DBG_PRINT("This is task %d process function\n", sg_u8TaskID);
+        /* If it is a test event */
+        case EVENT_TEST:       
+        {
+            
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
-    /*----------------  The end of your event process code  ------------------*/
-    EVENT_PROCESS_END(EVENT_TEST);
-/******************************************************************************/
+        /* If it is a timer event */
+        case EVENT_TIMER:       
+        {
+            
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
-    return 0;
+        /* If it is a message event */
+        case EVENT_INIT:       
+        {
+            /******************************************************************/
+            MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+            /******************************************************************/
 
+            /*--------------------   Add your init code here   ----------------------*/
+           // Moe_Timer_Periodic(1500);
+            /*-------------------   The end of your init code   ---------------------*/
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
-#endif
-
+        /* If it is other event */
+        default:       
+        {
+            return u8Evt;     /* Return event to indicate event is NOT processed */
+        }
+    }
 }
 /* End of file */
 
