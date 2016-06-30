@@ -28,7 +28,21 @@ extern "C" {
 
 
 
-void Task2_Init(uint8 u8TaskID);
+/******************************************************************************
+* Name       : uint8 Task2_Process(uint8 u8Evt)
+* Function   : Task 2 process
+* Input      : uint8 u8Evt  1~254     Event for the task
+* Output:    : None
+* Return     : SW_OK   Successful operation
+*            : SW_ERR  Failed operation
+*              1~254   Event which is not processed.
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8 Task2_Process(uint8 u8Evt);
+
 
 
 
