@@ -1,7 +1,7 @@
 /******************************************************************************
-* File       : OSAL_App.h
-* Function   : User application definitions.
-* description: To be done.          
+* File       : Task1.c
+* Function   : It is No. 1 task which is just a demo task
+* description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -9,35 +9,92 @@
 *               1    3/May/2016     Ian           Create
 ******************************************************************************/
 
-#ifndef _TASK_1_H_
-#define _TASK_1_H_
+#include "type_def.h"
+#include "common_head.h"
+#include "project_config.h"
+#include "MOE_Core.h"
+#include "MOE_Event.h"
+#include "MOE_Timer.h"
+#include "MOE_Msg.h"
+#include "Task1.h"
+#include "debug.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+static uint8 sg_u8TaskID = TASK_NO_TASK;
 
-/* Check if specified option is set for debugging */
-#ifndef __DEBUG_MODE_APP_TASK_1                    
-#define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
-#else
-#ifdef __DEBUG_MODE
-#undef __DEBUG_MODE
-#endif
-#define __DEBUG_MODE      __DEBUG_MODE_APP_TASK_1     /* According the set from project_config.h */
-#endif
+/******************************************************************************
+* Name       : uint8 Task1_Process(uint8 u8Evt)
+* Function   : Task 1 process
+* Input      : uint8 u8Evt  1~254     Event for the task
+* Output:    : None
+* Return     : SW_OK   Successful operation
+*            : SW_ERR  Failed operation
+*              1~254   Event which is not processed.
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+uint8 Task1_Process(uint8 u8Evt)
+{   
+    /* Check which event should be processed */
+    switch (u8Evt)
+    {
+        /* If it is a timer event */
+        case EVENT_PERIODIC:       
+        {
+            T_TEST_MSG tMsg;
 
+            DBG_PRINT("I am task 1 and I am working!!\n");
 
-void Task1_Init(uint8 u8TaskID);
+            tMsg.DATA.u32Data = 0x11223344;
+            Moe_Msg_Send(TASK_ALL_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
 
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
+        /* If it is a message event */
+        case EVENT_MSG:       
+        {
+            
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
+        /* If it is a test event */
+        case EVENT_TEST:       
+        {
+            
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
 
-#ifdef __cplusplus
+        /* If it is a timer event */
+        case EVENT_TIMER:       
+        {
+            
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
+
+        /* If it is a message event */
+        case EVENT_INIT:       
+        {
+            /******************************************************************/
+            MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+            /******************************************************************/
+
+            /*--------------------   Add your init code here   ----------------------*/
+            Moe_Timer_Periodic(4000);
+            /*-------------------   The end of your init code   ---------------------*/
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
+
+        /* If it is other event */
+        default:       
+        {
+            return u8Evt;     /* Return event to indicate event is NOT processed */
+        }
+    }
 }
-#endif
-
-#endif /* _TASK_1_H */
 
 /* End of file */
+
 
 
