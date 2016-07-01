@@ -36,17 +36,17 @@ extern "C" {
 #define TASK_DEMO_QUEUE_BUF_SIZE             (10)               /* Size of each buffer blocks */
 
 /******************************************************************************
-* Name       : void Task_Demo_Queue_Init(uint8 u8TaskID)
-* Function   : Init task_Demo_Queue
-* Input      : To be done.
+* Name       : uint8 Task_Demo_Queue_Process(uint16 u16Evt)
+* Function   : Task Demo Queue process
+* Input      : To be done
 * Output:    : None
-* Return     : None
-* description: To be done.
+* Return     : To be done
+* description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 19th Jun 2016
 ******************************************************************************/
-void Task_Demo_Queue_Init(uint8 u8TaskID);
+uint8 Task_Demo_Queue_Process(uint8 u8Evt);
 
 
 
