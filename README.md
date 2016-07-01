@@ -7,7 +7,7 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs.
 - [x] Add message process
 - [x] Debug message code 
 - [x] Queue process
-- [ ] Queue debug
+- [x] Queue debug
 - [ ] HAL process
 - [ ] HAL debug
 - [x] Sperate event
