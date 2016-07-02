@@ -45,6 +45,7 @@ static T_QUEUE_INFO sg_tQueue1,sg_tQueue2;
 uint8 Task_Demo_Queue_Process(uint8 u8Evt)
 
 {   
+    uint8 u8Idx;
     /* Check which event should be processed */
     switch (u8Evt)
     {
@@ -60,7 +61,6 @@ uint8 Task_Demo_Queue_Process(uint8 u8Evt)
         {
             uint8  u8MsgType;
             void  *ptMsg;
-            static uint8 sg_u8Cnt = 0;
 
             ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
             while(ptMsg)
