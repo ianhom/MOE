@@ -48,7 +48,7 @@ uint8 Task2_Process(uint8 u8Evt)
         }
 
         /* If it is a message event */
-        case EVENT_MSG+10:       
+        case EVENT_MSG:       
         {
             uint8  u8MsgType;
             void  *ptMsg;
