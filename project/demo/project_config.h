@@ -23,20 +23,27 @@ extern "C" {
 #include <stdlib.h>
 
 /* Configure Zone */
-uint8 Task1_Process(uint8 u8Evt);
-uint8 Task2_Process(uint8 u8Evt);
-uint8 Task3_Process(uint8 u8Evt);
-uint8 Task_Demo_Queue_Process(uint8 u8Evt);
-
 
 /* Add your task process here */
+#define LIST_OF_TASK \
+        TASK(Task1_Process)\
+        TASK(Task2_Process)\
+        TASK(Task3_Process)\
+        TASK(Task_Demo_Queue_Process)
+
+
+#define TASK(name) uint8 name(uint8 u8Evt);
+LIST_OF_TASK
+#undef TASK
+
+
 static const PF_TASK_PROCESS cg_apfTaskFn[] = 
 {
-    Task1_Process,
-    Task2_Process,
-    Task3_Process,
-    Task_Demo_Queue_Process
+#define TASK(name) name,
+LIST_OF_TASK
+#undef TASK
 };
+
 
 #define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks                      */
 
