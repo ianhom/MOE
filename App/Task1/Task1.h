@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task1.h
-* Function   : User application definitions.
-* description: To be done.          
+* Function   : It is No. 1 task which is just a demo task
+* description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
