@@ -14,6 +14,10 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs.
 - [ ] Design friendly & useful API
 
 ## Log
+### 3rd Jul 2016
+Use x macro to simplize the interface bewteen core and tasks.   
+And create board configuration files for hardware configuration.
+
 ### 1st Jul 2016
 Modify all app modules
 
