@@ -132,11 +132,10 @@ void Moe_Run()
         if(Moe_Event_Get(&sg_tEvt))      /* Check events                 */
         {
             cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
-            Moe_Msg_Never_Rcv_Check(sg_tEvt.u8Task, sg_tEvt.u8Task);
+            Moe_Msg_Never_Rcv_Check(sg_tEvt.u8Task, sg_tEvt.u8Evt);
             sg_tEvt.u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
         }
     }
-    return;
 }
 
 /******************************************************************************
