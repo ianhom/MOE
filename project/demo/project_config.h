@@ -25,23 +25,23 @@ extern "C" {
 /* Configure Zone */
 
 /* Add your task process here */
-#define LIST_OF_TASK \
-        TASK(Task1_Process)\
-        TASK(Task2_Process)\
-        TASK(Task3_Process)\
-        TASK(Task_Demo_Queue_Process)
+#define LIST_OF_REG_TASK \
+        REG_TASK(LED_Demo_Process)\
+        REG_TASK(Task2_Process)\
+        REG_TASK(Task3_Process)\
+        REG_TASK(Task_Demo_Queue_Process)
 
 
-#define TASK(name) uint8 name(uint8 u8Evt);
-LIST_OF_TASK
-#undef TASK
+#define REG_TASK(name) uint8 name(uint8 u8Evt);
+LIST_OF_REG_TASK
+#undef REG_TASK
 
 
 static const PF_TASK_PROCESS cg_apfTaskFn[] = 
 {
-#define TASK(name) name,
-LIST_OF_TASK
-#undef TASK
+#define REG_TASK(name) name,
+LIST_OF_REG_TASK
+#undef REG_TASK
 };
 
 
@@ -91,11 +91,13 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_APP_TASK_1            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
+#define __DEBUG_MODE_TASK_LED_DEMO         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #define __DEBUG_MODE_MOE_EVENT             __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_BOARD_CONFIG          __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_HAL               __DEBUG_BASIC_INFO
 #endif
 
                            
@@ -104,9 +106,11 @@ Options for __MALLOC_OPTION:
 #define MOE_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
 
+void LED_Off(uint8 u8Ch);
+#define TASK1_LED_OFF LED_Off
 
-
-
+void LED_On(uint8 u8Ch);
+#define TASK1_LED_ON LED_On
 
 #ifdef __cplusplus
 }
