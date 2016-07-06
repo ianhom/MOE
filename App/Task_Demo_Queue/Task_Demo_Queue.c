@@ -181,8 +181,10 @@ uint8 Task_Demo_Queue_Process(uint8 u8Evt)
             tTm.u16Evt       = EVENT_TIMER;
             tTm.u16Cnt       = MOE_TMR_INFINITE_CNT;
             tTm.u32TmOut     = 1000;
+#ifdef __TIMER_CALLBACK_SUPPORTED
             tTm.pfTmCallback = NULL;
             tTm.pPara        = NULL;
+#endif
             
             Moe_Timer_Start(&tTm);
             /*-------------------   The end of your init code   ---------------------*/
