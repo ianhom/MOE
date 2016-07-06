@@ -99,8 +99,8 @@ static T_TIMER_NODE* Moe_Timer_Add()
 
 /******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
-* Function   : Start a periodic timer for current task
-* Input      : T_TIMER *ptTm     Pointer of timers set by user.
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint32 u32TmOut   0~2^32   Time out in ms
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
@@ -122,15 +122,14 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
     tTmr.pPara        = NULL;
 #endif
 
-
     return (Moe_Timer_Start(&tTmr));
 }
 
 
 /******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
-* Function   : Start a timer for current task
-* Input      : T_TIMER *ptTm     Pointer of timers set by user.
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint32 u32TmOut   0~2^32   Time out in ms
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
@@ -152,9 +151,39 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
     tTmr.pPara        = NULL;
 #endif
 
+    return (Moe_Timer_Start(&tTmr));
+}
+
+/******************************************************************************
+* Name       : T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint8 u8DesTask   1~254    The destination task ID
+*              uint8 u8Evt       0~255    The event which will be create when time is up.
+*              uint32 u32TmOut   0~2^32   Time out in ms
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 23rd Jun 2016
+******************************************************************************/
+T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
+{
+    T_TIMER tTmr;
+
+    tTmr.u16Cnt       = 1;
+    tTmr.u16Evt       = u8Evt;
+    tTmr.u8TaskID     = u8DesTask;
+    tTmr.u32TmOut     = u32TmOut;
+#ifdef __TIMER_CALLBACK_SUPPORTED
+    tTmr.pfTmCallback = NULL;
+    tTmr.pPara        = NULL;
+#endif
 
     return (Moe_Timer_Start(&tTmr));
 }
+
 
 /******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
