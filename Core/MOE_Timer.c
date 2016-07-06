@@ -98,6 +98,36 @@ static T_TIMER_NODE* Moe_Timer_Add()
 }
 
 /******************************************************************************
+* Name       : T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
+* Function   : Start a periodic timer for current task
+* Input      : T_TIMER *ptTm     Pointer of timers set by user.
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 23rd Jun 2016
+******************************************************************************/
+T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
+{
+    T_TIMER tTmr;
+
+    tTmr.u16Cnt       = MOE_TMR_INFINITE_CNT;
+    tTmr.u16Evt       = EVENT_PERIODIC;
+    tTmr.u8TaskID     = TASK_CURRENT_TASK;
+    tTmr.u32TmOut     = u32TmOut;
+#ifdef __TIMER_CALLBACK_SUPPORTED
+    tTmr.pfTmCallback = NULL;
+    tTmr.pPara        = NULL;
+#endif
+
+
+    return (Moe_Timer_Start(&tTmr));
+}
+
+
+/******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
 * Function   : Start a timer for current task
 * Input      : T_TIMER *ptTm     Pointer of timers set by user.
@@ -112,12 +142,16 @@ static T_TIMER_NODE* Moe_Timer_Add()
 T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
 {
     T_TIMER tTmr;
-    tTmr.pfTmCallback = NULL;
-    tTmr.pPara        = NULL;
+
     tTmr.u16Cnt       = 1;
     tTmr.u16Evt       = EVENT_DELAY;
     tTmr.u8TaskID     = TASK_CURRENT_TASK;
     tTmr.u32TmOut     = u32TmOut;
+#ifdef __TIMER_CALLBACK_SUPPORTED
+    tTmr.pfTmCallback = NULL;
+    tTmr.pPara        = NULL;
+#endif
+
 
     return (Moe_Timer_Start(&tTmr));
 }
