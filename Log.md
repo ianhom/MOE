@@ -1,4 +1,7 @@
 # Log
+## 8th Jul 2016
+Add PT application
+
 ## 3rd Jul 2016
 Use x macro to simplize the interface bewteen core and tasks.   
 And create board configuration files for hardware configuration.
