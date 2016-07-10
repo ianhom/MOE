@@ -41,16 +41,23 @@ static void (*const TASK_PT_DEMO_LED_Toggle)(uint8 u8Clr) = TASK_PT_DEMO_LED_TOG
 ******************************************************************************/
 uint8 Task_PT_Demo_Process(uint8 u8Evt)
 {   
-    PTV uint16 ptv_u16Cnt = 100;
+    PTV uint16 ptv_u16Cnt = 250;
+ 
     PT_INIT();
 
     PT_BEGIN();
 
     while(1)
     {
+        PT_WAIT_MSG();
         TASK_PT_DEMO_LED_Toggle(1);
         PT_DELAY(ptv_u16Cnt);
-        ptv_u16Cnt = (ptv_u16Cnt + 10) % 500;
+        TASK_PT_DEMO_LED_Toggle(1);
+        PT_DELAY(ptv_u16Cnt);
+        TASK_PT_DEMO_LED_Toggle(1);
+        PT_DELAY(ptv_u16Cnt);
+        TASK_PT_DEMO_LED_Toggle(1);
+        PT_DELAY(ptv_u16Cnt);
     }
 
     PT_END();
