@@ -1,4 +1,5 @@
-# MOE
+# MOE   
+[中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 ## Introduce
 MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:   
 
