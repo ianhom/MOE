@@ -54,7 +54,7 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 #define TASK_LAST_TASK              MAX_TASK_NUM              /* Task number of the last one              */
 #define TASK_CURRENT_TASK           Moe_Get_Acktive_Task()    /* Task number of current one               */
 
-#define MOE_MANDATORY_INIT()          if(TASK_NO_TASK == sg_u8TaskID)\
+#define MOE_MANDATORY_INIT()        if(TASK_NO_TASK == sg_u8TaskID)\
                                     {\
                                         sg_u8TaskID = Moe_Get_Acktive_Task();\
                                     }\
@@ -83,7 +83,7 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
 
 
 /******************************************************************************
-* Name       : void Moe_Init()
+* Name       : void Moe_Init(void)
 * Function   : Init all tasks
 * Input      : None
 * Output:    : None
@@ -100,7 +100,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll);
 
 
 /******************************************************************************
-* Name       : void Moe_Run_System()
+* Name       : void Moe_Run_System(void)
 * Function   : The main function to schedule tasks.
 * Input      : None
 * Output:    : None
@@ -110,10 +110,10 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll);
 * Author     : Ian
 * Date       : 28th Apr 2016
 ******************************************************************************/
-void Moe_Run();
+void Moe_Run(void);
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Evt()
+* Name       : uint8 Moe_Get_Acktive_Evt(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -123,10 +123,10 @@ void Moe_Run();
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Evt();
+uint8 Moe_Get_Acktive_Evt(void);
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Task()
+* Name       : uint8 Moe_Get_Acktive_Task(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -136,7 +136,7 @@ uint8 Moe_Get_Acktive_Evt();
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Task();
+uint8 Moe_Get_Acktive_Task(void);
 
 /******************************************************************************
 * Name       : void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree)
