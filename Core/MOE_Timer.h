@@ -96,9 +96,23 @@ uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm);
 T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 
 /******************************************************************************
+* Name       : T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint32 u32TmOut   0~2^32   Time out in ms
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 23rd Jun 2016
+******************************************************************************/
+T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut);
+
+/******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
-* Function   : Start a timer for current task
-* Input      : T_TIMER *ptTm     Pointer of timers set by user.
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint32 u32TmOut   0~2^32   Time out in ms
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
@@ -108,6 +122,23 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 * Date       : 23rd Jun 2016
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut);
+
+/******************************************************************************
+* Name       : T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
+* Function   : Start a timer for current task and set "EVENT_DELAY"
+* Input      : uint8 u8DesTask   1~254    The destination task ID
+*              uint8 u8Evt       0~255    The event which will be create when time is up.
+*              uint32 u32TmOut   0~2^32   Time out in ms
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 23rd Jun 2016
+******************************************************************************/
+T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut);
+
 
 /******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE* ptNode)
@@ -156,7 +187,7 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE* ptNode);
 uint8 Moe_Timer_Process(void);
 
 /******************************************************************************
-* Name       : uint16 Moe_Timer_Test_Cnt()
+* Name       : uint16 Moe_Timer_Test_Cnt(void)
 * Function   : Get the count of timers
 * Input      : None
 * Output:    : None
@@ -166,10 +197,10 @@ uint8 Moe_Timer_Process(void);
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint16 Moe_Timer_Test_Cnt();
+uint16 Moe_Timer_Test_Cnt(void);
 
 /******************************************************************************
-* Name       : void Moe_Timer_Test_General()
+* Name       : void Moe_Timer_Test_General(void)
 * Function   : General test
 * Input      : None
 * Output:    : None
@@ -180,7 +211,7 @@ uint16 Moe_Timer_Test_Cnt();
 * Author     : Ian
 * Date       : 9th May 2016
 ******************************************************************************/
-void Moe_Timer_Test_General();
+void Moe_Timer_Test_General(void);
 
 
  
