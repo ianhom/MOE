@@ -58,7 +58,7 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 
 
 /******************************************************************************
-* Name       : void Moe_Init()
+* Name       : void Moe_Init(void)
 * Function   : Init all tasks
 * Input      : None
 * Output:    : None
@@ -108,7 +108,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 
 
 /******************************************************************************
-* Name       : void Moe_Run_System()
+* Name       : void Moe_Run_System(void)
 * Function   : The main function to schedule tasks.
 * Input      : None
 * Output:    : None
@@ -118,7 +118,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 * Author     : Ian
 * Date       : 28th Apr 2016
 ******************************************************************************/
-void Moe_Run()
+void Moe_Run(void)
 {
     while(1)                             /* The main loop                */
     {
@@ -139,7 +139,7 @@ void Moe_Run()
 }
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Task()
+* Name       : uint8 Moe_Get_Acktive_Task(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -149,13 +149,13 @@ void Moe_Run()
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Task()
+uint8 Moe_Get_Acktive_Task(void)
 {
     return sg_tEvt.u8Task;
 }
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Evt()
+* Name       : uint8 Moe_Get_Acktive_Evt(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -165,7 +165,7 @@ uint8 Moe_Get_Acktive_Task()
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Evt()
+uint8 Moe_Get_Acktive_Evt(void)
 {
     return sg_tEvt.u8Evt;
 }
