@@ -17,11 +17,11 @@
 #include "debug.h"
 #include "MOE_Event.h"
 
-static T_TIMER_NODE* Moe_Timer_Add();
+static T_TIMER_NODE* Moe_Timer_Add(void);
 static T_TIMER_NODE *Moe_Timer_Find(T_TIMER_NODE* ptNode);
 static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE* ptNode);
-static uint16 Moe_Timer_Test_Max_Cnt();
-static uint8  Moe_Timer_Test_StartStop();
+static uint16 Moe_Timer_Test_Max_Cnt(void);
+static uint8  Moe_Timer_Test_StartStop(void);
 
 
 static T_TIMER_NODE *sg_ptTmHead = NULL;
@@ -57,7 +57,7 @@ uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm)
 }
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE* Moe_Timer_Add()
+* Name       : static T_TIMER_NODE* Moe_Timer_Add(void)
 * Function   : Add a timer node
 * Input      : PF_TIMER_SRC pfSysTm   Funtion which returns system time
 * Output:    : None
@@ -68,7 +68,7 @@ uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-static T_TIMER_NODE* Moe_Timer_Add()
+static T_TIMER_NODE* Moe_Timer_Add(void)
 {
     T_TIMER_NODE* ptNode;
 
@@ -478,7 +478,7 @@ uint8 Moe_Timer_Process(void)
 }
 
 /******************************************************************************
-* Name       : uint16 Moe_Timer_Cnt()
+* Name       : uint16 Moe_Timer_Cnt(void)
 * Function   : Get the count of timers
 * Input      : None
 * Output:    : None
@@ -488,7 +488,7 @@ uint8 Moe_Timer_Process(void)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint16 Moe_Timer_Cnt()
+uint16 Moe_Timer_Cnt(void)
 {
     T_TIMER_NODE *ptFind;
     uint16 u16TmrCnt = 0;
@@ -510,7 +510,7 @@ uint16 Moe_Timer_Cnt()
 }
 
 /******************************************************************************
-* Name       : static uint16 Moe_Timer_Test_Max_Cnt()
+* Name       : static uint16 Moe_Timer_Test_Max_Cnt(void)
 * Function   : Get the Max. count of timers
 * Input      : None
 * Output:    : None
@@ -523,7 +523,7 @@ uint16 Moe_Timer_Cnt()
 * Author     : Ian
 * Date       : 9th May 2016
 ******************************************************************************/
-static uint16 Moe_Timer_Test_Max_Cnt()
+static uint16 Moe_Timer_Test_Max_Cnt(void)
 {
     uint16 u16Idx;
     uint32 u32IntSt;
@@ -555,7 +555,7 @@ static uint16 Moe_Timer_Test_Max_Cnt()
 }
 
 /******************************************************************************
-* Name       : static uint8 Moe_Timer_Test_StartStop()
+* Name       : static uint8 Moe_Timer_Test_StartStop(void)
 * Function   : Test start and stop function
 * Input      : None
 * Output:    : None
@@ -566,7 +566,7 @@ static uint16 Moe_Timer_Test_Max_Cnt()
 * Author     : Ian
 * Date       : 9th May 2016
 ******************************************************************************/
-static uint8 Moe_Timer_Test_StartStop()
+static uint8 Moe_Timer_Test_StartStop(void)
 {
     T_TIMER_NODE *ptNode;
     uint32 u32IntSt;
@@ -656,7 +656,7 @@ static uint8 Moe_Timer_Test_StartStop()
 }
 
 /******************************************************************************
-* Name       : void Moe_Timer_Test_General()
+* Name       : void Moe_Timer_Test_General(void)
 * Function   : General test
 * Input      : None
 * Output:    : None
@@ -667,7 +667,7 @@ static uint8 Moe_Timer_Test_StartStop()
 * Author     : Ian
 * Date       : 9th May 2016
 ******************************************************************************/
-void Moe_Timer_Test_General()
+void Moe_Timer_Test_General(void)
 {
     Moe_Timer_Cnt();               /* Get the current timer count          */
     Moe_Timer_Test_Max_Cnt();      /* Check how many timers can be created */
