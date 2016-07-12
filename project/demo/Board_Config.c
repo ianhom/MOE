@@ -22,8 +22,9 @@
 #include "Btn_SM_Config.h"
 #include "Btn_SM_Module.h"
 
+#ifdef __FRDM_MINI_SHIELD_SUPPORTED
 /******************************************************************************
-* Name       : void Gpio_Init()
+* Name       : void Gpio_Init(void)
 * Function   : Init GPIOs
 * Input      : None
 * Output:    : None
@@ -33,7 +34,7 @@
 * Author     : Ian
 * Date       : 3rd Jul 2016
 ******************************************************************************/
-void Gpio_Init()
+void Gpio_Init(void)
 {
     /* Button configure */
     PORTA_PCR12 = PORT_PCR_MUX(0x1);   /* Configure as GPIO           */
@@ -226,7 +227,152 @@ uint8 Btn_St_Get(uint8 u8Ch)
 
     return  u8Temp;
 }
+#else
+/******************************************************************************
+* Name       : void Gpio_Init(void)
+* Function   : Init GPIOs
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd Jul 2016
+******************************************************************************/
+void Gpio_Init(void)
+{
+    /* Led configure */
+    PORTB_PCR18 = PORT_PCR_MUX(0x1);   /* Configure as GPIO              */
+    PORTB_PCR19 = PORT_PCR_MUX(0x1);   /* Configure as GPIO              */
+    PORTD_PCR1  = PORT_PCR_MUX(0x1);   /* Configure as GPIO              */
 
+    GPIOB_PSOR  |= (1<<18);            /* Turn off first                 */
+    GPIOB_PSOR  |= (1<<19);            /* Turn off first                 */
+    GPIOD_PSOR  |= (1<<1);             /* Turn off first                 */
+
+    GPIOB_PDDR  |= (1<<18);            /* Configure as output LED RED    */
+    GPIOB_PDDR  |= (1<<19);            /* Configure as output LED GREEN  */
+    GPIOD_PDDR  |= (1<<1);             /* Configure as output LED BLUE   */
+
+    return;
+}
+
+/******************************************************************************
+* Name       : void LED_Toggle(uint8 u8Ch)
+* Function   : LED toggle control
+* Input      : uint8 u8Ch    0~255    Channel number of led
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 4th Jul 2016
+******************************************************************************/
+void LED_Toggle(uint8 u8Ch)
+{
+    switch(u8Ch)
+    { 
+        case BOARD_CONFIG_LED_BLUE:  /* If it is blue led   */
+        {
+            GPIOD_PTOR |= (1<<1);
+            break;
+        }
+        case BOARD_CONFIG_LED_RED:   /* If it is red led    */
+        {
+            GPIOB_PTOR |= (1<<18);
+            break;
+        }
+        case BOARD_CONFIG_LED_GREEN: /* If it is green led  */
+        {
+            GPIOB_PTOR |= (1<<19);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return;
+}
+
+/******************************************************************************
+* Name       : void LED_Off(uint8 u8Ch)
+* Function   : LED Off control
+* Input      : uint8 u8Ch    0~255    Channel number of led
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 4th Jul 2016
+******************************************************************************/
+void LED_Off(uint8 u8Ch)
+{
+    switch(u8Ch)
+    { 
+        case BOARD_CONFIG_LED_BLUE:  /* If it is blue led   */
+        {
+            GPIOD_PSOR |= (1<<1);
+            break;
+        }
+        case BOARD_CONFIG_LED_RED:   /* If it is red led    */
+        {
+            GPIOB_PSOR |= (1<<18);
+            break;
+        }
+        case BOARD_CONFIG_LED_GREEN: /* If it is green led  */
+        {
+            GPIOB_PSOR |= (1<<19);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return;
+}
+
+
+/******************************************************************************
+* Name       : void LED_On(uint8 u8Ch)
+* Function   : LED On control
+* Input      : uint8 u8Ch    0~255    Channel number of led
+* Output:    : None
+* Return     : None
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 4th Jul 2016
+******************************************************************************/
+void LED_On(uint8 u8Ch)
+{
+    switch(u8Ch)
+    { 
+        case BOARD_CONFIG_LED_BLUE:  /* If it is blue led   */
+        {
+            GPIOD_PCOR |= (1<<1);
+            break;
+        }
+        case BOARD_CONFIG_LED_RED:   /* If it is red led    */
+        {
+            GPIOB_PCOR |= (1<<18);
+            break;
+        }
+        case BOARD_CONFIG_LED_GREEN: /* If it is green led  */
+        {
+            GPIOB_PCOR |= (1<<19);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return;
+}
+
+#endif
 
 /* End of file */
 
