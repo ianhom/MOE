@@ -51,7 +51,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt);
 }
 #endif
 
-#endif /* _TASK_PT_DEMO_H */
+#endif /* _TASK_PT_DEMO2_H */
 
 /* End of file */
 
