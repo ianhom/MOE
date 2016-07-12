@@ -41,23 +41,27 @@ static void (*const TASK_PT_DEMO_LED_Toggle)(uint8 u8Clr) = TASK_PT_DEMO_LED_TOG
 ******************************************************************************/
 uint8 Task_PT_Demo_Process(uint8 u8Evt)
 {   
-    PTV uint16 ptv_u16Cnt = 250;
- 
     PT_INIT();
-
+    
     PT_BEGIN();
+
+    /******************************************************************/
+    MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+    /******************************************************************/
 
     while(1)
     {
-        PT_WAIT_MSG();
-        TASK_PT_DEMO_LED_Toggle(1);
-        PT_DELAY(ptv_u16Cnt);
-        TASK_PT_DEMO_LED_Toggle(1);
-        PT_DELAY(ptv_u16Cnt);
-        TASK_PT_DEMO_LED_Toggle(1);
-        PT_DELAY(ptv_u16Cnt);
-        TASK_PT_DEMO_LED_Toggle(1);
-        PT_DELAY(ptv_u16Cnt);
+        TASK_PT_DEMO_LED_On(LED_RED);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_RED);
+
+        TASK_PT_DEMO_LED_On(LED_GREEN);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_GREEN);
+
+        TASK_PT_DEMO_LED_On(LED_BLUE);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_BLUE);
     }
 
     PT_END();
