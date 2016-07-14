@@ -31,13 +31,79 @@ extern "C" {
 #define WRITE_SINGLE_MASK          (0x00)                 /* Mask of single register writing */
 #define WRITE_MULTI_MASK           (0x40)                 /* Mask of multi register writing  */
 
-#define DUMMY_BYTE                 (0xFF)                 /* Dummy byte for reading          */
-#define CC1101_MAX_ADDR            (0x40)                 /* Max register number of CC1101   */
+#define DUMMY_BYTE                 (0x3D)                 /* Dummy byte for reading          */
 
-#define ADDR_TX_FIFO               (0x3F)                 /* Address of TX FIFO              */
-#define ADDR_RX_FIFO               (0x3F)                 /* Address of TX FIFO              */
+#define CC1101_MAX_ADDR            (0x40)                 /* Max register number of CC1101   */
+#define CC1101_MAX_REG             (0x2F)                 /* Max config register number      */
+#define CC1101_MAX_PA_NUM          (0x08)                 /* Max number of PA table          */
+
+#define ADDR_REG_IOCFG2            (0x00)                 /* GDO2 configuration              */
+#define ADDR_REG_IOCFG1            (0x01)                 /* GDO1 configuration              */
+#define ADDR_REG_IOCFG0            (0x02)                 /* GDO0 configuration              */
+#define ADDR_REG_FIFOTHR           (0x03)                 /* Thrshold for RX & TX FIFO       */
+#define ADDR_REG_SYNC1             (0x04)                 /* Sync word high byte             */
+#define ADDR_REG_SYNC0             (0x05)                 /* Sync word low byte              */
+#define ADDR_REG_PKTLEN            (0x06)                 /* Length of packet                */
+#define ADDR_REG_PKTCTRL1          (0x07)                 /* Auto packet control             */
+#define ADDR_REG_PKTCTRL0          (0x08)                 /* Auto packet control             */
+#define ADDR_REG_ADDR              (0x09)                 /* Local address                   */
+#define ADDR_REG_CHANNR            (0x0A)                 /* Channel number                  */
+#define ADDR_REG_FSCTRL1           (0x0B)                 /* Freq mixer control              */
+#define ADDR_REG_FSCTRL0           (0x0C)                 /* Freq mixer control              */
+#define ADDR_REG_FREQ2             (0x0D)                 /* Freq control byte               */
+#define ADDR_REG_FREQ1             (0x0E)                 /* Freq control byte               */
+#define ADDR_REG_FREQ0             (0x0F)                 /* Freq control byte               */
+#define ADDR_REG_MDMCFG4           (0x10)                 /* Modem control                   */
+#define ADDR_REG_MDMCFG3           (0x11)                 /* Modem control                   */
+#define ADDR_REG_MDMCFG2           (0x12)                 /* Modem control                   */
+#define ADDR_REG_MDMCFG1           (0x13)                 /* Modem control                   */
+#define ADDR_REG_MDMCFG0           (0x14)                 /* Modem control                   */
+#define ADDR_REG_DEVIATN           (0x15)                 /* Deviatn control                 */
+#define ADDR_REG_MCSM2             (0x16)                 /* Main wireless state control     */
+#define ADDR_REG_MCSM1             (0x17)                 /* Main wireless state control     */
+#define ADDR_REG_MCSM0             (0x18)                 /* Main wireless state control     */
+#define ADDR_REG_FOCCFG            (0x19)                 /* Freq offset cali                */
+#define ADDR_REG_BSCFG             (0x1A)                 /* Bit sync configuration          */
+#define ADDR_REG_AGCTRL2           (0x1B)                 /* AGC control                     */
+#define ADDR_REG_AGCTRL1           (0x1C)                 /* AGC control                     */
+#define ADDR_REG_AGCTRL0           (0x1D)                 /* AGC control                     */
+#define ADDR_REG_WOREVT1           (0x1E)                 /* WOR event 1                     */
+#define ADDR_REG_WOREVT0           (0x1F)                 /* WOR event 0                     */
+#define ADDR_REG_WORCTRL           (0x20)                 /* WOR control                     */
+#define ADDR_REG_FREND1            (0x21)                 /* RX configuration                */
+#define ADDR_REG_FREND0            (0x22)                 /* TX configuration                */
+#define ADDR_REG_FSCAL3            (0x23)                 /* Freq mixer cali                 */
+#define ADDR_REG_FSCAL2            (0x24)                 /* Freq mixer cali                 */
+#define ADDR_REG_FSCAL1            (0x25)                 /* Freq mixer cali                 */
+#define ADDR_REG_FSCAL0            (0x26)                 /* Freq mixer cali                 */
+#define ADDR_REG_RCCTRL1           (0x27)                 /* RC configuration                */
+#define ADDR_REG_RCCTRL0           (0x28)                 /* RC configuration                */
+#define ADDR_REG_FSTEST            (0x29)                 /* Freq mixer cali test            */
+#define ADDR_REG_PTEST             (0x2A)                 /* Production test                 */
+#define ADDR_REG_AGCTEST           (0x2B)                 /* AGC test                        */
+#define ADDR_REG_TEST2             (0x2C)                 /* Test 1                          */
+#define ADDR_REG_TEST1             (0x2D)                 /* Test 2                          */
+#define ADDR_REG_TEST0             (0x2E)                 /* Test 3                          */
 
 #define ADDR_CMD_SRES              (0x30)                 /* Command: rest                   */
+#define ADDR_CMD_SFSTXON           (0x31)                 /* Command: Enable Freq cali       */
+#define ADDR_CMD_SXOFF             (0x32)                 /* Command: Disable cycstal        */
+#define ADDR_CMD_SCAL              (0x33)                 /* Command: Cali Freq              */
+#define ADDR_CMD_SRX               (0x34)                 /* Command: Enable RX              */
+#define ADDR_CMD_STX               (0x35)                 /* Command: Enable TX              */
+#define ADDR_CMD_SIDLE             (0x36)                 /* Command: Enter IDLE             */
+#define ADDR_CMD_SWOR              (0x38)                 /* Command: Enter WOR              */
+#define ADDR_CMD_SPWD              (0x39)                 /* Command: Power off when Cs low  */
+#define ADDR_CMD_SFRX              (0x3A)                 /* Command: Flush RX FIFO          */
+#define ADDR_CMD_SFTX              (0x3B)                 /* Command: Flush TX FIFO          */
+#define ADDR_CMD_SWORRST           (0x3C)                 /* Command: Rest RT as event 1     */
+#define ADDR_CMD_SNOP              (0x3D)                 /* Command: No operation           */
+
+#define ADDR_PATABLE               (0x3E)                 /* Address of PA table             */
+
+#define ADDR_FIFO_TX               (0x3F)                 /* Address of TX FIFO              */
+#define ADDR_FIFO_RX               (0x3F)                 /* Address of RX FIFO              */
+
 
 /******************************************************************************
 * Name       : uint8 CC1101_Init(void)
