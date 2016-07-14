@@ -207,7 +207,7 @@ uint8 CC1101_FIFO_Read(uint8 *pu8Data)
     {
         return SW_ERR;
     }
-    CC1101_Reg_Read_Multi(ADDR_RX_FIFO, CC1101_MAX_ADDR, pu8Data);
+    CC1101_Reg_Read_Multi(ADDR_FIFO_RX, CC1101_MAX_ADDR, pu8Data);
     return SW_OK;
 }
 
@@ -230,7 +230,56 @@ uint8 CC1101_FIFO_Write(uint8 *pu8Data)
     {
         return SW_ERR;
     }
-    CC1101_Reg_Write_Multi(ADDR_TX_FIFO, CC1101_MAX_ADDR, pu8Data);
+
+    CC1101_Reg_Write_Multi(ADDR_FIFO_TX, CC1101_MAX_ADDR, pu8Data);
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 CC1101_Global_Config(uint8 *pu8Data)
+* Function   : Read TX FIFO of CC1101
+* Input      : uint8 *pu8Data                  Pointer for writing parameter.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 13th Jul 2016
+******************************************************************************/
+uint8 CC1101_Global_Config(uint8 *pu8Data)
+{
+    /* Check input paramters */
+    if(NULL == pu8Data)
+    {
+        return SW_ERR;
+    }
+
+    CC1101_Reg_Write_Multi(ADDR_REG_IOCFG2, CC1101_MAX_REG, pu8Data);
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 CC1101_Global_Config(uint8 *pu8Data)
+* Function   : Read TX FIFO of CC1101
+* Input      : uint8 *pu8Data                  Pointer for writing parameter.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 13th Jul 2016
+******************************************************************************/
+uint8 CC1101_PA_Config(uint8 *pu8Data)
+{
+    /* Check input paramters */
+    if(NULL == pu8Data)
+    {
+        return SW_ERR;
+    }
+
+    CC1101_Reg_Write_Multi(ADDR_PATABLE, CC1101_MAX_REG, pu8Data);
     return SW_OK;
 }
 
