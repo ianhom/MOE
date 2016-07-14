@@ -221,6 +221,35 @@ uint8 CC1101_FIFO_Read(uint8 *pu8Data);
 ******************************************************************************/
 uint8 CC1101_FIFO_Write(uint8 *pu8Data);
 
+/******************************************************************************
+* Name       : uint8 CC1101_Global_Config(uint8 *pu8Data)
+* Function   : Read TX FIFO of CC1101
+* Input      : uint8 *pu8Data                  Pointer for writing parameter.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 13th Jul 2016
+******************************************************************************/
+uint8 CC1101_Global_Config(uint8 *pu8Data);
+
+/******************************************************************************
+* Name       : uint8 CC1101_Global_Config(uint8 *pu8Data)
+* Function   : Read TX FIFO of CC1101
+* Input      : uint8 *pu8Data                  Pointer for writing parameter.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 13th Jul 2016
+******************************************************************************/
+uint8 CC1101_PA_Config(uint8 *pu8Data);
+
+
  
 #ifdef __cplusplus
 }
