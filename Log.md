@@ -1,4 +1,7 @@
 # Log
+## 15th Jul 2016
+Add a demo app to use cc1101 driver for sending and receiving
+
 ## 14th Jul 2016
 Add CC1101 driver
 
