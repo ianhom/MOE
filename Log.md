@@ -1,4 +1,7 @@
 # Log
+## 14th Jul 2016
+Add CC1101 driver
+
 ## 8th Jul 2016
 Add PT application
 
