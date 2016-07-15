@@ -20,6 +20,8 @@
 #include "Task_PT_IEC870_PL.h"
 #include "debug.h"
 #include "MOE_DRV_CC1101.h"
+#include "knx_rf_Ll.h"
+
 
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
@@ -29,6 +31,8 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 //static void (*const TASK_PT_DEMO_LED_Toggle)(uint8 u8Clr) = TASK_PT_DEMO_LED_TOGGLE;
 
 static void Manchester_Decode(uint8 *pu8Src, uint8 *pu8Des);
+static void Print_RF_Info(void);
+
 
 
 static uint8 sg_au8Test[100] = {0x96,\
@@ -90,27 +94,21 @@ uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt)
 
     while(1)
     {
-        TASK_PT_DEMO_LED_On(LED_RED);
+#ifdef __PL_RCV_ENABLE
+        //TASK_PT_DEMO_LED_On(LED_RED);
         PL_RECEIVE(sg_au8RxFIFO);
         TASK_PT_DEMO_LED_Off(LED_RED);
 
         Manchester_Decode(&(sg_au8RxFIFO[1]), sg_au8RxData);
 
-        for(uint8 u8Temp = 0; u8Temp < 64; u8Temp++)
-        {
-            printf("Addr is 0x%2x, Data is 0x%2x\n", u8Temp,sg_au8RxFIFO[u8Temp]);
-        }
-        printf("\n\n");
-        for(uint8 u8Temp = 0; u8Temp < 32; u8Temp++)
-        {
-            printf("*********Addr is 0x%2x, Data is 0x%2x\n", u8Temp,sg_au8RxData[u8Temp]);
-        }
-        
+        Print_RF_Info();
+#endif
 
-        PT_DELAY(400);
+#ifdef __PL_SND_ENABLE
+        PT_DELAY(1000);
            
         TASK_PT_DEMO_LED_On(LED_BLUE);
-#if (1)        
+#if defined (__PL_RCV_ENABLE) && defined (__PL_RCV_ENABLE)        
         PL_SEND(sg_au8RxFIFO);
 #else
         PL_SEND(sg_au8Test);
@@ -118,6 +116,7 @@ uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt)
         TASK_PT_DEMO_LED_Off(LED_BLUE);
         
         PT_DELAY(500);
+#endif
     }
 
     PT_END();
@@ -177,6 +176,117 @@ static void Manchester_Decode(uint8 *pu8Src, uint8 *pu8Des)
     return;    
 }
 
+
+static void Print_RF_Info(void)
+{
+    PTV T_LL_FIRST_BLOCK* ptBlock1 = (T_LL_FIRST_BLOCK*)(&(sg_au8RxData[0]));
+    PTV T_LL_SECOND_BLOCK* ptBlock2 = (T_LL_SECOND_BLOCK*)(&(sg_au8RxData[12]));
+
+    DBG_PRINT("\n\n**** First Block Information:\n");
+    DBG_PRINT("Length is %d\n", ptBlock1->ucLength);
+    
+    switch(ptBlock1->ubStr)
+    {
+        case KNX_RF_Ll_STR_NULL:
+        {
+            DBG_PRINT("RF str is NULL\n");
+            break;
+        }
+        case KNX_RF_Ll_STR_LOW:
+        {
+            DBG_PRINT("RF str is low\n");
+            break;
+        }
+        case KNX_RF_Ll_STR_MID:
+        {
+            DBG_PRINT("RF str is MID\n");
+            break;
+        }
+        case KNX_RF_Ll_STR_HIGH:
+        {
+            DBG_PRINT("RF str is HIGH\n");
+            break;
+        }
+        default:
+        {
+            DBG_PRINT("RF str is WRONG!!\n");
+        }
+    }
+    
+    if (KNX_RF_Ll_BTY_LOW == ptBlock1->ubBty)
+    {
+        DBG_PRINT("Battery is low\n");
+    }
+    else if(KNX_RF_Ll_BTY_HIGH == ptBlock1->ubBty)
+    {
+        DBG_PRINT("Battery is high\n");
+    }
+    else
+    {
+        DBG_PRINT("Battery information is wrong!!\n");
+    }
+    
+    if (KNX_RF_LL_DIR_BI == ptBlock1->ubBi)
+    {
+        DBG_PRINT("Sender is bi-direction\n");
+    }
+    else if(KNX_RF_LL_DIR_UNI == ptBlock1->ubBi)
+    {
+        DBG_PRINT("Sender is uni-direction\n");
+    }
+    else
+    {
+        DBG_PRINT("Wrong direction info!!\n");
+    }
+    
+    DBG_PRINT("SN or DoA is");
+    for(uint8 u8Idx = 0; u8Idx < 6; u8Idx++)
+    {
+        DBG_PRINT("0x%x ",ptBlock1->aucSnDoA[u8Idx]);
+    }
+    DBG_PRINT("\n");
+    
+    DBG_PRINT("\n\n**** Second Block Information:\n");
+    DBG_PRINT("Source Address is 0x%x\n", ptBlock2->w16SrcAddr);
+    DBG_PRINT("Destination Address is 0x%x\n", ptBlock2->w16DesAddr);
+    
+    if(KNX_RF_Ll_FRAME_TYPE_STD == ptBlock2->ubAET)
+    {
+        DBG_PRINT("It is a standard frame\n");
+    }
+    else if(KNX_RF_Ll_FRAME_TYPE_EXT == ptBlock2->ubAET)
+    {
+        DBG_PRINT("It is a extented frame\n");
+    }
+    else
+    {
+        DBG_PRINT("Frame type is wrong!\n");
+    }
+    
+    if(KNX_RF_LL_DEST_ADDR_PHY == ptBlock2->ubAT)
+    {
+        DBG_PRINT("Destination address is a physical address\n");
+    }
+    else if(KNX_RF_LL_DEST_ADDR_GRP == ptBlock2->ubAT)
+    {
+        DBG_PRINT("Destination address is a group address\n");
+    }
+    else
+    {
+        DBG_PRINT("Destination address type is wrong!\n");
+    }
+    
+    DBG_PRINT("Repeat count is %d\n", ptBlock2->ubRC);
+    
+    DBG_PRINT("Link layer frame number(LFN) is %d\n", ptBlock2->ubLFN);
+    
+    DBG_PRINT("Seq Number is %d\n", ptBlock2->ubSeqNum);
+    
+    DBG_PRINT("User data 0x%x\n", ptBlock2->aucData[0]);
+    
+    DBG_PRINT("\n\n\n");
+
+}
 
 
 /* End of file */
