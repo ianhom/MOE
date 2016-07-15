@@ -16,9 +16,12 @@
 #include "MOE_Msg.h"
 #include "MOE_HAL.h"
 #include "debug.h"
+#ifdef __MOE_SPI_ENABLE
+#include "MOE_HAL_SPI.h"
+#endif
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Init()
+* Name       : uint8 Moe_HAL_Init(void)
 * Function   : Init hardware abstract layer
 * Input      : None.
 * Output:    : None.
@@ -29,7 +32,7 @@
 * Author     : Ian
 * Date       : 4th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_Init()
+uint8 Moe_HAL_Init(void)
 {
     uint32 u32IntSt;
 
@@ -37,7 +40,9 @@ uint8 Moe_HAL_Init()
     /**************************************************************************************************/
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
-  
+#ifdef __MOE_SPI_ENABLE
+    Moe_HAL_SPI_Init();
+#endif
     return SW_OK;
 
 }
