@@ -27,6 +27,9 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_PT_IEC870_PL   /* According the set from project_config.h */
 #endif
 
+#define __PL_RCV_ENABLE
+#define __PL_SND_ENABLE
+
 
 #define PL_SEND(p) {\
     CC1101_FIFO_Write(p);\
@@ -45,6 +48,7 @@ extern "C" {
         PT_DELAY(1);\
     }\
     while(0x6F != CC1101_Cmd(ADDR_CMD_SNOP));\
+    TASK_PT_DEMO_LED_On(LED_RED);\
     CC1101_Cmd(ADDR_CMD_SIDLE);\
     CC1101_FIFO_Read(p);\
     CC1101_Cmd(ADDR_CMD_SFRX);\
