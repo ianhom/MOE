@@ -26,9 +26,12 @@ extern "C" {
 
 /* Add your task process here */
 #define LIST_OF_REG_TASK \
-        REG_TASK(Task_PT_Demo_Process)\
-        REG_TASK(Task2_Process)\
-        REG_TASK(Task3_Process)\
+        REG_TASK(Task_PT_IEC870_PL_Process)
+        //REG_TASK(Task_PT_Demo_Process)\
+        //REG_TASK(Task_PT_Demo2_Process)\
+        //REG_TASK(Task1_Process)\
+        //REG_TASK(Task2_Process)\
+        //REG_TASK(Task3_Process)\
         //REG_TASK(LED_Demo_Process)\
         //REG_TASK(Task_Demo_Queue_Process)
 
@@ -54,7 +57,7 @@ LIST_OF_REG_TASK
 
 #define __TIMER_CALLBACK_SUPPORTED                    /* Timer callback is supported              */
 
-//#define __DEBUG_ENABLE                                /* Debug mode is enabled                    */
+#define __DEBUG_ENABLE                                /* Debug mode is enabled                    */
 
 #define __WANTED_A_LIVE_FOX                           /* Wanted: a live fox.                      */
 
@@ -101,6 +104,10 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_BOARD_CONFIG          __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_HAL               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO               __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_PT_DEMO2              __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_HAL_SPI           __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_DRV_CC1101        __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_PT_IEC870_PL          __DEBUG_BASIC_INFO
 #endif
 
                            
@@ -120,6 +127,11 @@ void LED_On(uint8 u8Ch);
 
 void LED_Toggle(uint8 u8Ch);
 #define TASK_PT_DEMO_LED_TOGGLE LED_Toggle
+
+#define LED_BLUE                 (3)     /* Blue led        */
+#define LED_RED                  (2)     /* Red led         */
+#define LED_GREEN                (0)     /* Green led       */
+
 
 
 #ifdef __cplusplus
