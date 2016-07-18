@@ -19,6 +19,14 @@
 #ifdef __MOE_SPI_ENABLE
 #include "MOE_HAL_SPI.h"
 #endif
+#ifdef __MOE_I2C_ENABLE
+#include "MOE_HAL_I2C.h"
+#endif
+#ifdef __MOE_UART_ENABLE
+#include "MOE_HAL_UART.h"
+#endif
+
+
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Init(void)
@@ -43,6 +51,18 @@ uint8 Moe_HAL_Init(void)
 #ifdef __MOE_SPI_ENABLE
     Moe_HAL_SPI_Init();
 #endif
+
+#ifdef __MOE_I2C_ENABLE
+    Moe_HAL_I2C_Init();
+#endif
+
+#ifdef __MOE_UART_ENABLE
+    Moe_HAL_UART_Init();
+#endif
+
+
+
+
     return SW_OK;
 
 }
