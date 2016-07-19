@@ -108,6 +108,7 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_MOE_HAL_SPI           __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_DRV_CC1101        __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_IEC870_PL          __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_HAL_UART          __DEBUG_BASIC_INFO
 #endif
 
                            
