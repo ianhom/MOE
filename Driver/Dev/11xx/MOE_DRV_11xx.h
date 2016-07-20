@@ -31,7 +31,19 @@ extern "C" {
 #define DRV_11XX_END_M                  (0xFF)            /* Command to exit "M" sub-mode            */   
 #define DRV_11XX_RSPON                  (0x3E)            /* Responing code                          */
 
+#define DRV_11XX_MAX_BIND_ADDR          (64)              /* Max number of bind sender address       */
+#define DRV_11XX_SN_LEN                 (6)               /* The length of SN address                */    
 
+#define DRV_11XX_MODE_SEL_CMD           (0x47)            /* Command to select operating mode        */
+
+#define DRV_11XX_MODE_S1                (3)               /* S1 sending only uni-direction mode      */
+#define DRV_11XX_MODE_S2                (0)               /* S2 bi-direction mode                    */     
+
+#define DRV_11XX_RCV_MODE_CMD           (0x49)            /* Command to select receiving mode        */
+
+#define DRV_11XX_NORMAL_RCV             (0)               /* Receive telegram with normal operation  */
+#define DRV_11XX_ALL_RCV                (2)               /* Receive all telegram                    */
+      
 /******************************************************************************
 * Name       : uint8 Drv_11XX_Init(void);
 * Function   : Init operation for 11xx.
@@ -46,7 +58,80 @@ extern "C" {
 ******************************************************************************/
 uint8 Drv_11XX_Init(void);
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Simple_Cmd(uint8 u8Cmd)
+* Function   : Send command to 11xx
+* Input      : uint8 u8Cmd
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Cmd(uint8 u8Cmd);
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Simple_Cmd(uint8 u8Cmd)
+* Function   : Send command with 1 byte value to 11xx
+* Input      : uint8 u8Cmd    0~255    Command code
+*              uint8 u8Val    0~255    Value after command
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Cmd_1Val(uint8 u8Cmd, uint8 u8Val);
+
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Bind(uint8 u8Ch, uint8 *pu8Addr)
+* Function   : Bind a sender SN address
+* Input      : uint8  u8Ch       1~64      Index of address
+*              uint8 *pu8Addr              Pointer for SN address
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Bind(uint8 u8Ch, uint8 *pu8Addr);
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Mode_Sel(uint8 u8Mode)
+* Function   : Bind a sender SN address    
+* Input      : uint8  u8Mode    DRV_11XX_MODE_S1    S1 sending only mode
+*                               DRV_11XX_MODE_S2    S2 bi-direction mode
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Mode_Sel(uint8 u8Mode);
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Rcv_Mode(uint8 u8Mode)
+* Function   : Bind a sender SN address    
+* Input      : uint8  u8Mode    DRV_11XX_NORMAL_RCV    Receive normal telegram
+*                               DRV_11XX_ALL_RCV       Receive all telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Rcv_Mode(uint8 u8Mode);
 
  
 #ifdef __cplusplus
