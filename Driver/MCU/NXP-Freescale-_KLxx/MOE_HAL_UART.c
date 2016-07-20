@@ -9,7 +9,7 @@
 *               1    19/Jul/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
+#include "common.h"
 #include "common_head.h"
 #include "project_config.h"
 #include "MOE_Core.h"
@@ -34,6 +34,7 @@ extern int periph_clk_khz;
 ******************************************************************************/
 uint8 Moe_HAL_UART_Init(void)
 {
+
     volatile uint8 u8Data = 0;
     uint16         U16SBR = 0; 
     
@@ -71,16 +72,15 @@ uint8 Moe_HAL_UART_Init(void)
     UART1_C2 |= (UART_C2_TE_MASK | UART_C2_RE_MASK);                //Enasable TX/RX first before UART init 
     
     /*------------Enable TX/RX interrupt after UART init -------*/
-    UART1_C2 |= UART_C2_RIE_MASK;
+    //UART1_C2 |= UART_C2_RIE_MASK;
     
     /* Enable Error interrupt. */
-    UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
-    
+    //UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
+
 
     return SW_OK;  
 }
 
-}
 
 /* end of file */
 
