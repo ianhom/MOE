@@ -34,7 +34,7 @@ extern int periph_clk_khz;
 ******************************************************************************/
 uint8 Moe_HAL_UART_Init(void)
 {
-
+#if (1)
     volatile uint8 u8Data = 0;
     uint16         U16SBR = 0; 
     
@@ -76,11 +76,85 @@ uint8 Moe_HAL_UART_Init(void)
     
     /* Enable Error interrupt. */
     //UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
-
+#else
+    
+    uart_init (UART1_BASE_PTR, periph_clk_khz, 19200);
+    
+#endif
 
     return SW_OK;  
 }
 
+
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Byte_Receive()
+* Function   : Get a single byte data from uart receiving buffer
+* Input      : None.
+* Output:    : None.
+* Return     : uint8 Received data.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Byte_Receive()
+{
+    while (!(UART1_S1 & UART_S1_RDRF_MASK)); /* Check if any available data in receiving buffer */
+    return UART1_D;                          /* Return the received data                        */
+}
+
+/******************************************************************************
+* Name       : void Moe_HAL_Uart_Byte_Send(uint8 u8Data)
+* Function   : Send a single byte data to uart sending buffer.
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Moe_HAL_Uart_Byte_Send(uint8 u8Data)
+{
+    while(!(UART1_S1 & UART_S1_TDRE_MASK)); /* Check sending buffer is free or NOT */
+    UART1_D = u8Data;                       /* Send the desired data               */
+    return;
+}
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Free_Send_Buf(void)
+* Function   : Check sending buffer is free or NOT
+* Input      : None.
+* Output:    : None.
+* Return     : MOE_HAL_UART_SND_BUF_NOT_FREE  Sending buffer is NOT free
+*              MOE_HAL_UART_SND_BUF_FREE      Sending buffer is free
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Free_Send_Buf(void)
+{
+    return (!!(UART1_S1 & UART_S1_TDRE_MASK));
+}
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Got_Data(void)
+* Function   : Check sending buffer is free or NOT
+* Input      : None.
+* Output:    : None.
+* Return     : MOE_HAL_UART_RCV_DATA     Get a data in receiving buffer
+*              MOE_HAL_UART_NO_RCV_DATA  Get NONE data in receiving buffer
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Got_Data(void)
+{
+    return (!!(UART1_S1 & UART_S1_RDRF_MASK));
+}
 
 /* end of file */
 
