@@ -26,7 +26,10 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_MOE_DRV_11XX       /* According the set from project_config.h */
 #endif
 
-#define READ_SINGLE_MASK           (0x80)                 /* Mask of single register reading */
+#define DRV_11XX_CFG_MODE               (0x00)            /* Command to enter configuration mode     */
+#define DRV_11XX_IDLE                   (0x58)            /* Command to enter IDLE state (normal)    */
+#define DRV_11XX_END_M                  (0xFF)            /* Command to exit "M" sub-mode            */   
+#define DRV_11XX_RSPON                  (0x3E)            /* Responing code                          */
 
 
 /******************************************************************************
