@@ -68,7 +68,7 @@ extern "C" {
 #define DRV_11XX_CMD_ALL_ADDR_TAB       (0x25)            /* Command to get ALL address table        */
 #define DRV_11XX_CMD_ALL_ADDR_TAB_LEN   (580)             /* Length of all address table             */
 
-
+#define DRV_11XX_CMD_WIRTE_REG          (0x4D)            /* Command to write register               */
 
 
 
@@ -298,6 +298,21 @@ uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data);
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch);
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
+* Function   : write value into register and store in Flash.
+* Input      : uint8  u8Reg      0~255     Register address.
+*              uint8  u8Cnt      1~255     Count of register to be writen
+*              uint8 *pu8Addr              Pointer for SN address
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr);
 
 
  
