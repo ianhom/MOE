@@ -1,4 +1,7 @@
 # Log
+## 21st Jul 2016
+Add driver of 11xx
+
 ## 20th Jul 2016
 Add uart driver of KL25
 
