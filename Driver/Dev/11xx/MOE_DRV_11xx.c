@@ -19,8 +19,6 @@
 #include "MOE_DRV_11xx.h"
 #include "debug.h"
 
-static uint8 sg_au8RegRead[256] = {0};
-
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Init(void)
 * Function   : Init operation for 11xx.
@@ -35,11 +33,8 @@ static uint8 sg_au8RegRead[256] = {0};
 ******************************************************************************/
 uint8 Drv_11xx_Init(void)
 {
-    uint8 u8Temp = 0;
-    
-    
     Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_CFG_MODE);
-    if(DRV_11XX_CMD_RSPON = Moe_HAL_Uart_Byte_Receive())
+    if(DRV_11XX_CMD_RSPON == Moe_HAL_Uart_Byte_Receive())
     {
         Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_IDLE);
     }
@@ -52,13 +47,13 @@ uint8 Drv_11xx_Init(void)
 
 
 /******************************************************************************
-* Name       : uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint8 u8Len, uint8 *pu8Data)
+* Name       : uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data)
 * Function   : Send command to 11xx
 * Input      : uint8  u8Cmd    0~255                      Command code
 *              uint8  u8Para   DRV_11XX_CMD_WITHOUT_VAL   No value after command
 *                              DRV_11XX_CMD_WITH_VAL      A byte value after command
 *              uint8  u8Val    0~255                      Value after command
-*              uint8  u8Len    0~255                      Return bytes of command        
+*              uint16 u16Len   0~65536                    Return bytes of command        
 * Output:    : uint8 *pu8Data                             Pointer to save return bytes     
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -67,12 +62,12 @@ uint8 Drv_11xx_Init(void)
 * Author     : Ian
 * Date       : 20th Jul 2016
 ******************************************************************************/
-uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint8 u8Len, uint8 *pu8Data)
+uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data)
 {
     uint8 u8Idx;
 
     /* Check if input parameter is invalid or NOT */
-    if((0 != u8Len) && (NULL == pu8Data))
+    if((0 != u16Len) && (NULL == pu8Data))
     {
         DBG_PRINT("Invalid input\n");
         return SW_ERR;
@@ -94,7 +89,7 @@ uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint8 u8Len, uint8 *p
         Moe_HAL_Uart_Byte_Send(u8Val);                      /* Send value              */
     }
         
-    for(u8Idx = 0; u8Idx < u8Len; u8Idx++)                  /* Get return data         */
+    for(u8Idx = 0; u8Idx < u16Len; u8Idx++)                  /* Get return data         */
     {
         pu8Data[u8Idx] = Moe_HAL_Uart_Byte_Receive();
     }
@@ -175,8 +170,6 @@ uint8 Drv_11xx_Cmd_Bind(uint8 u8Ch, uint8 *pu8Addr)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Mode_Sel(uint8 u8Mode)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameter is invalid or NOT */
     if((DRV_11XX_MODE_S1 != u8Mode) && (DRV_11XX_MODE_S2 != u8Mode))
     {
@@ -208,8 +201,6 @@ uint8 Drv_11xx_Cmd_Mode_Sel(uint8 u8Mode)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Rcv_Mode(uint8 u8Mode)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameter is invalid or NOT */
     if((DRV_11XX_NORMAL_RCV != u8Mode) && (DRV_11XX_ALL_RCV != u8Mode))
     {
@@ -240,8 +231,6 @@ uint8 Drv_11xx_Cmd_Rcv_Mode(uint8 u8Mode)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Power_Sel(uint8 u8Lv)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameter is invalid or NOT */
     if((u8Lv - 1) > 4)
     {
@@ -272,8 +261,6 @@ uint8 Drv_11xx_Cmd_Power_Sel(uint8 u8Lv)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_List_Bind(uint8 u8Num, uint8 *pu8Addr)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(((u8Num - 1) > (DRV_11XX_MAX_BIND_ADDR - 1)) ||(NULL == pu8Addr))
     {
@@ -304,8 +291,6 @@ uint8 Drv_11xx_Cmd_List_Bind(uint8 u8Num, uint8 *pu8Addr)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Quality_Ind(uint8 *pu8Data)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(NULL == pu8Data)
     {
@@ -336,8 +321,6 @@ uint8 Drv_11xx_Cmd_Quality_Ind(uint8 *pu8Data)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_Rssi(uint8 *pu8Data)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(NULL == pu8Data)
     {
@@ -368,8 +351,6 @@ uint8 Drv_11xx_Cmd_Get_Rssi(uint8 *pu8Data)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(NULL == pu8Data)
     {
@@ -400,8 +381,6 @@ uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_Des_Addr_Tab (uint8 *pu8Data)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(NULL == pu8Data)
     {
@@ -432,8 +411,6 @@ uint8 Drv_11xx_Cmd_Get_Des_Addr_Tab (uint8 *pu8Data)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if(NULL == pu8Data)
     {
@@ -466,8 +443,6 @@ uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch)
 {
-    uint8 u8Idx;
-
     /* Check if the input parameters are invalid or NOT */
     if((u8Ch - 1) > 2)
     {
@@ -554,7 +529,7 @@ uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
     uint8 u8Len = *pu8Data;
 
     /* Check if the input parameters are invalid or NOT */
-    if(NULL == pu8Data))
+    if(NULL == pu8Data)
     {
         DBG_PRINT("Invalid input\n");
         return SW_ERR;
@@ -568,37 +543,6 @@ uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
     return SW_OK;
 }
 
-/******************************************************************************
-* Name       : uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
-* Function   : Send telegram with 11xx
-* Input      : uint8 *pu8Data              Pointer for sending telegram
-* Output:    : None.
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 21th Jul 2016
-******************************************************************************/
-uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
-{
-    uint8 u8Idx;
-    uint8 u8Len = *pu8Data;
-
-    /* Check if the input parameters are invalid or NOT */
-    if(NULL == pu8Data))
-    {
-        DBG_PRINT("Invalid input\n");
-        return SW_ERR;
-    }
-
-    for(u8Idx = 0; u8Idx < u8Len + 1; u8Idx++)
-    {
-        Moe_HAL_Uart_Byte_Send(pu8Data[u8Idx]);   /* Send each byte of data  */
-    }
-
-    return SW_OK;
-}
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data)
@@ -618,7 +562,7 @@ uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data)
     uint8 u8Len;
 
     /* Check if the input parameters are invalid or NOT */
-    if(NULL == pu8Data))
+    if(NULL == pu8Data)
     {
         DBG_PRINT("Invalid input\n");
         return SW_ERR;
