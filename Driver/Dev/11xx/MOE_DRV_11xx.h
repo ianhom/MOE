@@ -300,7 +300,7 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch);
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
-* Function   : write value into register and store in Flash.
+* Function   : Write value into register and store in Flash.
 * Input      : uint8  u8Reg      0~255     Register address.
 *              uint8  u8Cnt      1~255     Count of register to be writen
 *              uint8 *pu8Addr              Pointer for SN address
@@ -314,8 +314,35 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch);
 ******************************************************************************/
 uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr);
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
+* Function   : Send telegram with 11xx
+* Input      : uint8 *pu8Data              Pointer for sending telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data);
 
- 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data)
+* Function   : Receive telegram with 11xx
+* Input      : None.
+* Output:    : uint8  *pu8Data              Pointer for received telegram
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data);
+
+
 #ifdef __cplusplus
 }
 #endif
