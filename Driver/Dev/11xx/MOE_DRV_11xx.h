@@ -196,7 +196,7 @@ uint8 Drv_11xx_Cmd_Rcv_Mode(uint8 u8Mode);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Power_Sel(uint8 u8Lv);
 
@@ -210,7 +210,7 @@ uint8 Drv_11xx_Cmd_Power_Sel(uint8 u8Lv);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_List_Bind(uint8 u8Num, uint8 *pu8Addr);
 
@@ -224,7 +224,7 @@ uint8 Drv_11xx_Cmd_List_Bind(uint8 u8Num, uint8 *pu8Addr);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Quality_Ind(uint8 *pu8Data);
 
@@ -238,7 +238,7 @@ uint8 Drv_11xx_Cmd_Quality_Ind(uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_Rssi(uint8 *pu8Data);
 
@@ -252,7 +252,7 @@ uint8 Drv_11xx_Cmd_Get_Rssi(uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data);
 
@@ -266,7 +266,7 @@ uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_Des_Addr_Tab (uint8 *pu8Data);
 
@@ -280,7 +280,7 @@ uint8 Drv_11xx_Cmd_Get_Des_Addr_Tab (uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data);
 
@@ -294,7 +294,7 @@ uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch);
 
@@ -310,7 +310,7 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr);
 
@@ -324,7 +324,7 @@ uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data);
 
@@ -338,7 +338,7 @@ uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 21th Jul 2016
+* Date       : 21st Jul 2016
 ******************************************************************************/
 uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data);
 
