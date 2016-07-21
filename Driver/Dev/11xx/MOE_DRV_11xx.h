@@ -123,13 +123,13 @@ extern "C" {
 uint8 Drv_11XX_Init(void);
 
 /******************************************************************************
-* Name       : uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint8 u8Len, uint8 *pu8Data)
+* Name       : uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data)
 * Function   : Send command to 11xx
 * Input      : uint8  u8Cmd    0~255                      Command code
 *              uint8  u8Para   DRV_11XX_CMD_WITHOUT_VAL   No value after command
 *                              DRV_11XX_CMD_WITH_VAL      A byte value after command
 *              uint8  u8Val    0~255                      Value after command
-*              uint8  u8Len    0~255                      Return bytes of command        
+*              uint16 u16Len   0~65536                    Return bytes of command        
 * Output:    : uint8 *pu8Data                             Pointer to save return bytes     
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -138,7 +138,7 @@ uint8 Drv_11XX_Init(void);
 * Author     : Ian
 * Date       : 20th Jul 2016
 ******************************************************************************/
-uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint8 u8Len, uint8 *pu8Data);
+uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data);
 
 
 /******************************************************************************
