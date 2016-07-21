@@ -486,7 +486,7 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch)
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
-* Function   : write value into register and store in Flash.
+* Function   : Write value into register and store in Flash.
 * Input      : uint8  u8Reg      0~255     Register address.
 *              uint8  u8Cnt      1~255     Count of register to be writen
 *              uint8 *pu8Addr              Pointer for SN address
@@ -535,6 +535,106 @@ uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
     Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_IDLE);     /* Return back to IDLE    */
     return SW_OK;
 }
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
+* Function   : Send telegram with 11xx
+* Input      : uint8 *pu8Data              Pointer for sending telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
+{
+    uint8 u8Idx;
+    uint8 u8Len = *pu8Data;
+
+    /* Check if the input parameters are invalid or NOT */
+    if(NULL == pu8Data))
+    {
+        DBG_PRINT("Invalid input\n");
+        return SW_ERR;
+    }
+
+    for(u8Idx = 0; u8Idx < u8Len; u8Idx++)
+    {
+        Moe_HAL_Uart_Byte_Send(pu8Data[u8Idx]);   /* Send each byte of data  */
+    }
+
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
+* Function   : Send telegram with 11xx
+* Input      : uint8 *pu8Data              Pointer for sending telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
+{
+    uint8 u8Idx;
+    uint8 u8Len = *pu8Data;
+
+    /* Check if the input parameters are invalid or NOT */
+    if(NULL == pu8Data))
+    {
+        DBG_PRINT("Invalid input\n");
+        return SW_ERR;
+    }
+
+    for(u8Idx = 0; u8Idx < u8Len + 1; u8Idx++)
+    {
+        Moe_HAL_Uart_Byte_Send(pu8Data[u8Idx]);   /* Send each byte of data  */
+    }
+
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data)
+* Function   : Receive telegram with 11xx
+* Input      : None.
+* Output:    : uint8  *pu8Data              Pointer for received telegram
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Receive_Telegram(uint8 *pu8Data)
+{
+    uint8 u8Idx;
+    uint8 u8Len;
+
+    /* Check if the input parameters are invalid or NOT */
+    if(NULL == pu8Data))
+    {
+        DBG_PRINT("Invalid input\n");
+        return SW_ERR;
+    }
+
+    u8Len    = Moe_HAL_Uart_Byte_Receive();          /* Get the length of telegram  */
+    *pu8Data = u8Len;                                /* Fill the first byte         */
+
+    for(u8Idx = 1; u8Idx < u8Len + 1; u8Idx++)
+    {
+        pu8Data[u8Idx] = Moe_HAL_Uart_Byte_Receive();/* Received each byte of data  */
+    }
+
+    return SW_OK;
+}
+
 
 
 /* end of file */
