@@ -167,7 +167,7 @@ uint8 Drv_11xx_Bind(uint8 u8Ch, uint8 *pu8Addr)
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Mode_Sel(uint8 u8Mode)
-* Function   : Bind a sender SN address    
+* Function   : Select operating mode 
 * Input      : uint8  u8Mode    DRV_11XX_MODE_S1    S1 sending only mode
 *                               DRV_11XX_MODE_S2    S2 bi-direction mode
 * Output:    : None.
@@ -200,7 +200,7 @@ uint8 Drv_11xx_Mode_Sel(uint8 u8Mode)
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Rcv_Mode(uint8 u8Mode)
-* Function   : Bind a sender SN address    
+* Function   : Select receving mode  
 * Input      : uint8  u8Mode    DRV_11XX_NORMAL_RCV    Receive normal telegram
 *                               DRV_11XX_ALL_RCV       Receive all telegram
 * Output:    : None.
@@ -231,6 +231,37 @@ uint8 Drv_11xx_Rcv_Mode(uint8 u8Mode)
     return SW_OK;
 }
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Power_Sel(uint8 u8Lv)
+* Function   : Select output power
+* Input      : uint8  u8Lv    1~5         Output level
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Power_Sel(uint8 u8Lv)
+{
+    uint8 u8Idx;
+
+    /* Check if the input parameter is invalid or NOT */
+    if((u8Lv - 1) > 4)
+    {
+        DBG_PRINT("Invalid input\n");
+        return SW_ERR;
+    }
+
+    /* Write the command and value */
+    if(!Drv_11xx_Cmd_1Val(DRV_11XX_OUTPUT_PWR_CMD, u8Lv))
+    {
+        DBG_PRINT("Something wrong with command!!\n");
+        return SW_ERR;
+    }
+    return SW_OK;
+}
 
 
 /* end of file */
