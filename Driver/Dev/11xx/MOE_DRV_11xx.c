@@ -484,5 +484,58 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch)
     return SW_OK;
 }
 
+/******************************************************************************
+* Name       : uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
+* Function   : write value into register and store in Flash.
+* Input      : uint8  u8Reg      0~255     Register address.
+*              uint8  u8Cnt      1~255     Count of register to be writen
+*              uint8 *pu8Addr              Pointer for SN address
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21th Jul 2016
+******************************************************************************/
+uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
+{
+    uint8 u8Idx;
+
+    /* Check if the input parameters are invalid or NOT */
+    if((0 == u8Cnt) || (NULL == pu8Addr))
+    {
+        DBG_PRINT("Invalid input\n");
+        return SW_ERR;
+    }
+
+    Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_CFG_MODE);/* Enter to configure mode */
+    if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive()) /* Wait respons    */
+    {
+        return SW_ERR;
+    }
+    Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_WIRTE_REG);/* Enter M sub-mode       */
+    if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive()) /* Wait respons    */
+    {
+        return SW_ERR;
+    }
+
+    for(u8Idx = 0; u8Idx < u8Cnt; u8Idx++)
+    {
+        Moe_HAL_Uart_Byte_Send(u8Reg + u8Idx); /* Send register address      */
+        Moe_HAL_Uart_Byte_Send(pu8Addr[u8Idx]);/* Send register value        */
+    }
+    
+    Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_END_M);/* First byte of address      */
+    if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive()) /* Wait respons    */
+    {
+        return SW_ERR;
+    }
+
+    Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_IDLE);     /* Return back to IDLE    */
+    return SW_OK;
+}
+
+
 /* end of file */
 
