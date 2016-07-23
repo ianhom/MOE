@@ -22,6 +22,13 @@
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
+static uint8 sg_au8SndTele[]   = {0x09, 0x00, 0x11, 0x22, 0x33, 0x44, 0x01, 0x00, 0x00, 0xAB};
+static uint8 sg_au8RcvTele[50] = {0x00};
+
+static uint8 sg_au8SnAddr[6]   = {0x66, 0x55, 0x44, 0x33, 0x22, 0x11};
+static uint8 sg_au8ComAddr[8]  = {0x00};
+static uint8 sg_au8ShtAddr[2]  = {0x00};
+
 static void (*const TASK_PT_DEMO_LED_Off)(uint8 u8Clr)    = TASK_PT_DEMO_LED_OFF;
 static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 //static void (*const TASK_PT_DEMO_LED_Toggle)(uint8 u8Clr) = TASK_PT_DEMO_LED_TOGGLE;
@@ -49,9 +56,14 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
     MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
     /******************************************************************/
 
+    Drv_11xx_Init();
+
     while(1)
     {
-
+        TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_GREEN);
+        Drv_11xx_Send_Telegram(sg_au8SndTele);
+        TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_GREEN);
+        PT_DELAY(2000);
     }
 
     PT_END();
