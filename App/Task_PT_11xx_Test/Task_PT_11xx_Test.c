@@ -28,6 +28,7 @@ static uint8 sg_au8RcvTele[50] = {0x00};
 static uint8 sg_au8SnAddr[6]   = {0x66, 0x55, 0x44, 0x33, 0x22, 0x11};
 static uint8 sg_au8ComAddr[8]  = {0x00};
 static uint8 sg_au8ShtAddr[2]  = {0x00};
+static uint8 sg_au8RegVal[256] = {0x00};
 
 static void (*const TASK_PT_DEMO_LED_Off)(uint8 u8Clr)    = TASK_PT_DEMO_LED_OFF;
 static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
@@ -48,6 +49,7 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 ******************************************************************************/
 uint8 Task_PT_11xx_Test(uint8 u8Evt)
 {   
+    uint16 u16Idx;
     PT_INIT();
     
     PT_BEGIN();
@@ -57,6 +59,12 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
     /******************************************************************/
 
     Drv_11xx_Init();
+
+    Drv_11xx_Cmd_Reg_Read(sg_au8RegVal);
+    for (u16Idx = 0; u16Idx < DRV_11XX_MAX_REG_NUM; u16Idx++)
+    {
+        DBG_PRINT("0x%2x ", sg_au8RegVal[u16Idx]);
+    }
 
     while(1)
     {
