@@ -1,4 +1,7 @@
 # Log
+## 25th Jul 2016
+Debug 11xx and finish sending.
+
 ## 21st Jul 2016
 Add driver of 11xx
 
