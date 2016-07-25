@@ -26,7 +26,7 @@ extern "C" {
 
 /* Add your task process here */
 #define LIST_OF_REG_TASK \
-        REG_TASK(Task_PT_IEC870_PL_Process)
+        REG_TASK(Task_PT_11xx_Test)//Task_PT_IEC870_PL_Process)
         //REG_TASK(Task_PT_Demo_Process)\
         //REG_TASK(Task_PT_Demo2_Process)\
         //REG_TASK(Task1_Process)\
@@ -60,6 +60,9 @@ LIST_OF_REG_TASK
 #define __DEBUG_ENABLE                                /* Debug mode is enabled                    */
 
 #define __WANTED_A_LIVE_FOX                           /* Wanted: a live fox.                      */
+
+//#define __MOE_SPI_ENABLE
+#define __MOE_UART_ENABLE
 
 /*********************************************************
 NOTE: You have four ways to use malloc:
@@ -107,8 +110,11 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_PT_DEMO2              __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_HAL_SPI           __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_DRV_CC1101        __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_KNX_RF_LL             __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_IEC870_PL          __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_HAL_UART          __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_HAL_UART          __DEBUG_FUNC_LINE_INFO
+#define __DEBUG_MODE_MOE_DRV_11XX          __DEBUG_FUNC_LINE_INFO
+#define __DEBUG_MODE_PT_11XX_TEST          __DEBUG_BASIC_INFO
 #endif
 
                            
