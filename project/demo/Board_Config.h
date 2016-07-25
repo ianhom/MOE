@@ -41,7 +41,7 @@ extern "C" {
 
 
 /******************************************************************************
-* Name       : void Gpio_Init()
+* Name       : void Gpio_Init(void)
 * Function   : Init GPIOs
 * Input      : None
 * Output:    : None
@@ -51,7 +51,7 @@ extern "C" {
 * Author     : Ian
 * Date       : 3rd Jul 2016
 ******************************************************************************/
-void Gpio_Init();
+void Gpio_Init(void);
 
 /******************************************************************************
 * Name       : void LED_Toggle(uint8 u8Ch)
@@ -108,7 +108,7 @@ void LED_On(uint8 u8Ch);
 ******************************************************************************/
 uint8 Btn_St_Get(uint8 u8Ch);
 
-
+void Board_Config_Reset_Ctrl(uint8 u8Val);
 
 
 #ifdef __cplusplus
