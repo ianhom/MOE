@@ -52,6 +52,7 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 uint8 Task_PT_11xx_Test(uint8 u8Evt)
 {   
     uint16 u16Idx;
+    
     PT_INIT();
     
     PT_BEGIN();
