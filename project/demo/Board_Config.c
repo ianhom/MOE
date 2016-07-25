@@ -254,7 +254,42 @@ void Gpio_Init(void)
     GPIOB_PDDR  |= (1<<19);            /* Configure as output LED GREEN  */
     GPIOD_PDDR  |= (1<<1);             /* Configure as output LED BLUE   */
 
+#ifdef __MOE_SPI_ENABLE
+    /* SPI configure */
+    PORTE_PCR1  = PORT_PCR_MUX(0x2);
+    PORTE_PCR2  = PORT_PCR_MUX(0x2);
+    PORTE_PCR3  = PORT_PCR_MUX(0x2);
+    PORTE_PCR4  = PORT_PCR_MUX(0x1);
+    GPIOE_PDDR  |= (1 << 4);
+    
+    PORTE_PCR20 = PORT_PCR_MUX(0x1);
+    PORTE_PCR21 = PORT_PCR_MUX(0x1);
+#endif
+
+#ifdef __MOE_UART_ENABLE
+    /* Enable the UART_TXD function on PTC4 */
+    PORTC_PCR4 = PORT_PCR_MUX(0x3); // UART1 is alt3 function for this pin
+            
+    /* Enable the UART_RXD function on PTC3 */
+    PORTC_PCR3 = PORT_PCR_MUX(0x3); // UART1 is alt3 function for this pin
+#endif
+
+    PORTA_PCR1 = PORT_PCR_MUX(0X1); /* PTA1 as a GPIO for 11XX reset */
+    GPIOA_PSOR = (1 << 1);
+    GPIOA_PDDR = (1 << 1);
     return;
+}
+
+void Board_Config_Reset_Ctrl(uint8 u8Val)
+{
+    if(u8Val)
+    {
+        GPIOA_PSOR = (1 << 1); 
+    }
+    else
+    {
+        GPIOA_PCOR = (1 << 1);
+    }
 }
 
 /******************************************************************************
