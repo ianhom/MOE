@@ -101,7 +101,7 @@ uint8 Moe_HAL_UART_Init(void)
 uint8 Moe_HAL_Uart_Byte_Receive()
 {
     while (!(UART1_S1 & UART_S1_RDRF_MASK)); /* Check if any available data in receiving buffer */
-    return UART1_D;                          /* Return the received data                        */
+    return UART1_D;
 }
 
 /******************************************************************************
@@ -155,6 +155,7 @@ uint8 Moe_HAL_Uart_Got_Data(void)
 {
     return (!!(UART1_S1 & UART_S1_RDRF_MASK));
 }
+
 
 /* end of file */
 
