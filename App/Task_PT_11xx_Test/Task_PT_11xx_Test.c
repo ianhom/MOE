@@ -19,16 +19,18 @@
 #include "MOE_PT.h"
 #include "Task_PT_11xx_Test.h"
 #include "debug.h"
+#include "MOE_DRV_11xx.h"
+#include "Board_Config.h"
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
-static uint8 sg_au8SndTele[]   = {0x09, 0x00, 0x11, 0x22, 0x33, 0x44, 0x01, 0x00, 0x00, 0xAB};
+static uint8 sg_au8SndTele[]   = {0x09, 0x00, 0x11, 0x22, 0x33, 0x44, 0x01, 0x00, 0x00, 0x00};
 static uint8 sg_au8RcvTele[50] = {0x00};
 
 static uint8 sg_au8SnAddr[6]   = {0x66, 0x55, 0x44, 0x33, 0x22, 0x11};
 static uint8 sg_au8ComAddr[8]  = {0x00};
 static uint8 sg_au8ShtAddr[2]  = {0x00};
-static uint8 sg_au8RegVal[256] = {0x00};
+static uint8 sg_au8RegVal[256] = {0x01};
 
 static void (*const TASK_PT_DEMO_LED_Off)(uint8 u8Clr)    = TASK_PT_DEMO_LED_OFF;
 static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
@@ -70,8 +72,9 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
     {
         TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_GREEN);
         Drv_11xx_Send_Telegram(sg_au8SndTele);
+        sg_au8SndTele[9]++;
         TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_GREEN);
-        PT_DELAY(2000);
+        PT_DELAY(1000);
     }
 
     PT_END();
