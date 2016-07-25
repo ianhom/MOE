@@ -30,7 +30,7 @@ extern "C" {
 
 
 #define DRV_11XX_CMD_WITH_VAL           (0x01)            /* A byte value after command              */
-#define DRV_11XX_CMD_WITHOUT_VAL        (0x01)            /* No value after command                  */
+#define DRV_11XX_CMD_WITHOUT_VAL        (0x00)            /* No value after command                  */
 
 
 #define DRV_11XX_CMD_CFG_MODE           (0x00)            /* Command to enter configuration mode     */
@@ -107,9 +107,8 @@ extern "C" {
 #endif
 
 
-      
 /******************************************************************************
-* Name       : uint8 Drv_11XX_Init(void);
+* Name       : uint8 Drv_11xx_Init(void)
 * Function   : Init operation for 11xx.
 * Input      : None.
 * Output:    : None.
@@ -120,7 +119,8 @@ extern "C" {
 * Author     : Ian
 * Date       : 20th Jul 2016
 ******************************************************************************/
-uint8 Drv_11XX_Init(void);
+uint8 Drv_11xx_Init(void);
+
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data)
