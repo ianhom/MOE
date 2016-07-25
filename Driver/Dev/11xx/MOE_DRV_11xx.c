@@ -18,6 +18,8 @@
 #include "MOE_HAL_UART.h"
 #include "MOE_DRV_11xx.h"
 #include "debug.h"
+#include "Board_Config.h"
+#include "KL25_Lpt_Time.h"
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Init(void)
@@ -33,15 +35,10 @@
 ******************************************************************************/
 uint8 Drv_11xx_Init(void)
 {
-    Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_CFG_MODE);
-    if(DRV_11XX_CMD_RSPON == Moe_HAL_Uart_Byte_Receive())
-    {
-        Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_IDLE);
-    }
-    else
-    {
-        DBG_PRINT("Wrong operating mode of 11xx!!\n");
-    }
+    Board_Config_Reset_Ctrl(0);
+    Delay_ms(10);
+    Board_Config_Reset_Ctrl(1);
+    Delay_ms(10);
     return SW_OK;
 }
 
@@ -64,7 +61,7 @@ uint8 Drv_11xx_Init(void)
 ******************************************************************************/
 uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 *pu8Data)
 {
-    uint8 u16Idx;
+    uint16 u16Idx;
 
     /* Check if input parameter is invalid or NOT */
     if((0 != u16Len) && (NULL == pu8Data))
@@ -74,15 +71,10 @@ uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 
     }
 
     Moe_HAL_Uart_Byte_Send(DRV_11XX_CMD_CFG_MODE);          /* Enter to configure mode */
-    if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive())   /* Wait respons            */
-    {
-        return SW_ERR;
-    }
+    while(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive());/* Wait respons           */
+    
     Moe_HAL_Uart_Byte_Send(u8Cmd);                          /* Send command first      */
-//    if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive())   /* Wait respons            */
-//    {
-//        return SW_ERR;
-//    }
+
     
     if(DRV_11XX_CMD_WITH_VAL == u8Para)                     /* If need to send a value */
     {
@@ -93,7 +85,6 @@ uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 
     {
         pu8Data[u16Idx] = Moe_HAL_Uart_Byte_Receive();
     }
-    
     if(DRV_11XX_CMD_RSPON != Moe_HAL_Uart_Byte_Receive())   /* Wait respons            */
     {
         return SW_ERR;
@@ -359,7 +350,7 @@ uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data)
     }
 
     /* Write the command */
-    if(!Drv_11xx_Cmd(DRV_11XX_CMD_REG_READ, DRV_11XX_CMD_WITHOUT_VAL, 0, DRV_11XX_MAX_REG_NUM, pu8Data))
+    if(SW_ERR == Drv_11xx_Cmd(DRV_11XX_CMD_REG_READ, DRV_11XX_CMD_WITHOUT_VAL, 0, DRV_11XX_MAX_REG_NUM, pu8Data))
     {
         DBG_PRINT("Something wrong with command!!\n");
         return SW_ERR;
