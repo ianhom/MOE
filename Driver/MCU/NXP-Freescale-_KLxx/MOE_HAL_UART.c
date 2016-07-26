@@ -34,7 +34,6 @@ extern int periph_clk_khz;
 ******************************************************************************/
 uint8 Moe_HAL_UART_Init(void)
 {
-#if (1)
     volatile uint8 u8Data = 0;
     uint16         U16SBR = 0; 
     
@@ -76,11 +75,6 @@ uint8 Moe_HAL_UART_Init(void)
     
     /* Enable Error interrupt. */
     //UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
-#else
-    
-    uart_init (UART1_BASE_PTR, periph_clk_khz, 19200);
-    
-#endif
 
     return SW_OK;  
 }
