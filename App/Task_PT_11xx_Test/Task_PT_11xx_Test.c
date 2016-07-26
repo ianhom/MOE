@@ -71,11 +71,16 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
 
     while(1)
     {
+        
+        TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_BLUE;
+        Drv_11xx_Receive_Telegram(sg_au8RcvTele);
+        TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_BLUE);
+        PT_DELAY(1000);
         TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_GREEN);
         Drv_11xx_Send_Telegram(sg_au8SndTele);
         sg_au8SndTele[9]++;
         TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_GREEN);
-        PT_DELAY(1000);
+        
     }
 
     PT_END();
