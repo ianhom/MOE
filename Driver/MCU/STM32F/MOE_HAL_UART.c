@@ -18,6 +18,15 @@
 #include "MOE_HAL_UART.h"
 #include "debug.h"
 
+static const uin32 sg_au32UartAddr[] = 
+{
+    UART1_BASE,
+    UART2_BASE,
+    UART3_BASE,
+    UART4_BASE,
+    UART5_BASE
+};
+
 extern int periph_clk_khz;
 
 /******************************************************************************
@@ -32,9 +41,62 @@ extern int periph_clk_khz;
 * Author     : Ian
 * Date       : 26th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_UART_Init(void)
+uint8 Moe_HAL_UART_Init(uint8 u8No)
 {
-    return SW_OK;  
+    volatile uint16 u16Data = 0;
+    uint32 u32UartNo;
+
+    /* Check if the uart number is valid or NOT */
+    if((u8No - 1) > (MAX_UART_DEVICE_NUM - 1))
+    {
+        return SW_ERR;
+    }
+    
+    u32UartNo = sg_au32UartAddr[u8No - 1];
+    
+    /* Enable uart clock and reset */
+    if(UART_1 == u8No) /* If it is uart1 */
+    {
+        RCC->APB2ENR  |= RCC_APB2ENR_USART1EN;        /* Enable uart clock */
+        RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST;      /* Reset uart device */
+        RCC->APB2RSTR &= ~(RCC_APB2RSTR_USART1RST);   /* Stop reset uart   */     
+    }    
+    else /* If it is uart 2~5 */
+    {
+        RCC->APB1ENR  |= (RCC_APB1ENR_USART2EN    << (u8No - UART_2)); /* Enable uart clock */
+        RCC->APB1RSTR |= (RCC_APB1RSTR_USART2RST  << (u8No - UART_2)); /* Reset uart device */
+        RCC->APB1RSTR &= ~(RCC_APB1RSTR_USART2RST << (u8No - UART_2)); /* Reset uart device */
+    }
+
+    /* Disable Tx/Rx function, Tx/Rx interrupt and Error interrupt before uart init operation */
+    UARTX_CR1(dwUartNo) &= ~(USART_CR1_RE\
+                           | USART_CR1_TE\
+                           | USART_CR1_UE\
+                           | USART_CR1_RXNEIE\
+                           | USART_CR1_TXEIE\
+                           | USART_CR1_PEIE);
+    UARTX_CR3(dwUartNo) &= ~(USART_CR3_EIE);
+
+    
+    /* Configure stop bit, bit mode, parity and Buad rate */
+    if (SW_ERR == Uartx_Ctrl(ptPara))
+    {
+        return SW_ERR;
+    }
+    
+    /* Clear error flags and data buffer */
+    u16Data = UARTX_SR(dwUartNo);
+    u16Data = UARTX_DR(dwUartNo);
+    
+    /* Enable Tx/Rx function, Rx interrupt and Error interrupt */
+    UARTX_CR1(dwUartNo) |= (USART_CR1_RE\
+                          | USART_CR1_TE\
+                          | USART_CR1_UE\
+                          | USART_CR1_RXNEIE\
+                          | USART_CR1_PEIE);
+    UARTX_CR3(dwUartNo) |=  USART_CR3_EIE;
+    
+    return SW_OK;
 }
 
 
