@@ -26,6 +26,8 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_MOE            /* According the set from project_config.h */
 #endif
 
+#define MOE_VERSION       "MOE V0.11"
+
 /* Malloc MACRO */ 
 #if (__MALLOC_OPTION != __MALLOC_MY)
 #if (__MALLOC_OPTION == __MALLOC_MOE)
