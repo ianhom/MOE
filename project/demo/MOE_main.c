@@ -1,5 +1,5 @@
 /*
- * File:        Moeike.c
+ * File:        Moe_main.c
  * Purpose:        Main process
  *
  */
@@ -16,12 +16,14 @@
 #include "KL25_Lpt_Time.h"
 #include "Btn_SM_Config.h"
 #include "Btn_SM_Module.h"
+#include "MOE_HAL_UART.h"
 
 /********************************************************************/
 
+__root const char version_string[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
 
 
-void Poll_Process()
+void Poll_Process(void)
 {
     return;
 }
@@ -32,7 +34,7 @@ int main (void)
     Gpio_Init();
     Timer_Init();
 
-    DBG_PRINT("\n***** MOE scheduler V0.10 *****\n");
+    DBG_PRINT("\n***** %s *****\n", version_string);
 
     Moe_Init(App_GetSystemTime_ms, Poll_Process);   
     
