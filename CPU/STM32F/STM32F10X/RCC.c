@@ -38,7 +38,7 @@ static const WORD16 sg_awAhpPre[] = {1, 2, 4, 8, 16, 64, 128, 256, 512};
 * -----------------------------------------------
 * 2016/07/26	   V1.0	        Ian          Create 
 **************************************************************************/
-WORD32 SysClk_Config(BYTE ucExtCrystal, BYTE ucSetClk)
+WORD32 Rcc_SysClk_Config(BYTE ucExtCrystal, BYTE ucSetClk)
 {
     BYTE ucHse, ucPllMul, ucAhb;
     BYTE ucTemp   = 0;
