@@ -1,4 +1,7 @@
 # Log
+## 1st Aug 2016
+Modify uart driver of KL25, use Rx interrupt to receive entire telegram.
+
 ## 25th Jul 2016
 Debug 11xx and finish sending.
 
