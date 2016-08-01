@@ -20,6 +20,11 @@
 
 extern int periph_clk_khz;
 
+static uint8 sg_u8RcvLen = 0;
+static uint8 sg_u8Index  = 0;
+static uint8 sg_au8RcvData[40] = {0}; 
+static uint8 sg_u8GetTel = MOE_HAL_UART_NO_RCV_TEL;
+
 /******************************************************************************
 * Name       : uint8 uint8 Moe_HAL_UART_Init(void)
 * Function   : Init hardware abstract layer for UART
@@ -34,6 +39,7 @@ extern int periph_clk_khz;
 ******************************************************************************/
 uint8 Moe_HAL_UART_Init(void)
 {
+#if (1)
     volatile uint8 u8Data = 0;
     uint16         U16SBR = 0; 
     
@@ -72,9 +78,14 @@ uint8 Moe_HAL_UART_Init(void)
     
     /*------------Enable TX/RX interrupt after UART init -------*/
     //UART1_C2 |= UART_C2_RIE_MASK;
-    
+    NVIC_ISER = 1<<(13);
     /* Enable Error interrupt. */
     //UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
+#else
+    
+    uart_init (UART1_BASE_PTR, periph_clk_khz, 19200);
+    
+#endif
 
     return SW_OK;  
 }
@@ -92,7 +103,7 @@ uint8 Moe_HAL_UART_Init(void)
 * Author     : Ian
 * Date       : 20th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_Uart_Byte_Receive()
+uint8 Moe_HAL_Uart_Byte_Receive(void)
 {
     while (!(UART1_S1 & UART_S1_RDRF_MASK)); /* Check if any available data in receiving buffer */
     return UART1_D;
@@ -135,7 +146,7 @@ uint8 Moe_HAL_Uart_Free_Send_Buf(void)
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Got_Data(void)
-* Function   : Check sending buffer is free or NOT
+* Function   : Check rx buffer is free or NOT
 * Input      : None.
 * Output:    : None.
 * Return     : MOE_HAL_UART_RCV_DATA     Get a data in receiving buffer
@@ -148,6 +159,127 @@ uint8 Moe_HAL_Uart_Free_Send_Buf(void)
 uint8 Moe_HAL_Uart_Got_Data(void)
 {
     return (!!(UART1_S1 & UART_S1_RDRF_MASK));
+}
+
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Got_Telegram(void)
+* Function   : Check gets an entire telegram or NOT
+* Input      : None.
+* Output:    : None.
+* Return     : MOE_HAL_UART_RCV_TEL     Get a entire telegram
+*              MOE_HAL_UART_NO_RCV_TEL  Get NO telegram
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Got_Telegram(void)
+{
+    return sg_u8GetTel;
+}
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data)
+* Function   : Get the entire byte data
+* Input      : uint8 *pu8Data    pointer to save the telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data)
+{
+    uint8 u8Idx;
+    
+    /* If the telegram get flag is NOT set */
+    if(MOE_HAL_UART_NO_RCV_TEL == sg_u8GetTel)
+    {   /* Return error */
+        return SW_ERR;
+    }
+
+    /* Copy the received telegram to desired address */
+    for(u8Idx = 0; u8Idx < sg_u8RcvLen + 1; u8Idx++)
+    {
+        pu8Data[u8Idx] = sg_au8RcvData[u8Idx];
+    }
+    
+    sg_u8GetTel = MOE_HAL_UART_NO_RCV_TEL;  /* Clear the flag */
+
+    return SW_OK;
+} 
+
+
+/******************************************************************************
+* Name       : void Moe_HAL_Uart_Rx_Int_Enable(void)
+* Function   : Enable uart rx interrupt
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Moe_HAL_Uart_Rx_Int_Enable(void)
+{
+    UART1_C2 |= UART_C2_RIE_MASK;
+    return;
+}
+
+/******************************************************************************
+* Name       : vvoid Moe_HAL_Uart_Rx_Int_Disable(void)
+* Function   : Disable uart rx interrupt
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Moe_HAL_Uart_Rx_Int_Disable(void)
+{
+    UART1_C2 &= ~(UART_C2_RIE_MASK);
+    return;
+}
+
+
+/******************************************************************************
+* Name       : void Uart1_isr(void)
+* Function   : Uart1 interrupt process
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: When rx interrupt, isr will get the length of telegram and then
+*              automatically receive the rest bytes.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Uart1_isr(void)
+{
+    uint8 u8Temp;
+    if(UART1_S1 & UART_S1_RDRF_MASK)
+    {
+        u8Temp = UART1_D;
+        if(0 == sg_u8Index)
+        {
+            sg_u8RcvLen = u8Temp;
+        }
+        sg_au8RcvData[sg_u8Index] = u8Temp;
+        sg_u8Index++;            
+
+        if(sg_u8Index > sg_u8RcvLen)
+        {
+            sg_u8Index  = 0;
+            sg_u8GetTel = MOE_HAL_UART_RCV_TEL;
+        }
+    }
+    return;
 }
 
 
