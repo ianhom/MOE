@@ -32,6 +32,9 @@ extern "C" {
 #define MOE_HAL_UART_NO_RCV_DATA                    (0)   /* Uart get NONE received data             */
 #define MOE_HAL_UART_RCV_DATA                       (1)   /* Uart get a received data                */
 
+#define MOE_HAL_UART_RCV_TEL                        (1)   /* Uart get a entiry telegram              */
+#define MOE_HAL_UART_NO_RCV_TEL                     (0)   /* Uart do NOT get a entiry telegram       */
+
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Init_UART(void)
 * Function   : Init hardware abstract layer for UART
@@ -88,7 +91,7 @@ uint8 Moe_HAL_Uart_Free_Send_Buf(void);
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Got_Data(void)
-* Function   : Check sending buffer is free or NOT
+* Function   : Check rx buffer is free or NOT
 * Input      : None.
 * Output:    : None.
 * Return     : MOE_HAL_UART_RCV_DATA     Get a data in receiving buffer
@@ -99,6 +102,75 @@ uint8 Moe_HAL_Uart_Free_Send_Buf(void);
 * Date       : 20th Jul 2016
 ******************************************************************************/
 uint8 Moe_HAL_Uart_Got_Data(void);
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Got_Telegram(void)
+* Function   : Check gets an entire telegram or NOT
+* Input      : None.
+* Output:    : None.
+* Return     : MOE_HAL_UART_RCV_TEL     Get a entire telegram
+*              MOE_HAL_UART_NO_RCV_TEL  Get NO telegram
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Got_Telegram(void);
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data)
+* Function   : Get the entire byte data
+* Input      : uint8 *pu8Data    pointer to save the telegram
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data);
+
+/******************************************************************************
+* Name       : void Moe_HAL_Uart_Rx_Int_Enable()
+* Function   : Enable uart rx interrupt
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Moe_HAL_Uart_Rx_Int_Enable(void);
+
+/******************************************************************************
+* Name       : vvoid Moe_HAL_Uart_Rx_Int_Disable()
+* Function   : Disable uart rx interrupt
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Moe_HAL_Uart_Rx_Int_Disable(void);
+
+/******************************************************************************
+* Name       : void Uart1_isr(void)
+* Function   : Uart1 interrupt process
+* Input      : None.
+* Output:    : None.
+* Return     : None.
+* description: When rx interrupt, isr will get the length of telegram and then
+*              automatically receive the rest bytes.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 20th Jul 2016
+******************************************************************************/
+void Uart1_isr(void);
+
 
  
 #ifdef __cplusplus
