@@ -19,6 +19,7 @@
 #include "MOE_PT.h"
 #include "Task_PT_11xx_Test.h"
 #include "debug.h"
+#include "MOE_HAL_UART.h"
 #include "MOE_DRV_11xx.h"
 #include "Board_Config.h"
 
@@ -52,6 +53,7 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 uint8 Task_PT_11xx_Test(uint8 u8Evt)
 {   
     uint16 u16Idx;
+    uint8  u8Temp = 1;
     
     PT_INIT();
     
@@ -62,6 +64,8 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
     /******************************************************************/
 
     Drv_11xx_Init();
+    //Moe_HAL_Uart_Byte_Receive();
+    //Drv_11xx_Write_Reg(DRV_11XX_REG_TM_OUT, 1, &u8Temp);
 
     Drv_11xx_Cmd_Reg_Read(sg_au8RegVal);
     for (u16Idx = 0; u16Idx < DRV_11XX_MAX_REG_NUM; u16Idx++)
@@ -69,18 +73,34 @@ uint8 Task_PT_11xx_Test(uint8 u8Evt)
         DBG_PRINT("0x%2x ", sg_au8RegVal[u16Idx]);
     }
 
+    Moe_HAL_Uart_Rx_Int_Enable();
     while(1)
     {
-        
-        TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_BLUE;
+#if (0)
+        TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_BLUE);
         Drv_11xx_Receive_Telegram(sg_au8RcvTele);
         TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_BLUE);
-        PT_DELAY(1000);
+        PT_DELAY(500);
         TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_GREEN);
-        Drv_11xx_Send_Telegram(sg_au8SndTele);
+        //Drv_11xx_Send_Telegram(sg_au8SndTele);
+        Drv_11xx_Send_Telegram(sg_au8RcvTele);
+        PT_DELAY(500);
         sg_au8SndTele[9]++;
         TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_GREEN);
-        
+#else
+        TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_BLUE);
+        if(MOE_HAL_UART_RCV_TEL == Moe_HAL_Uart_Got_Telegram())
+        {
+            Moe_HAL_Uart_Tele_Receive(sg_au8RcvTele);
+            TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_BLUE);
+//            PT_DELAY(500);
+//            TASK_PT_DEMO_LED_On(BOARD_CONFIG_LED_GREEN);
+//            Drv_11xx_Send_Telegram(sg_au8RcvTele);
+//            PT_DELAY(100);
+//            TASK_PT_DEMO_LED_Off(BOARD_CONFIG_LED_GREEN);
+        }
+        PT_DELAY(1);
+#endif
     }
 
     PT_END();
