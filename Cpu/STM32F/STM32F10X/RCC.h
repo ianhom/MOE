@@ -1,28 +1,64 @@
-#define RCC_BASE                       (0x40021000u)    /* Address of RCC base register */
+/******************************************************************************
+* File       : rcc.h
+* Function   : Reset and clock control
+* description: Realise the system clock configuration.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 30th Jul 2016
+* History    :  No.  When           Who           What
+*               1    30/Jul/2016    Ian           Create
+******************************************************************************/
 
-#define RCC_CR                         (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->CR)       /* Address of clock control register   */
-#define RCC_CFGR                       (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->CFGR)     /* Address of clock configure register */
-#define RCC_CIR                        (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->CIR)      /* Address of clock interrupt register */
-#define RCC_APB2RSTR                   (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->APB2RSTR) /* Address of APB2 reset register      */
-#define RCC_APB1RSTR                   (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->APB1RSTR) /* Address of APB1 reset register      */
-#define RCC_AHBENR                     (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->AHBENR)   /* Address of AHB enable register      */
-#define RCC_APB2ENR                    (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->APB2ENR)  /* Address of APB2 enable register     */
-#define RCC_APB1ENR                    (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->APB1ENR)  /* Address of APB1 enable register     */
-#define RCC_BDCR                       (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->BDCR)     /* Address of backup control register  */
-#define RCC_CSR                        (((UART_RCC_REG_MAP*)(UART_RCC_BASE))->CSR)      /* Address of control/status register  */
 
-#define RCC_CR_DEFAULT_VAL             (0x00000083)       /* default value of clock control register   */
-#define RCC_CFGR_DEFAULT_VAL           (0x00000000)       /* default value of clock configure register */
-#define RCC_CIR_DEFAULT_VAL            (0x00000000)       /* default value of clock interrupt register */
-#define RCC_APB2RSTR_DEFAULT_VAL       (0x00000000)       /* default value of APB2 reset register      */
-#define RCC_APB1RSTR_DEFAULT_VAL       (0x00000000)       /* default value of APB1 reset register      */
-#define RCC_AHBENR_DEFAULT_VAL         (0x00000014)       /* default value of AHB enable register      */
-#define RCC_APB2ENR_DEFAULT_VAL        (0x00000000)       /* default value of APB2 enable register     */
-#define RCC_APB1ENR_DEFAULT_VAL        (0x00000000)       /* default value of APB1 enable register     */
-#define RCC_BDCR_DEFAULT_VAL           (0x00000000)       /* default value of backup control register  */
-#define RCC_CSR_DEFAULT_VAL            (0x0C000000)       /* default value of control/status register  */
+#ifndef _RCC_H_
+#define _RCC_H_
 
-/********************  Bit definition for RCC_CR register  ********************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Extern crystal frequency should be defined in Boardctrl.h for Baud rate setting */
+#ifndef EXT_CRYSTAL_FREQ
+#define EXT_CRYSTAL_FREQ                        (8000000)        /* Frequency of extern crystal */
+#endif
+
+
+/* Check if the max AHB clock is defined or NOT */
+#ifndef MAX_AHB_CLK_IN_MHZ
+#if defined(__STM32F103)
+#define MAX_AHB_CLK_IN_MHZ                   (72)  /* 72MHz is the max AHB clock for STM32F103  */
+#elif defined(__STM32101)
+#define MAX_AHB_CLK_IN_MHZ                   (36)  /* 36MHz is the max AHB clock for STM32F101  */
+#else
+#define MAX_AHB_CLK_IN_MHZ                   (36)  /* 36MHz is the max AHB clock for the others */
+#endif
+#endif
+
+#define RCC_BASE                             (0x40021000U)                               /* Address of RCC base register */
+
+#define RCC_CR                               (((RCC_REG_MAP*)(RCC_BASE))->CR)       /* Address of clock control register   */
+#define RCC_CFGR                             (((RCC_REG_MAP*)(RCC_BASE))->CFGR)     /* Address of clock configure register */
+#define RCC_CIR                              (((RCC_REG_MAP*)(RCC_BASE))->CIR)      /* Address of clock interrupt register */
+#define RCC_APB2RSTR                         (((RCC_REG_MAP*)(RCC_BASE))->APB2RSTR) /* Address of APB2 reset register      */
+#define RCC_APB1RSTR                         (((RCC_REG_MAP*)(RCC_BASE))->APB1RSTR) /* Address of APB1 reset register      */
+#define RCC_AHBENR                           (((RCC_REG_MAP*)(RCC_BASE))->AHBENR)   /* Address of AHB enable register      */
+#define RCC_APB2ENR                          (((RCC_REG_MAP*)(RCC_BASE))->APB2ENR)  /* Address of APB2 enable register     */
+#define RCC_APB1ENR                          (((RCC_REG_MAP*)(RCC_BASE))->APB1ENR)  /* Address of APB1 enable register     */
+#define RCC_BDCR                             (((RCC_REG_MAP*)(RCC_BASE))->BDCR)     /* Address of backup control register  */
+#define RCC_CSR                              (((RCC_REG_MAP*)(RCC_BASE))->CSR)      /* Address of control/status register  */
+
+#define RCC_CR_DEFAULT_VAL                   (0x00000083U)                     /* default value of clock control register   */
+#define RCC_CFGR_DEFAULT_VAL                 (0x00000000U)                     /* default value of clock configure register */
+#define RCC_CIR_DEFAULT_VAL                  (0x00000000U)                     /* default value of clock interrupt register */
+#define RCC_APB2RSTR_DEFAULT_VAL             (0x00000000U)                     /* default value of APB2 reset register      */
+#define RCC_APB1RSTR_DEFAULT_VAL             (0x00000000U)                     /* default value of APB1 reset register      */
+#define RCC_AHBENR_DEFAULT_VAL               (0x00000014U)                     /* default value of AHB enable register      */
+#define RCC_APB2ENR_DEFAULT_VAL              (0x00000000U)                     /* default value of APB2 enable register     */
+#define RCC_APB1ENR_DEFAULT_VAL              (0x00000000U)                     /* default value of APB1 enable register     */
+#define RCC_BDCR_DEFAULT_VAL                 (0x00000000U)                     /* default value of backup control register  */
+#define RCC_CSR_DEFAULT_VAL                  (0x0C000000U)                     /* default value of control/status register  */
+
+/* Bit definition for RCC_CR register */
 #define RCC_CR_HSION_POS                     (0U)                              
 #define RCC_CR_HSION_MASK                    (0x1U << RCC_CR_HSION_POS)        /* 0x00000001                       */
 #define RCC_CR_HSION                         RCC_CR_HSION_MASK                 /* Internal High Speed clock enable */
@@ -55,7 +91,7 @@
 #define RCC_CR_PLLRDY                        RCC_CR_PLLRDY_MASK                /* PLL clock ready flag */
 
 
-/*******************  Bit definition for RCC_CFGR register  *******************/
+/* Bit definition for RCC_CFGR register */
 /* SW configuration */
 #define RCC_CFGR_SW_POS                      (0U)                              
 #define RCC_CFGR_SW_MASK                     (0x3U << RCC_CFGR_SW_POS)         /* 0x00000003                         */
@@ -63,9 +99,9 @@
 #define RCC_CFGR_SW_0                        (0x1U << RCC_CFGR_SW_POS)         /* 0x00000001                         */
 #define RCC_CFGR_SW_1                        (0x2U << RCC_CFGR_SW_POS)         /* 0x00000002                         */
 
-#define RCC_CFGR_SW_HSI                      ((WORD32)0x00000000)            /* HSI selected as system clock */
-#define RCC_CFGR_SW_HSE                      ((WORD32)0x00000001)            /* HSE selected as system clock */
-#define RCC_CFGR_SW_PLL                      ((WORD32)0x00000002)            /* PLL selected as system clock */
+#define RCC_CFGR_SW_HSI                      ((WORD32)0x00000000)              /* HSI selected as system clock */
+#define RCC_CFGR_SW_HSE                      ((WORD32)0x00000001)              /* HSE selected as system clock */
+#define RCC_CFGR_SW_PLL                      ((WORD32)0x00000002)              /* PLL selected as system clock */
 
 /* SWS configuration */
 #define RCC_CFGR_SWS_POS                     (2U)                              
@@ -74,9 +110,9 @@
 #define RCC_CFGR_SWS_0                       (0x1U << RCC_CFGR_SWS_POS)        /* 0x00000004                                 */
 #define RCC_CFGR_SWS_1                       (0x2U << RCC_CFGR_SWS_POS)        /* 0x00000008                                 */
 
-#define RCC_CFGR_SWS_HSI                     ((WORD32)0x00000000)            /* HSI oscillator used as system clock */
-#define RCC_CFGR_SWS_HSE                     ((WORD32)0x00000004)            /* HSE oscillator used as system clock */
-#define RCC_CFGR_SWS_PLL                     ((WORD32)0x00000008)            /* PLL used as system clock            */
+#define RCC_CFGR_SWS_HSI                     ((WORD32)0x00000000)              /* HSI oscillator used as system clock */
+#define RCC_CFGR_SWS_HSE                     ((WORD32)0x00000004)              /* HSE oscillator used as system clock */
+#define RCC_CFGR_SWS_PLL                     ((WORD32)0x00000008)              /* PLL used as system clock            */
 
 /* HPRE configuration */
 #define RCC_CFGR_HPRE_POS                    (4U)                              
@@ -88,15 +124,15 @@
 #define RCC_CFGR_HPRE_3                      (0x8U << RCC_CFGR_HPRE_POS)       /* 0x00000080                     */
 #define RCC_CFGR_HPRE_DIV_2                  (0x08U)
 
-#define RCC_CFGR_HPRE_DIV1                   ((WORD32)0x00000000)            /* SYSCLK not divided    */
-#define RCC_CFGR_HPRE_DIV2                   ((WORD32)0x00000080)            /* SYSCLK divided by 2   */
-#define RCC_CFGR_HPRE_DIV4                   ((WORD32)0x00000090)            /* SYSCLK divided by 4   */
-#define RCC_CFGR_HPRE_DIV8                   ((WORD32)0x000000A0)            /* SYSCLK divided by 8   */
-#define RCC_CFGR_HPRE_DIV16                  ((WORD32)0x000000B0)            /* SYSCLK divided by 16  */
-#define RCC_CFGR_HPRE_DIV64                  ((WORD32)0x000000C0)            /* SYSCLK divided by 64  */
-#define RCC_CFGR_HPRE_DIV128                 ((WORD32)0x000000D0)            /* SYSCLK divided by 128 */
-#define RCC_CFGR_HPRE_DIV256                 ((WORD32)0x000000E0)            /* SYSCLK divided by 256 */
-#define RCC_CFGR_HPRE_DIV512                 ((WORD32)0x000000F0)            /* SYSCLK divided by 512 */
+#define RCC_CFGR_HPRE_DIV1                   ((WORD32)0x00000000)              /* SYSCLK not divided    */
+#define RCC_CFGR_HPRE_DIV2                   ((WORD32)0x00000080)              /* SYSCLK divided by 2   */
+#define RCC_CFGR_HPRE_DIV4                   ((WORD32)0x00000090)              /* SYSCLK divided by 4   */
+#define RCC_CFGR_HPRE_DIV8                   ((WORD32)0x000000A0)              /* SYSCLK divided by 8   */
+#define RCC_CFGR_HPRE_DIV16                  ((WORD32)0x000000B0)              /* SYSCLK divided by 16  */
+#define RCC_CFGR_HPRE_DIV64                  ((WORD32)0x000000C0)              /* SYSCLK divided by 64  */
+#define RCC_CFGR_HPRE_DIV128                 ((WORD32)0x000000D0)              /* SYSCLK divided by 128 */
+#define RCC_CFGR_HPRE_DIV256                 ((WORD32)0x000000E0)              /* SYSCLK divided by 256 */
+#define RCC_CFGR_HPRE_DIV512                 ((WORD32)0x000000F0)              /* SYSCLK divided by 512 */
 
 /* PPRE1 configuration */
 #define RCC_CFGR_PPRE1_POS                   (8U)                              
@@ -107,11 +143,11 @@
 #define RCC_CFGR_PPRE1_2                     (0x4U << RCC_CFGR_PPRE1_POS)      /* 0x00000400                      */
 #define RCC_CFGR_PPRE1_DIV_2                 (0x04U)
 
-#define RCC_CFGR_PPRE1_DIV1                  ((WORD32)0x00000000)            /* HCLK not divided   */
-#define RCC_CFGR_PPRE1_DIV2                  ((WORD32)0x00000400)            /* HCLK divided by 2  */
-#define RCC_CFGR_PPRE1_DIV4                  ((WORD32)0x00000500)            /* HCLK divided by 4  */
-#define RCC_CFGR_PPRE1_DIV8                  ((WORD32)0x00000600)            /* HCLK divided by 8  */
-#define RCC_CFGR_PPRE1_DIV16                 ((WORD32)0x00000700)            /* HCLK divided by 16 */
+#define RCC_CFGR_PPRE1_DIV1                  ((WORD32)0x00000000)              /* HCLK not divided   */
+#define RCC_CFGR_PPRE1_DIV2                  ((WORD32)0x00000400)              /* HCLK divided by 2  */
+#define RCC_CFGR_PPRE1_DIV4                  ((WORD32)0x00000500)              /* HCLK divided by 4  */
+#define RCC_CFGR_PPRE1_DIV8                  ((WORD32)0x00000600)              /* HCLK divided by 8  */
+#define RCC_CFGR_PPRE1_DIV16                 ((WORD32)0x00000700)              /* HCLK divided by 16 */
 
 /* PPRE2 configuration */
 #define RCC_CFGR_PPRE2_POS                   (11U)                             
@@ -122,11 +158,11 @@
 #define RCC_CFGR_PPRE2_2                     (0x4U << RCC_CFGR_PPRE2_POS)      /* 0x00002000                      */
 #define RCC_CFGR_PPRE2_DIV_2                 (0x04U)
 
-#define RCC_CFGR_PPRE2_DIV1                  ((WORD32)0x00000000)            /* HCLK not divided   */
-#define RCC_CFGR_PPRE2_DIV2                  ((WORD32)0x00002000)            /* HCLK divided by 2  */
-#define RCC_CFGR_PPRE2_DIV4                  ((WORD32)0x00002800)            /* HCLK divided by 4  */
-#define RCC_CFGR_PPRE2_DIV8                  ((WORD32)0x00003000)            /* HCLK divided by 8  */
-#define RCC_CFGR_PPRE2_DIV16                 ((WORD32)0x00003800)            /* HCLK divided by 16 */
+#define RCC_CFGR_PPRE2_DIV1                  ((WORD32)0x00000000)              /* HCLK not divided   */
+#define RCC_CFGR_PPRE2_DIV2                  ((WORD32)0x00002000)              /* HCLK divided by 2  */
+#define RCC_CFGR_PPRE2_DIV4                  ((WORD32)0x00002800)              /* HCLK divided by 4  */
+#define RCC_CFGR_PPRE2_DIV8                  ((WORD32)0x00003000)              /* HCLK divided by 8  */
+#define RCC_CFGR_PPRE2_DIV16                 ((WORD32)0x00003800)              /* HCLK divided by 16 */
 
 /* ADCPPRE configuration */
 #define RCC_CFGR_ADCPRE_POS                  (14U)                             
@@ -135,10 +171,10 @@
 #define RCC_CFGR_ADCPRE_0                    (0x1U << RCC_CFGR_ADCPRE_POS)     /* 0x00004000                       */
 #define RCC_CFGR_ADCPRE_1                    (0x2U << RCC_CFGR_ADCPRE_POS)     /* 0x00008000                       */
 
-#define RCC_CFGR_ADCPRE_DIV2                 ((WORD32)0x00000000)            /* PCLK2 divided by 2 */
-#define RCC_CFGR_ADCPRE_DIV4                 ((WORD32)0x00004000)            /* PCLK2 divided by 4 */
-#define RCC_CFGR_ADCPRE_DIV6                 ((WORD32)0x00008000)            /* PCLK2 divided by 6 */
-#define RCC_CFGR_ADCPRE_DIV8                 ((WORD32)0x0000C000)            /* PCLK2 divided by 8 */
+#define RCC_CFGR_ADCPRE_DIV2                 ((WORD32)0x00000000)              /* PCLK2 divided by 2 */
+#define RCC_CFGR_ADCPRE_DIV4                 ((WORD32)0x00004000)              /* PCLK2 divided by 4 */
+#define RCC_CFGR_ADCPRE_DIV6                 ((WORD32)0x00008000)              /* PCLK2 divided by 6 */
+#define RCC_CFGR_ADCPRE_DIV8                 ((WORD32)0x0000C000)              /* PCLK2 divided by 8 */
 
 #define RCC_CFGR_PLLSRC_POS                  (16U)                             
 #define RCC_CFGR_PLLSRC_MASK                 (0x1U << RCC_CFGR_PLLSRC_POS)     /* 0x00010000             */
@@ -157,10 +193,10 @@
 #define RCC_CFGR_PLLMULL_2                   (0x4U << RCC_CFGR_PLLMULL_POS)    /* 0x00100000                                   */
 #define RCC_CFGR_PLLMULL_3                   (0x8U << RCC_CFGR_PLLMULL_POS)    /* 0x00200000                                   */
 
-#define RCC_CFGR_PLLXTPRE_HSE                ((WORD32)0x00000000)            /* HSE clock not divided for PLL entry  */
-#define RCC_CFGR_PLLXTPRE_HSE_DIV2           ((WORD32)0x00020000)            /* HSE clock divided by 2 for PLL entry */
+#define RCC_CFGR_PLLXTPRE_HSE                ((WORD32)0x00000000)              /* HSE clock not divided for PLL entry  */
+#define RCC_CFGR_PLLXTPRE_HSE_DIV2           ((WORD32)0x00020000)              /* HSE clock divided by 2 for PLL entry */
 
-#define RCC_CFGR_PLLMULL2                    ((WORD32)0x00000000)            /* PLL input clock*2 */
+#define RCC_CFGR_PLLMULL2                    ((WORD32)0x00000000)              /* PLL input clock*2 */
 #define RCC_CFGR_PLLMULL3_POS                (18U)                             
 #define RCC_CFGR_PLLMULL3_MASK               (0x1U << RCC_CFGR_PLLMULL3_POS)   /* 0x00040000        */
 #define RCC_CFGR_PLLMULL3                    RCC_CFGR_PLLMULL3_MASK            /* PLL input clock*3 */
@@ -215,11 +251,11 @@
 #define RCC_CFGR_MCO_1                       (0x2U << RCC_CFGR_MCO_POS)        /* 0x02000000                                   */
 #define RCC_CFGR_MCO_2                       (0x4U << RCC_CFGR_MCO_POS)        /* 0x04000000                                   */
 
-#define RCC_CFGR_MCO_NOCLOCK                 ((WORD32)0x00000000)            /* No clock                                      */
-#define RCC_CFGR_MCO_SYSCLK                  ((WORD32)0x04000000)            /* System clock selected as MCO source           */
-#define RCC_CFGR_MCO_HSI                     ((WORD32)0x05000000)            /* HSI clock selected as MCO source              */
-#define RCC_CFGR_MCO_HSE                     ((WORD32)0x06000000)            /* HSE clock selected as MCO source              */
-#define RCC_CFGR_MCO_PLLCLK_DIV2             ((WORD32)0x07000000)            /* PLL clock divided by 2 selected as MCO source */
+#define RCC_CFGR_MCO_NOCLOCK                 ((WORD32)0x00000000)              /* No clock                                      */
+#define RCC_CFGR_MCO_SYSCLK                  ((WORD32)0x04000000)              /* System clock selected as MCO source           */
+#define RCC_CFGR_MCO_HSI                     ((WORD32)0x05000000)              /* HSI clock selected as MCO source              */
+#define RCC_CFGR_MCO_HSE                     ((WORD32)0x06000000)              /* HSE clock selected as MCO source              */
+#define RCC_CFGR_MCO_PLLCLK_DIV2             ((WORD32)0x07000000)              /* PLL clock divided by 2 selected as MCO source */
 
  /* Reference defines */
  #define RCC_CFGR_MCOSEL                      RCC_CFGR_MCO
@@ -232,7 +268,7 @@
  #define RCC_CFGR_MCOSEL_HSE                  RCC_CFGR_MCO_HSE
  #define RCC_CFGR_MCOSEL_PLL_DIV2             RCC_CFGR_MCO_PLLCLK_DIV2
 
-/*******************  Bit definition for RCC_CIR register  ********************/
+/* Bit definition for RCC_CIR register */
 #define RCC_CIR_LSIRDYF_POS                  (0U)                              
 #define RCC_CIR_LSIRDYF_MASK                 (0x1U << RCC_CIR_LSIRDYF_POS)     /* 0x00000001               */
 #define RCC_CIR_LSIRDYF                      RCC_CIR_LSIRDYF_MASK              /* LSI Ready Interrupt flag */
@@ -286,7 +322,7 @@
 #define RCC_CIR_CSSC                         RCC_CIR_CSSC_MASK                 /* Clock Security System Interrupt Clear */
 
 
-/*****************  Bit definition for RCC_APB2RSTR register  *****************/
+/* Bit definition for RCC_APB2RSTR register */
 #define RCC_APB2RSTR_AFIORST_POS             (0U)                              
 #define RCC_APB2RSTR_AFIORST_MASK            (0x1U << RCC_APB2RSTR_AFIORST_POS) /* 0x00000001                  */
 #define RCC_APB2RSTR_AFIORST                 RCC_APB2RSTR_AFIORST_MASK         /* Alternate Function I/O reset */
@@ -320,15 +356,12 @@
 #define RCC_APB2RSTR_USART1RST_MASK          (0x1U << RCC_APB2RSTR_USART1RST_POS) /* 0x00004000 */
 #define RCC_APB2RSTR_USART1RST               RCC_APB2RSTR_USART1RST_MASK       /* USART1 reset  */
 
-
 #define RCC_APB2RSTR_IOPERST_POS             (6U)                              
 #define RCC_APB2RSTR_IOPERST_MASK            (0x1U << RCC_APB2RSTR_IOPERST_POS) /* 0x00000040      */
 #define RCC_APB2RSTR_IOPERST                 RCC_APB2RSTR_IOPERST_MASK         /* I/O port E reset */
 
 
-
-
-/*****************  Bit definition for RCC_APB1RSTR register  *****************/
+/* Bit definition for RCC_APB1RSTR register */
 #define RCC_APB1RSTR_TIM2RST_POS             (0U)                              
 #define RCC_APB1RSTR_TIM2RST_MASK            (0x1U << RCC_APB1RSTR_TIM2RST_POS) /* 0x00000001   */
 #define RCC_APB1RSTR_TIM2RST                 RCC_APB1RSTR_TIM2RST_MASK         /* Timer 2 reset */
@@ -374,11 +407,7 @@
 #define RCC_APB1RSTR_USBRST                  RCC_APB1RSTR_USBRST_MASK          /* USB Device reset */
 
 
-
-
-
-
-/******************  Bit definition for RCC_AHBENR register  ******************/
+/* Bit definition for RCC_AHBENR register */
 #define RCC_AHBENR_DMA1EN_POS                (0U)                              
 #define RCC_AHBENR_DMA1EN_MASK               (0x1U << RCC_AHBENR_DMA1EN_POS)   /* 0x00000001        */
 #define RCC_AHBENR_DMA1EN                    RCC_AHBENR_DMA1EN_MASK            /* DMA1 clock enable */
@@ -395,7 +424,7 @@
 
 
 
-/******************  Bit definition for RCC_APB2ENR register  *****************/
+/* Bit definition for RCC_APB2ENR register */
 #define RCC_APB2ENR_AFIOEN_POS               (0U)                              
 #define RCC_APB2ENR_AFIOEN_MASK              (0x1U << RCC_APB2ENR_AFIOEN_POS)  /* 0x00000001                          */
 #define RCC_APB2ENR_AFIOEN                   RCC_APB2ENR_AFIOEN_MASK           /* Alternate Function I/O clock enable */
@@ -435,9 +464,7 @@
 #define RCC_APB2ENR_IOPEEN                   RCC_APB2ENR_IOPEEN_MASK           /* I/O port E clock enable */
 
 
-
-
-/*****************  Bit definition for RCC_APB1ENR register  ******************/
+/* Bit definition for RCC_APB1ENR register */
 #define RCC_APB1ENR_TIM2EN_POS               (0U)                              
 #define RCC_APB1ENR_TIM2EN_MASK              (0x1U << RCC_APB1ENR_TIM2EN_POS)  /* 0x00000001            */
 #define RCC_APB1ENR_TIM2EN                   RCC_APB1ENR_TIM2EN_MASK           /* Timer 2 clock enabled */
@@ -483,11 +510,7 @@
 #define RCC_APB1ENR_USBEN                    RCC_APB1ENR_USBEN_MASK            /* USB Device clock enable */
 
 
-
-
-
-
-/*******************  Bit definition for RCC_BDCR register  *******************/
+/* Bit definition for RCC_BDCR register */
 #define RCC_BDCR_LSEON_POS                   (0U)                              
 #define RCC_BDCR_LSEON_MASK                  (0x1U << RCC_BDCR_LSEON_POS)      /* 0x00000001                           */
 #define RCC_BDCR_LSEON                       RCC_BDCR_LSEON_MASK               /* External Low Speed oscillator enable */
@@ -505,10 +528,10 @@
 #define RCC_BDCR_RTCSEL_1                    (0x2U << RCC_BDCR_RTCSEL_POS)     /* 0x00000200                                    */
 
 /* RTC congiguration */
-#define RCC_BDCR_RTCSEL_NOCLOCK              ((WORD32)0x00000000)            /* No clock                               */
-#define RCC_BDCR_RTCSEL_LSE                  ((WORD32)0x00000100)            /* LSE oscillator clock used as RTC clock */
-#define RCC_BDCR_RTCSEL_LSI                  ((WORD32)0x00000200)            /* LSI oscillator clock used as RTC clock */
-#define RCC_BDCR_RTCSEL_HSE                  ((WORD32)0x00000300)            /* HSE oscillator clock divided by 128 used as RTC clock */
+#define RCC_BDCR_RTCSEL_NOCLOCK              ((WORD32)0x00000000)              /* No clock                               */
+#define RCC_BDCR_RTCSEL_LSE                  ((WORD32)0x00000100)              /* LSE oscillator clock used as RTC clock */
+#define RCC_BDCR_RTCSEL_LSI                  ((WORD32)0x00000200)              /* LSI oscillator clock used as RTC clock */
+#define RCC_BDCR_RTCSEL_HSE                  ((WORD32)0x00000300)              /* HSE oscillator clock divided by 128 used as RTC clock */
 
 #define RCC_BDCR_RTCEN_POS                   (15U)                             
 #define RCC_BDCR_RTCEN_MASK                  (0x1U << RCC_BDCR_RTCEN_POS)      /* 0x00008000       */
@@ -517,7 +540,7 @@
 #define RCC_BDCR_BDRST_MASK                  (0x1U << RCC_BDCR_BDRST_POS)      /* 0x00010000                   */
 #define RCC_BDCR_BDRST                       RCC_BDCR_BDRST_MASK               /* Backup domain software reset */
 
-/*******************  Bit definition for RCC_CSR register  ********************/  
+/* Bit definition for RCC_CSR register */  
 #define RCC_CSR_LSION_POS                    (0U)                              
 #define RCC_CSR_LSION_MASK                   (0x1U << RCC_CSR_LSION_POS)       /* 0x00000001                           */
 #define RCC_CSR_LSION                        RCC_CSR_LSION_MASK                /* Internal Low Speed oscillator enable */
@@ -545,4 +568,115 @@
 #define RCC_CSR_LPWRRSTF_POS                 (31U)                             
 #define RCC_CSR_LPWRRSTF_MASK                (0x1U << RCC_CSR_LPWRRSTF_POS)    /* 0x80000000           */
 #define RCC_CSR_LPWRRSTF                     RCC_CSR_LPWRRSTF_MASK             /* Low-Power reset flag */
+
+/* Data structure definition */
+/* RCC register */
+/*******************************************************************************
+* Structure  : RCC_REG_MAP
+* Description: Structure of RCC registers
+* Memebers   : volatile WORD32 CR          RCC clock control register   
+               volatile WORD32 CFGR        RCC clock configure register 
+               volatile WORD32 CIR         RCC clock interrupt register 
+               volatile WORD32 APB2RSTR    RCC APB2 reset register      
+               volatile WORD32 APB1RSTR    RCC APB1 reset register      
+               volatile WORD32 AHBENR      RCC AHB enable register      
+               volatile WORD32 APB2ENR     RCC APB2 enable register     
+               volatile WORD32 APB1ENR     RCC APB1 enable register     
+               volatile WORD32 BDCR        RCC backup control register  
+               volatile WORD32 CSR         RCC control/status register  
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/07/25       V1.0         Ian          Create 
+*******************************************************************************/
+typedef struct _RCC_REG_MAP
+{
+    volatile WORD32 CR;          /* RCC clock control register   */
+    volatile WORD32 CFGR;        /* RCC clock configure register */
+    volatile WORD32 CIR;         /* RCC clock interrupt register */
+    volatile WORD32 APB2RSTR;    /* RCC APB2 reset register      */
+    volatile WORD32 APB1RSTR;    /* RCC APB1 reset register      */
+    volatile WORD32 AHBENR;      /* RCC AHB enable register      */
+    volatile WORD32 APB2ENR;     /* RCC APB2 enable register     */
+    volatile WORD32 APB1ENR;     /* RCC APB1 enable register     */
+    volatile WORD32 BDCR;        /* RCC backup control register  */
+    volatile WORD32 CSR;         /* RCC control/status register  */
+}RCC_REG_MAP;
+
+
+
+/* Declaration of functions */
+/**************************************************************************
+* Function: WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
+* Descrip.: Configure system clock
+* Input   : BYTE ucSetClk       Desired clock in MHz
+* Output  : None
+* Return  : SW_OK    Successful
+*           SW_ERR   Failed
+* Note    ：None
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/07/26       V1.0         Ian          Create 
+**************************************************************************/
+WORD32 Rcc_SysClk_Config(BYTE ucSetClk);
+
+/**************************************************************************
+* Function: WORD32 Rcc_Get_SYSCLK(void)
+* Descrip.: Get SYSCLK in Hz
+* Input   : None
+* Output  : None
+* Return  : WORD32 SYSCLK in Hz
+* Note    ：None
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/08/01       V1.0         Ian          Create 
+**************************************************************************/
+WORD32 Rcc_Get_SYSCLK(void);
+
+/**************************************************************************
+* Function: WORD32 Rcc_Get_HCLK(void)
+* Descrip.: Get HCLK in Hz
+* Input   : None
+* Output  : None
+* Return  : WORD32 HCLK in Hz
+* Note    ：None
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/08/01       V1.0         Ian          Create 
+**************************************************************************/
+WORD32 Rcc_Get_HCLK(void);
+
+/**************************************************************************
+* Function: WORD32 Rcc_Get_PCLK1(void)
+* Descrip.: Get PCLK1 in Hz
+* Input   : None
+* Output  : None
+* Return  : WORD32 PCLK1 in Hz
+* Note    ：None
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/08/01       V1.0         Ian          Create 
+**************************************************************************/
+WORD32 Rcc_Get_PCLK1(void);
+
+/**************************************************************************
+* Function: WORD32 Rcc_Get_PCLK2(void)
+* Descrip.: Get PCLK2 in Hz
+* Input   : None
+* Output  : None
+* Return  : WORD32 PCLK2 in Hz
+* Note    ：None
+* Date             Version     Author        Content
+* -----------------------------------------------
+* 2016/08/01       V1.0         Ian          Create 
+**************************************************************************/
+WORD32 Rcc_Get_PCLK2(void);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _RCC_H_ */
+
+
 
