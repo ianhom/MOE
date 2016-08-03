@@ -99,9 +99,9 @@ extern "C" {
 #define RCC_CFGR_SW_0                        (0x1U << RCC_CFGR_SW_POS)         /* 0x00000001                         */
 #define RCC_CFGR_SW_1                        (0x2U << RCC_CFGR_SW_POS)         /* 0x00000002                         */
 
-#define RCC_CFGR_SW_HSI                      ((WORD32)0x00000000)              /* HSI selected as system clock */
-#define RCC_CFGR_SW_HSE                      ((WORD32)0x00000001)              /* HSE selected as system clock */
-#define RCC_CFGR_SW_PLL                      ((WORD32)0x00000002)              /* PLL selected as system clock */
+#define RCC_CFGR_SW_HSI                      ((uint32)0x00000000)              /* HSI selected as system clock */
+#define RCC_CFGR_SW_HSE                      ((uint32)0x00000001)              /* HSE selected as system clock */
+#define RCC_CFGR_SW_PLL                      ((uint32)0x00000002)              /* PLL selected as system clock */
 
 /* SWS configuration */
 #define RCC_CFGR_SWS_POS                     (2U)                              
@@ -124,15 +124,15 @@ extern "C" {
 #define RCC_CFGR_HPRE_3                      (0x8U << RCC_CFGR_HPRE_POS)       /* 0x00000080                     */
 #define RCC_CFGR_HPRE_DIV_2                  (0x08U)
 
-#define RCC_CFGR_HPRE_DIV1                   ((WORD32)0x00000000)              /* SYSCLK not divided    */
-#define RCC_CFGR_HPRE_DIV2                   ((WORD32)0x00000080)              /* SYSCLK divided by 2   */
-#define RCC_CFGR_HPRE_DIV4                   ((WORD32)0x00000090)              /* SYSCLK divided by 4   */
-#define RCC_CFGR_HPRE_DIV8                   ((WORD32)0x000000A0)              /* SYSCLK divided by 8   */
-#define RCC_CFGR_HPRE_DIV16                  ((WORD32)0x000000B0)              /* SYSCLK divided by 16  */
-#define RCC_CFGR_HPRE_DIV64                  ((WORD32)0x000000C0)              /* SYSCLK divided by 64  */
-#define RCC_CFGR_HPRE_DIV128                 ((WORD32)0x000000D0)              /* SYSCLK divided by 128 */
-#define RCC_CFGR_HPRE_DIV256                 ((WORD32)0x000000E0)              /* SYSCLK divided by 256 */
-#define RCC_CFGR_HPRE_DIV512                 ((WORD32)0x000000F0)              /* SYSCLK divided by 512 */
+#define RCC_CFGR_HPRE_DIV1                   ((uint32)0x00000000)              /* SYSCLK not divided    */
+#define RCC_CFGR_HPRE_DIV2                   ((uint32)0x00000080)              /* SYSCLK divided by 2   */
+#define RCC_CFGR_HPRE_DIV4                   ((uint32)0x00000090)              /* SYSCLK divided by 4   */
+#define RCC_CFGR_HPRE_DIV8                   ((uint2)0x000000A0)              /* SYSCLK divided by 8   */
+#define RCC_CFGR_HPRE_DIV16                  ((uint32)0x000000B0)              /* SYSCLK divided by 16  */
+#define RCC_CFGR_HPRE_DIV64                  ((uint32)0x000000C0)              /* SYSCLK divided by 64  */
+#define RCC_CFGR_HPRE_DIV128                 ((uint32)0x000000D0)              /* SYSCLK divided by 128 */
+#define RCC_CFGR_HPRE_DIV256                 ((uint32)0x000000E0)              /* SYSCLK divided by 256 */
+#define RCC_CFGR_HPRE_DIV512                 ((uint32)0x000000F0)              /* SYSCLK divided by 512 */
 
 /* PPRE1 configuration */
 #define RCC_CFGR_PPRE1_POS                   (8U)                              
@@ -143,11 +143,11 @@ extern "C" {
 #define RCC_CFGR_PPRE1_2                     (0x4U << RCC_CFGR_PPRE1_POS)      /* 0x00000400                      */
 #define RCC_CFGR_PPRE1_DIV_2                 (0x04U)
 
-#define RCC_CFGR_PPRE1_DIV1                  ((WORD32)0x00000000)              /* HCLK not divided   */
-#define RCC_CFGR_PPRE1_DIV2                  ((WORD32)0x00000400)              /* HCLK divided by 2  */
-#define RCC_CFGR_PPRE1_DIV4                  ((WORD32)0x00000500)              /* HCLK divided by 4  */
-#define RCC_CFGR_PPRE1_DIV8                  ((WORD32)0x00000600)              /* HCLK divided by 8  */
-#define RCC_CFGR_PPRE1_DIV16                 ((WORD32)0x00000700)              /* HCLK divided by 16 */
+#define RCC_CFGR_PPRE1_DIV1                  ((uint32)0x00000000)              /* HCLK not divided   */
+#define RCC_CFGR_PPRE1_DIV2                  ((uint32)0x00000400)              /* HCLK divided by 2  */
+#define RCC_CFGR_PPRE1_DIV4                  ((uint32)0x00000500)              /* HCLK divided by 4  */
+#define RCC_CFGR_PPRE1_DIV8                  ((uint32)0x00000600)              /* HCLK divided by 8  */
+#define RCC_CFGR_PPRE1_DIV16                 ((uint32)0x00000700)              /* HCLK divided by 16 */
 
 /* PPRE2 configuration */
 #define RCC_CFGR_PPRE2_POS                   (11U)                             
@@ -158,11 +158,11 @@ extern "C" {
 #define RCC_CFGR_PPRE2_2                     (0x4U << RCC_CFGR_PPRE2_POS)      /* 0x00002000                      */
 #define RCC_CFGR_PPRE2_DIV_2                 (0x04U)
 
-#define RCC_CFGR_PPRE2_DIV1                  ((WORD32)0x00000000)              /* HCLK not divided   */
-#define RCC_CFGR_PPRE2_DIV2                  ((WORD32)0x00002000)              /* HCLK divided by 2  */
-#define RCC_CFGR_PPRE2_DIV4                  ((WORD32)0x00002800)              /* HCLK divided by 4  */
-#define RCC_CFGR_PPRE2_DIV8                  ((WORD32)0x00003000)              /* HCLK divided by 8  */
-#define RCC_CFGR_PPRE2_DIV16                 ((WORD32)0x00003800)              /* HCLK divided by 16 */
+#define RCC_CFGR_PPRE2_DIV1                  ((uint32)0x00000000)              /* HCLK not divided   */
+#define RCC_CFGR_PPRE2_DIV2                  ((uint32)0x00002000)              /* HCLK divided by 2  */
+#define RCC_CFGR_PPRE2_DIV4                  ((uint32)0x00002800)              /* HCLK divided by 4  */
+#define RCC_CFGR_PPRE2_DIV8                  ((uint32)0x00003000)              /* HCLK divided by 8  */
+#define RCC_CFGR_PPRE2_DIV16                 ((uint32)0x00003800)              /* HCLK divided by 16 */
 
 /* ADCPPRE configuration */
 #define RCC_CFGR_ADCPRE_POS                  (14U)                             
@@ -171,10 +171,10 @@ extern "C" {
 #define RCC_CFGR_ADCPRE_0                    (0x1U << RCC_CFGR_ADCPRE_POS)     /* 0x00004000                       */
 #define RCC_CFGR_ADCPRE_1                    (0x2U << RCC_CFGR_ADCPRE_POS)     /* 0x00008000                       */
 
-#define RCC_CFGR_ADCPRE_DIV2                 ((WORD32)0x00000000)              /* PCLK2 divided by 2 */
-#define RCC_CFGR_ADCPRE_DIV4                 ((WORD32)0x00004000)              /* PCLK2 divided by 4 */
-#define RCC_CFGR_ADCPRE_DIV6                 ((WORD32)0x00008000)              /* PCLK2 divided by 6 */
-#define RCC_CFGR_ADCPRE_DIV8                 ((WORD32)0x0000C000)              /* PCLK2 divided by 8 */
+#define RCC_CFGR_ADCPRE_DIV2                 ((uint32)0x00000000)              /* PCLK2 divided by 2 */
+#define RCC_CFGR_ADCPRE_DIV4                 ((uint32)0x00004000)              /* PCLK2 divided by 4 */
+#define RCC_CFGR_ADCPRE_DIV6                 ((uint32)0x00008000)              /* PCLK2 divided by 6 */
+#define RCC_CFGR_ADCPRE_DIV8                 ((uint32)0x0000C000)              /* PCLK2 divided by 8 */
 
 #define RCC_CFGR_PLLSRC_POS                  (16U)                             
 #define RCC_CFGR_PLLSRC_MASK                 (0x1U << RCC_CFGR_PLLSRC_POS)     /* 0x00010000             */
@@ -193,10 +193,10 @@ extern "C" {
 #define RCC_CFGR_PLLMULL_2                   (0x4U << RCC_CFGR_PLLMULL_POS)    /* 0x00100000                                   */
 #define RCC_CFGR_PLLMULL_3                   (0x8U << RCC_CFGR_PLLMULL_POS)    /* 0x00200000                                   */
 
-#define RCC_CFGR_PLLXTPRE_HSE                ((WORD32)0x00000000)              /* HSE clock not divided for PLL entry  */
-#define RCC_CFGR_PLLXTPRE_HSE_DIV2           ((WORD32)0x00020000)              /* HSE clock divided by 2 for PLL entry */
+#define RCC_CFGR_PLLXTPRE_HSE                ((uint32)0x00000000)              /* HSE clock not divided for PLL entry  */
+#define RCC_CFGR_PLLXTPRE_HSE_DIV2           ((uint32)0x00020000)              /* HSE clock divided by 2 for PLL entry */
 
-#define RCC_CFGR_PLLMULL2                    ((WORD32)0x00000000)              /* PLL input clock*2 */
+#define RCC_CFGR_PLLMULL2                    ((uint32)0x00000000)              /* PLL input clock*2 */
 #define RCC_CFGR_PLLMULL3_POS                (18U)                             
 #define RCC_CFGR_PLLMULL3_MASK               (0x1U << RCC_CFGR_PLLMULL3_POS)   /* 0x00040000        */
 #define RCC_CFGR_PLLMULL3                    RCC_CFGR_PLLMULL3_MASK            /* PLL input clock*3 */
@@ -251,11 +251,11 @@ extern "C" {
 #define RCC_CFGR_MCO_1                       (0x2U << RCC_CFGR_MCO_POS)        /* 0x02000000                                   */
 #define RCC_CFGR_MCO_2                       (0x4U << RCC_CFGR_MCO_POS)        /* 0x04000000                                   */
 
-#define RCC_CFGR_MCO_NOCLOCK                 ((WORD32)0x00000000)              /* No clock                                      */
-#define RCC_CFGR_MCO_SYSCLK                  ((WORD32)0x04000000)              /* System clock selected as MCO source           */
-#define RCC_CFGR_MCO_HSI                     ((WORD32)0x05000000)              /* HSI clock selected as MCO source              */
-#define RCC_CFGR_MCO_HSE                     ((WORD32)0x06000000)              /* HSE clock selected as MCO source              */
-#define RCC_CFGR_MCO_PLLCLK_DIV2             ((WORD32)0x07000000)              /* PLL clock divided by 2 selected as MCO source */
+#define RCC_CFGR_MCO_NOCLOCK                 ((uint32)0x00000000)              /* No clock                                      */
+#define RCC_CFGR_MCO_SYSCLK                  ((uint32)0x04000000)              /* System clock selected as MCO source           */
+#define RCC_CFGR_MCO_HSI                     ((uint32)0x05000000)              /* HSI clock selected as MCO source              */
+#define RCC_CFGR_MCO_HSE                     ((uint32)0x06000000)              /* HSE clock selected as MCO source              */
+#define RCC_CFGR_MCO_PLLCLK_DIV2             ((uint32)0x07000000)              /* PLL clock divided by 2 selected as MCO source */
 
  /* Reference defines */
  #define RCC_CFGR_MCOSEL                      RCC_CFGR_MCO
@@ -574,41 +574,41 @@ extern "C" {
 /*******************************************************************************
 * Structure  : RCC_REG_MAP
 * Description: Structure of RCC registers
-* Memebers   : volatile WORD32 CR          RCC clock control register   
-               volatile WORD32 CFGR        RCC clock configure register 
-               volatile WORD32 CIR         RCC clock interrupt register 
-               volatile WORD32 APB2RSTR    RCC APB2 reset register      
-               volatile WORD32 APB1RSTR    RCC APB1 reset register      
-               volatile WORD32 AHBENR      RCC AHB enable register      
-               volatile WORD32 APB2ENR     RCC APB2 enable register     
-               volatile WORD32 APB1ENR     RCC APB1 enable register     
-               volatile WORD32 BDCR        RCC backup control register  
-               volatile WORD32 CSR         RCC control/status register  
+* Memebers   : volatile uint32 CR          RCC clock control register   
+               volatile uint32 CFGR        RCC clock configure register 
+               volatile uint32 CIR         RCC clock interrupt register 
+               volatile uint32 APB2RSTR    RCC APB2 reset register      
+               volatile uint32 APB1RSTR    RCC APB1 reset register      
+               volatile uint32 AHBENR      RCC AHB enable register      
+               volatile uint32 APB2ENR     RCC APB2 enable register     
+               volatile uint32 APB1ENR     RCC APB1 enable register     
+               volatile uint32 BDCR        RCC backup control register  
+               volatile uint32 CSR         RCC control/status register  
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/07/25       V1.0         Ian          Create 
 *******************************************************************************/
 typedef struct _RCC_REG_MAP
 {
-    volatile WORD32 CR;          /* RCC clock control register   */
-    volatile WORD32 CFGR;        /* RCC clock configure register */
-    volatile WORD32 CIR;         /* RCC clock interrupt register */
-    volatile WORD32 APB2RSTR;    /* RCC APB2 reset register      */
-    volatile WORD32 APB1RSTR;    /* RCC APB1 reset register      */
-    volatile WORD32 AHBENR;      /* RCC AHB enable register      */
-    volatile WORD32 APB2ENR;     /* RCC APB2 enable register     */
-    volatile WORD32 APB1ENR;     /* RCC APB1 enable register     */
-    volatile WORD32 BDCR;        /* RCC backup control register  */
-    volatile WORD32 CSR;         /* RCC control/status register  */
+    volatile uint32 CR;          /* RCC clock control register   */
+    volatile uint32 CFGR;        /* RCC clock configure register */
+    volatile uint32 CIR;         /* RCC clock interrupt register */
+    volatile uint32 APB2RSTR;    /* RCC APB2 reset register      */
+    volatile uint32 APB1RSTR;    /* RCC APB1 reset register      */
+    volatile uint32 AHBENR;      /* RCC AHB enable register      */
+    volatile uint32 APB2ENR;     /* RCC APB2 enable register     */
+    volatile uint32 APB1ENR;     /* RCC APB1 enable register     */
+    volatile uint32 BDCR;        /* RCC backup control register  */
+    volatile uint32 CSR;         /* RCC control/status register  */
 }RCC_REG_MAP;
 
 
 
 /* Declaration of functions */
 /**************************************************************************
-* Function: WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
+* Function: uint32 Rcc_SysClk_Config(uint8 u8SetClk)
 * Descrip.: Configure system clock
-* Input   : BYTE ucSetClk       Desired clock in MHz
+* Input   : uint8 u8SetClk       Desired clock in MHz
 * Output  : None
 * Return  : SW_OK    Successful
 *           SW_ERR   Failed
@@ -617,59 +617,59 @@ typedef struct _RCC_REG_MAP
 * -----------------------------------------------
 * 2016/07/26       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_SysClk_Config(BYTE ucSetClk);
+uint32 Rcc_SysClk_Config(uint8 u8SetClk);
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_SYSCLK(void)
+* Function: uint32 Rcc_Get_SYSCLK(void)
 * Descrip.: Get SYSCLK in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 SYSCLK in Hz
+* Return  : uint32 SYSCLK in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_SYSCLK(void);
+uint32 Rcc_Get_SYSCLK(void);
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_HCLK(void)
+* Function: uint32 Rcc_Get_HCLK(void)
 * Descrip.: Get HCLK in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 HCLK in Hz
+* Return  : uint32 HCLK in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_HCLK(void);
+uint32 Rcc_Get_HCLK(void);
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_PCLK1(void)
+* Function: uint32 Rcc_Get_PCLK1(void)
 * Descrip.: Get PCLK1 in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 PCLK1 in Hz
+* Return  : uint32 PCLK1 in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_PCLK1(void);
+uint32 Rcc_Get_PCLK1(void);
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_PCLK2(void)
+* Function: uint32 Rcc_Get_PCLK2(void)
 * Descrip.: Get PCLK2 in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 PCLK2 in Hz
+* Return  : uint32 PCLK2 in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_PCLK2(void);
+uint32 Rcc_Get_PCLK2(void);
 
 
 #ifdef __cplusplus
