@@ -21,17 +21,17 @@
 
 
 /* Declaration of static function */
-static WORD32 Rcc_Prescaler_Cal(BYTE ucSetClk);
+static uint32 Rcc_Prescaler_Cal(uint u8SetClk);
 
 /* Div value of AHB clock */
-static const WORD16 sg_awAhbPre[] = {1, 2, 4, 8, 16, 64, 128, 256, 512}; 
+static const uint16 sg_au16AhbPre[] = {1, 2, 4, 8, 16, 64, 128, 256, 512}; 
 
 /* Div and Mul values */
-static BYTE sg_ucHse, sg_ucPllMul, sg_ucAhbIdx, sg_ucApb1, sg_ucApb2;
+static uint8 sg_u8Hse, sg_u8PllMul, sg_u8AhbIdx, sg_u8Apb1, sg_u8Apb2;
 /**************************************************************************
-* Function: WORD32 Rcc_SysClk_Config(BYTE ucExtCrystal, BYTE ucSetClk)
+* Function: uint32 Rcc_SysClk_Config(uint8 u8SetClk)
 * Descrip.: Configure system clock
-* Input   : BYTE ucSetClk       Desired clock in MHz
+* Input   : uint8 ucSetClk       Desired clock in MHz
 * Output  : None
 * Return  : SW_OK    Successful
 *           SW_ERR   Failed
@@ -40,18 +40,18 @@ static BYTE sg_ucHse, sg_ucPllMul, sg_ucAhbIdx, sg_ucApb1, sg_ucApb2;
 * -----------------------------------------------
 * 2016/07/26       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
+uint32 Rcc_SysClk_Config(uint8 u8SetClk)
 {
-    WORD32 dwCFGR = 0;
+    uint32 dwCFGR = 0;
 
     /* Check if set clock is valid or NOT */
-    if(ucSetClk > MAX_AHB_CLK_IN_MHZ)
+    if(u8SetClk > MAX_AHB_CLK_IN_MHZ)
     {
         return SW_ERR;
     }
 
     /* Check if any prescaler is available or NOT */
-    if(SW_ERR == Rcc_Prescaler_Cal(ucSetClk))
+    if(SW_ERR == Rcc_Prescaler_Cal(u8SetClk))
     {
         return SW_ERR;
     }
@@ -61,21 +61,21 @@ WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
     while(!(RCC_CR & RCC_CR_HSERDY)); /* Wait for external clock statble  */
     
     /* Set HSE prescaler */
-    if(2 == sg_ucHse)
+    if(2 == sg_u8Hse)
     {
-        dwCFGR |= RCC_CFGR_PLLXTPRE;
+        u32CFGR |= RCC_CFGR_PLLXTPRE;
     }
 
     /* Set PLLMUL */
-    dwCFGR |= ((sg_ucPllMul - 2) << RCC_CFGR_PLLMULL_POS);
+    u32CFGR |= ((sg_u8PllMul - 2) << RCC_CFGR_PLLMULL_POS);
 
     /* Set AHB clock */
-    if(sg_ucAhbIdx)
+    if(sg_u8AhbIdx)
     {
-        dwCFGR |= ((sg_ucAhbIdx + 7) << RCC_CFGR_HPRE_POS);
+        u32CFGR |= ((sg_u8AhbIdx + 7) << RCC_CFGR_HPRE_POS);
     }
     
-    RCC_CFGR = dwCFGR; /* Set entire prescaler */
+    RCC_CFGR = u32CFGR; /* Set entire prescaler */
 
     /* Enable PLL */
     RCC_CR |= RCC_CR_PLLON;            /* Enable PLL          */
@@ -91,9 +91,9 @@ WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
 
 
 /**************************************************************************
-* Function: static WORD32 Rcc_Prescaler_Cal(BYTE ucSetClk)
+* Function: static uint32 Rcc_Prescaler_Cal(uint8 u8SetClk)
 * Descrip.: Calculate system clock and return prescaler solution.
-* Input   : BYTE  ucSetClk       Desired clock in MHz
+* Input   : uint8  u8SetClk       Desired clock in MHz
 * Output  : None
 * Return  : SW_OK    Successful
 *           SW_ERR   Failed
@@ -102,18 +102,18 @@ WORD32 Rcc_SysClk_Config(BYTE ucSetClk)
 * -----------------------------------------------
 * 2016/07/26       V1.0         Ian          Create 
 **************************************************************************/
-static WORD32 Rcc_Prescaler_Cal(BYTE ucSetClk)
+static uint32 Rcc_Prescaler_Cal(uint8 u8SetClk)
 {
     /* Try every PLLMUL value */
-    for(sg_ucPllMul = 2; sg_ucPllMul <= 16; sg_ucPllMul++)
+    for(sg_u8PllMul = 2; sg_u8PllMul <= 16; sg_u8PllMul++)
     {   /* Try every AHB prescaler value */
-        for(sg_ucAhbIdx = 0; sg_ucAhbIdx < 9; sg_ucAhbIdx++)
+        for(sg_u8AhbIdx = 0; sg_u8AhbIdx < 9; sg_u8AhbIdx++)
         {   /* Tyr every HSE prescaler value */
-            for(sg_ucHse = 1; sg_ucHse <= 2; sg_ucHse++)
+            for(sg_u8Hse = 1; sg_u8Hse <= 2; sg_u8Hse++)
             {   /* if the combination is satisfied */
-                if((ucSetClk * sg_ucHse * sg_awAhbPre[sg_ucAhbIdx]) == ((EXT_CRYSTAL_FREQ /1000000) * sg_ucPllMul))
+                if((u8SetClk * sg_u8Hse * sg_au16AhbPre[sg_u8AhbIdx]) == ((EXT_CRYSTAL_FREQ /1000000) * sg_u8PllMul))
                 {   /* And MAX AHB clock is NOT exceeded */
-                    if((EXT_CRYSTAL_FREQ / 1000000) / sg_ucHse * sg_ucPllMul <= MAX_AHB_CLK_IN_MHZ)
+                    if((EXT_CRYSTAL_FREQ / 1000000) / sg_u8Hse * sg_u8PllMul <= MAX_AHB_CLK_IN_MHZ)
                     {   
                         /* Return the solution */
                         return SW_OK;
@@ -127,91 +127,91 @@ static WORD32 Rcc_Prescaler_Cal(BYTE ucSetClk)
 }
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_SYSCLK(void)
+* Function: uint32 Rcc_Get_SYSCLK(void)
 * Descrip.: Get SYSCLK in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 SYSCLK in Hz
+* Return  : uint32 SYSCLK in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_SYSCLK(void)
+uint32 Rcc_Get_SYSCLK(void)
 {
-    return (EXT_CRYSTAL_FREQ / sg_ucHse * sg_ucPllMul);
+    return (EXT_CRYSTAL_FREQ / sg_u8Hse * sg_u8PllMul);
 }
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_HCLK(void)
+* Function: uint32 Rcc_Get_HCLK(void)
 * Descrip.: Get HCLK in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 HCLK in Hz
+* Return  : uint32 HCLK in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_HCLK(void)
+uint32 Rcc_Get_HCLK(void)
 {
-    return (EXT_CRYSTAL_FREQ / sg_ucHse * sg_ucPllMul / sg_awAhbPre[sg_ucAhbIdx]);
+    return (EXT_CRYSTAL_FREQ / sg_u8Hse * sg_u8PllMul / sg_au16AhbPre[sg_u8AhbIdx]);
 }
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_PCLK1(void)
+* Function: uint32 Rcc_Get_PCLK1(void)
 * Descrip.: Get PCLK1 in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 PCLK1 in Hz
+* Return  : uint32 PCLK1 in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_PCLK1(void)
+uint32 Rcc_Get_PCLK1(void)
 {
     /* Get APB1 div value */
-    sg_ucApb1 = ((RCC_CFGR & RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_POS);  /* Get Apb1 setting */
+    sg_u8Apb1 = ((RCC_CFGR & RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_POS);  /* Get Apb1 setting */
     /* If Apb1 does not div clcok */
-    if(sg_ucApb1 < (RCC_CFGR_PPRE1_DIV2 >> RCC_CFGR_PPRE1_POS))
+    if(sg_u8Apb1 < (RCC_CFGR_PPRE1_DIV2 >> RCC_CFGR_PPRE1_POS))
     {
-        sg_ucApb1 = 1;
+        sg_u8Apb1 = 1;
     }
     else/* Else, according the register map to get div value */
     {
-        sg_ucApb1 = 1 << (sg_ucApb1 - 3);
+        sg_u8Apb1 = 1 << (sg_u8Apb1 - 3);
     }
 
-    return (EXT_CRYSTAL_FREQ / sg_ucHse * sg_ucPllMul / sg_awAhbPre[sg_ucAhbIdx] / sg_ucApb1);
+    return (EXT_CRYSTAL_FREQ / sg_u8Hse * sg_u8PllMul / sg_au16AhbPre[sg_u8AhbIdx] / sg_u8Apb1);
 }
 
 /**************************************************************************
-* Function: WORD32 Rcc_Get_PCLK2(void)
+* Function: uint32 Rcc_Get_PCLK2(void)
 * Descrip.: Get PCLK2 in Hz
 * Input   : None
 * Output  : None
-* Return  : WORD32 PCLK2 in Hz
+* Return  : uint32 PCLK2 in Hz
 * Note    ：None
 * Date             Version     Author        Content
 * -----------------------------------------------
 * 2016/08/01       V1.0         Ian          Create 
 **************************************************************************/
-WORD32 Rcc_Get_PCLK2(void)
+uint32 Rcc_Get_PCLK2(void)
 {
     /* Get APB2 div value */
-    sg_ucApb2 = ((RCC_CFGR & RCC_CFGR_PPRE2) >> RCC_CFGR_PPRE2_POS);  /* Get Apb2 setting */
+    sg_u8Apb2 = ((RCC_CFGR & RCC_CFGR_PPRE2) >> RCC_CFGR_PPRE2_POS);  /* Get Apb2 setting */
     /* If Apb2 does not div clcok */
-    if(sg_ucApb2 < (RCC_CFGR_PPRE2_DIV2 >> RCC_CFGR_PPRE2_POS))
+    if(sg_u8Apb2 < (RCC_CFGR_PPRE2_DIV2 >> RCC_CFGR_PPRE2_POS))
     {
-        sg_ucApb2 = 1;
+        sg_u8Apb2 = 1;
     }
     else/* Else, according the register map to get div value */
     {
-        sg_ucApb2 = 1 << (sg_ucApb2 - 3);
+        sg_u8Apb2 = 1 << (sg_u8Apb2 - 3);
     }
 
-    return (EXT_CRYSTAL_FREQ / sg_ucHse * sg_ucPllMul / sg_awAhbPre[sg_ucAhbIdx] / sg_ucApb2);
+    return (EXT_CRYSTAL_FREQ / sg_u8Hse * sg_u8PllMul / sg_au16AhbPre[sg_ucAhbIdx] / sg_u8Apb2);
 }
 
 /* End of file */
