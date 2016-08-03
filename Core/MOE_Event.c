@@ -16,18 +16,19 @@
 #include "MOE_Event.h"
 #include "debug.h"
 
+/* Declaration of static function */
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg);
 
 
-static uint16 sg_u16EvtFisrt   = 0;
-static uint16 sg_u16EvtCnt     = 0;
-#ifndef __FLEXIBLE_EVENT_QUEUE
+static uint16 sg_u16EvtFisrt = 0;  /* The fisrt available data position */
+static uint16 sg_u16EvtCnt   = 0;  /* The count of availabe data        */
+#ifndef __FLEXIBLE_EVENT_QUEUE     /* If use regular length fixed queue */
 static T_EVENT sg_atEvtQueue[MAX_QUEUE_EVT_NUM] = {0};
-#else
-static T_EVENT_QUEUE *sg_ptEvtHead = NULL;
-static T_EVENT_QUEUE *sg_ptEvtTail = NULL;
-static uint16 sg_u16BlkCnt    = 1;
-static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;
+#else                              /* Else if use flexible length queue */
+static T_EVENT_QUEUE *sg_ptEvtHead = NULL;          /* Head node of event queue link list */
+static T_EVENT_QUEUE *sg_ptEvtTail = NULL;          /* Tail node of event queue link list */
+static uint16 sg_u16BlkCnt    = 1;                  /* Count of queue node block          */
+static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;  /* Max count of exsit events          */
 #endif
 
 
@@ -43,34 +44,34 @@ static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint8 Moe_Event_Init()
+uint8 Moe_Event_Init(void)
 {   
     uint32 u32IntSt;
-#ifndef __FLEXIBLE_EVENT_QUEUE
+#ifndef __FLEXIBLE_EVENT_QUEUE      /* If use regular length fixed queue */
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     Moe_Memset((uint8*)sg_atEvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
     return SW_OK;
-#else
+#else                               /* Else if use flexible length queue */
     uint8 u8Idx,u8Return;
 
+    /* Check if head node is empty or NOT */
     if(NULL != sg_ptEvtHead)
-    {
+    {   /* If it is NOT empty which means it had been inited, return error */
         return SW_ERR;
     }
  
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_ptEvtHead = MOE_MALLOC(sizeof(T_EVENT_QUEUE));
+    sg_ptEvtHead = MOE_MALLOC(sizeof(T_EVENT_QUEUE));  /* Create a space for head node */
     if(NULL == sg_ptEvtHead)
     {
         u8Return = SW_ERR;
     }
     else
     {
-
         sg_ptEvtTail = sg_ptEvtHead;
         sg_ptEvtHead->ptNext = NULL;
         Moe_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
@@ -298,9 +299,6 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
 #endif
     return (uint16)ptEvt->u8Task;
 }
-
-
-
 
 
 /* end of file */
