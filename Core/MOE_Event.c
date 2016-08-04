@@ -66,16 +66,16 @@ uint8 Moe_Event_Init(void)
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     sg_ptEvtHead = MOE_MALLOC(sizeof(T_EVENT_QUEUE));  /* Create a space for head node */
-    if(NULL == sg_ptEvtHead)
+    if(NULL == sg_ptEvtHead)   /* If malloc is failed */
     {
         u8Return = SW_ERR;
     }
-    else
+    else /* If new node is created successfully */
     {
-        sg_ptEvtTail = sg_ptEvtHead;
-        sg_ptEvtHead->ptNext = NULL;
+        sg_ptEvtTail = sg_ptEvtHead;      
+        sg_ptEvtHead->ptNext = NULL;    /* Update link list head and tail information */
         Moe_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
-        sg_u16BlkCnt++;
+        sg_u16BlkCnt++;                 /* Create the first event queue block */
         u8Return = SW_OK;
     }
     /**************************************************************************************************/
@@ -299,6 +299,9 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
 #endif
     return (uint16)ptEvt->u8Task;
 }
+
+
+
 
 
 /* end of file */
