@@ -1,4 +1,7 @@
 # Log
+## 5th Aug 2016
+Add task name printing function.
+
 ## 1st Aug 2016
 Modify uart driver of KL25, use Rx interrupt to receive entire telegram.
 
