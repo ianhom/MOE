@@ -22,18 +22,21 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
+#define _STR(a)     #a
+#define STR(a)      _STR(a)
 /* Configure Zone */
 
 /* Add your task process here */
 #define LIST_OF_REG_TASK \
-        REG_TASK(Task_PT_11xx_Test)//Task_PT_IEC870_PL_Process)
-        //REG_TASK(Task_PT_Demo_Process)\
-        //REG_TASK(Task_PT_Demo2_Process)\
-        //REG_TASK(Task1_Process)\
-        //REG_TASK(Task2_Process)\
-        //REG_TASK(Task3_Process)\
-        //REG_TASK(LED_Demo_Process)\
-        //REG_TASK(Task_Demo_Queue_Process)
+        REG_TASK(Task_PT_11xx_Test)\
+        REG_TASK(Task_PT_Demo_Process)\
+        REG_TASK(Task_PT_Demo2_Process)\
+        REG_TASK(Task1_Process)\
+        REG_TASK(Task2_Process)\
+        REG_TASK(Task3_Process)\
+        REG_TASK(LED_Demo_Process)\
+        REG_TASK(Task_Demo_Queue_Process)
+//        REG_TASK(Task_PT_IEC870_PL_Process)
 
 
 #define REG_TASK(name) uint8 name(uint8 u8Evt);
@@ -48,6 +51,12 @@ LIST_OF_REG_TASK
 #undef REG_TASK
 };
 
+static const uint8* cg_apu8TaskName[] = 
+{
+#define REG_TASK(name) STR(name),
+LIST_OF_REG_TASK
+#undef REG_TASK
+};
 
 #define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks                      */
 
