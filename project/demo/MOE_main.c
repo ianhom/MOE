@@ -17,10 +17,10 @@
 #include "Btn_SM_Config.h"
 #include "Btn_SM_Module.h"
 #include "MOE_HAL_UART.h"
-
+ 
 /********************************************************************/
 
-__root const char version_string[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
+__root const char cg_au8Version[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
 
 
 void Poll_Process(void)
@@ -30,11 +30,17 @@ void Poll_Process(void)
 
 int main (void)
 {   
-
+    uint8 u8Idx;
     Gpio_Init();
     Timer_Init();
 
-    DBG_PRINT("\n***** %s *****\n", version_string);
+    DBG_PRINT("\n***** %s *****\n", cg_au8Version);
+    DBG_PRINT("Task count is %d:\n",MAX_TASK_NUM);
+    for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
+    {
+        DBG_PRINT("---Task No. is %3d : %s.\n", (u8Idx+1),cg_apu8TaskName[u8Idx]);
+    }
+    DBG_PRINT("\n\n");
 
     Moe_Init(App_GetSystemTime_ms, Poll_Process);   
     
