@@ -137,26 +137,30 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg)
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 {
     uint16 u16EvtLast;
+
+/* If use  length fixed queue */    
 #ifdef __FLEXIBLE_EVENT_QUEUE
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
+    /* If the current event counter is equal to the max limit */
     if(sg_u16EvtCntMax == sg_u16EvtCnt)
     {
-        return SW_ERR;
+        return SW_ERR;  /* Return error */
     }
 
+    /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
     {
-        if(0 == sg_u16EvtFisrt)
+        if(0 == sg_u16EvtFisrt)  /* If the first available data is in 0 position */
         {
-            u16EvtLast = sg_u16EvtCntMax - 1;
+            u16EvtLast = sg_u16EvtCntMax - 1;  /* Calculate the last empty position */
         }
-        else
+        else  /* In other situations */
         {
-            u16EvtLast = sg_u16EvtFisrt - 1;
+            u16EvtLast = sg_u16EvtFisrt - 1;   /* Calculate the last empty position */
         }
-        sg_u16EvtFisrt = u16EvtLast;
+        sg_u16EvtFisrt = u16EvtLast;           
     }
     else
     {
@@ -187,12 +191,17 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
         Moe_Memset(sg_ptEvtTail->au8EvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
         sg_u16EvtCntMax += MAX_QUEUE_EVT_NUM;
     }
+
+    
+/* If use regular length fixed queue */    
 #else
+    /* If the current event count is equal to the max limit */
     if(MAX_QUEUE_EVT_NUM == sg_u16EvtCnt)
-    {
-        return SW_ERR;
+    {   
+        return SW_ERR;  /* Return error */
     }
 
+    /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
     {
         if(0 == sg_u16EvtFisrt)
@@ -205,13 +214,13 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
         }
         sg_u16EvtFisrt = u16EvtLast;
     }
-    else
-    {
+    else/* If it is a normal event */
+    {   /* Calculate the position for new event */
         u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;    
     }
-    sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;
-    sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;
-    sg_u16EvtCnt++;
+    sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;  /* Fill the task ID   */
+    sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;     /* Fill the evnet     */
+    sg_u16EvtCnt++;                               /* Update event count */
 
 #endif
     return SW_OK;
