@@ -43,17 +43,27 @@ extern "C" {
 #define EVENT_PERIODIC              (0x06)
 #define EVENT_TEST                  (0X07)
 
-
+/*******************************************************************************
+* Structure  : T_EVENT
+* Description: Structure of event information including task ID and event.
+* Memebers   : uint8 u8Task    1~255     The task ID for such event
+*              uint8 u8Evt     1~255     The event
+*******************************************************************************/
 typedef struct _T_EVENT
 {
     uint8 u8Task;
     uint8 u8Evt;
 }T_EVENT;
 
-
+/*******************************************************************************
+* Structure  : T_EVENT_QUEUE
+* Description: Structure of event queue.
+* Memebers   : struct _T_EVENT_QUEUE  *ptNext           Pointer for next event queue node
+*              T_EVENT atEvtQueue[MAX_QUEUE_EVT_NUM]    Event queue block
+*******************************************************************************/
 typedef struct _T_EVENT_QUEUE
 {
-    struct _T_EVENT_QUEUE  *ptNext;      /* Pointer for next timer node */
+    struct _T_EVENT_QUEUE  *ptNext;      /* Pointer for next event queue node */
     T_EVENT atEvtQueue[MAX_QUEUE_EVT_NUM];
 }T_EVENT_QUEUE;
 
