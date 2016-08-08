@@ -1,4 +1,7 @@
 # Log
+## 8th Aug 2016
+Fix the bug for flexible length event queue.
+
 ## 5th Aug 2016
 Add task name printing function.
 
