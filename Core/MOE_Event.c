@@ -87,10 +87,12 @@ uint8 Moe_Event_Init(void)
 
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint16 Event)
-* Function   : To be done
-* Input      : uint8  u8TaskID
-*              uint16 u16Evt
+* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+* Function   : This function is used to set event for tasks.
+* Input      : uint8 u8TaskID   1~255               The task ID to receive such event
+*              uint8 u8Evt      1~255               The event type
+*              uint8 u8Urg      MOE_EVENT_URGENT    It is an urgent event
+*                               MOE_EVENT_NORMAL    It is a normal event
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -99,7 +101,7 @@ uint8 Moe_Event_Init(void)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg) 
+uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg) 
 {  
     uint8  u8Idx;
     uint32 u32IntSt;
@@ -111,7 +113,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg)
         /**************************************************************************************************/
         for(u8Idx = 1; u8Idx <= MAX_TASK_NUM; u8Idx++)
         {
-            Moe_Event_Setting(u8Idx, u16Evt,u8Urg);
+            Moe_Event_Setting(u8Idx, u8Evt,u8Urg);
         }
         /**************************************************************************************************/
         EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -126,22 +128,39 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt, uint8 u8Urg)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    Moe_Event_Setting(u8TaskID, u16Evt,u8Urg);
+    Moe_Event_Setting(u8TaskID, u8Evt,u8Urg);
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
     return SW_OK;
 }
 
-
+/******************************************************************************
+* Name       : static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+* Function   : This function is used to set event for each tasks.
+* Input      : uint8 u8TaskID   1~255               The task ID to receive such event
+*              uint8 u8Evt      1~255               The event type
+*              uint8 u8Urg      MOE_EVENT_URGENT    It is an urgent event
+*                               MOE_EVENT_NORMAL    It is a normal event
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 {
+    uint8  u8Idx;
     uint16 u16EvtLast;
 
 /* If use  length fixed queue */    
 #ifdef __FLEXIBLE_EVENT_QUEUE
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
+    T_EVENT_QUEUE *ptPre      = sg_ptEvtHead;
+    T_EVENT_QUEUE *ptTemp;
 
     /* If the current event counter is equal to the max limit */
     if(sg_u16EvtCntMax == sg_u16EvtCnt)
@@ -162,33 +181,68 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
         }
         sg_u16EvtFisrt = u16EvtLast;           
     }
-    else
-    {
+    else/* If it is a normal event */
+    {   /* Calculate the last empty position */
         u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % sg_u16EvtCntMax;
     }
 
-    u16Blk     = u16EvtLast % MAX_QUEUE_EVT_NUM;
-    u16OffSet  = u16EvtLast / MAX_QUEUE_EVT_NUM;
+    u16Blk    = u16EvtLast % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block */
+    u16OffSet = u16EvtLast / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block   */
+
+    /* Find the block to be used */
     while(u16Blk)
     {
         ptEvtQueue = ptEvtQueue->ptNext;
         u16Blk--;
     }
-    ptEvtQueue->atEvtQueue[u16OffSet].u8Task = u8TaskID;
-    ptEvtQueue->atEvtQueue[u16OffSet].u8Evt  = u8Evt;
+    
+    ptEvtQueue->atEvtQueue[u16OffSet].u8Task = u8TaskID; /* Fill the task ID   */
+    ptEvtQueue->atEvtQueue[u16OffSet].u8Evt  = u8Evt;    /* Fill the evnet     */
+    sg_u16EvtCnt++;                                      /* Update event count */
 
-    sg_u16EvtCnt++;
-
+    /* Create more event queue block when current entire blocks are full */
     if(sg_u16EvtCnt == sg_u16EvtCntMax)
     {
-        sg_ptEvtTail->ptNext = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
-        if(NULL == sg_ptEvtTail->ptNext)
+        ptTemp = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
+        if(NULL == ptTemp)
         {
             return SW_ERR;
         }
-        sg_ptEvtTail = sg_ptEvtTail->ptNext;
-        sg_ptEvtTail->ptNext = NULL;
-        Moe_Memset(sg_ptEvtTail->au8EvtQueue, 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
+
+        u16Blk    = sg_u16EvtFisrt % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block */
+        u16OffSet = sg_u16EvtFisrt / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block   */
+
+        /* Find the block which has the fisrt available event */
+        while(u16Blk)
+        {
+            ptEvtQueue = ptEvtQueue->ptNext;
+            u16Blk--;
+        }
+
+        for(u8Idx = 0; u8Idx < u16OffSet; u8Idx++)
+        {
+            ptTemp->atEvtQueue[u8Idx].u8Evt  = ptEvtQueue->atEvtQueue[u8Idx].u8Evt;
+            ptTemp->atEvtQueue[u8Idx].u8Task = ptEvtQueue->atEvtQueue[u8Idx].u8Task;
+        }
+
+        if(0 == u16Blk)
+        {
+            ptTemp->ptNext = ptEvtQueue;
+            sg_ptEvtHead   = ptTemp;
+        }
+        else
+        {
+            u16Blk--;
+            while(u16Blk)
+            {
+                ptPre = ptPre->ptNext;
+                u16Blk--;
+            }
+            ptPre->ptNext  = ptTemp;
+            ptTemp->ptNext = ptEvtQueue;
+        }
+
+        sg_u16EvtFisrt  += MAX_QUEUE_EVT_NUM;
         sg_u16EvtCntMax += MAX_QUEUE_EVT_NUM;
     }
 
@@ -204,15 +258,15 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
     {
-        if(0 == sg_u16EvtFisrt)
+        if(0 == sg_u16EvtFisrt)       /* If the first available data is in 0 position */
         {
-            u16EvtLast = MAX_QUEUE_EVT_NUM - 1;
+            u16EvtLast = MAX_QUEUE_EVT_NUM - 1;  /* Calculate the last empty position */
         }
         else
         {
-            u16EvtLast = sg_u16EvtFisrt - 1;
+            u16EvtLast = sg_u16EvtFisrt - 1;     /* Calculate the last empty position */
         }
-        sg_u16EvtFisrt = u16EvtLast;
+        sg_u16EvtFisrt = u16EvtLast;  /* Update the first event position */
     }
     else/* If it is a normal event */
     {   /* Calculate the position for new event */
