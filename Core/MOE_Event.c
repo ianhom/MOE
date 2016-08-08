@@ -19,15 +19,17 @@
 /* Declaration of static function */
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg);
 
-
-static uint16 sg_u16EvtFisrt = 0;  /* The fisrt available data position */
+static uint16 sg_u16EvtFirst = 0;  /* The fisrt available data position */
 static uint16 sg_u16EvtCnt   = 0;  /* The count of availabe data        */
 #ifndef __FLEXIBLE_EVENT_QUEUE     /* If use regular length fixed queue */
 static T_EVENT sg_atEvtQueue[MAX_QUEUE_EVT_NUM] = {0};
 #else                              /* Else if use flexible length queue */
+static uint32 Moe_Event_Queue_Block_Add(void);
+static void Moe_Event_Queue_Block_Del(void);
+
 static T_EVENT_QUEUE *sg_ptEvtHead = NULL;          /* Head node of event queue link list */
 static T_EVENT_QUEUE *sg_ptEvtTail = NULL;          /* Tail node of event queue link list */
-static uint16 sg_u16BlkCnt    = 1;                  /* Count of queue node block          */
+static uint16 sg_u16BlkCnt    = 0;                  /* Count of queue node block          */
 static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;  /* Max count of exsit events          */
 #endif
 
@@ -159,8 +161,6 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 #ifdef __FLEXIBLE_EVENT_QUEUE
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
-    T_EVENT_QUEUE *ptPre      = sg_ptEvtHead;
-    T_EVENT_QUEUE *ptTemp;
 
     /* If the current event counter is equal to the max limit */
     if(sg_u16EvtCntMax == sg_u16EvtCnt)
@@ -171,19 +171,19 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
     {
-        if(0 == sg_u16EvtFisrt)  /* If the first available data is in 0 position */
+        if(0 == sg_u16EvtFirst)  /* If the first available data is in 0 position */
         {
             u16EvtLast = sg_u16EvtCntMax - 1;  /* Calculate the last empty position */
         }
         else  /* In other situations */
         {
-            u16EvtLast = sg_u16EvtFisrt - 1;   /* Calculate the last empty position */
+            u16EvtLast = sg_u16EvtFirst - 1;   /* Calculate the last empty position */
         }
-        sg_u16EvtFisrt = u16EvtLast;           
+        sg_u16EvtFirst = u16EvtLast;           
     }
     else/* If it is a normal event */
     {   /* Calculate the last empty position */
-        u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % sg_u16EvtCntMax;
+        u16EvtLast = (sg_u16EvtFirst + sg_u16EvtCnt) % sg_u16EvtCntMax;
     }
 
     u16Blk    = u16EvtLast % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block */
@@ -202,48 +202,11 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 
     /* Create more event queue block when current entire blocks are full */
     if(sg_u16EvtCnt == sg_u16EvtCntMax)
-    {
-        ptTemp = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
-        if(NULL == ptTemp)
+    {   /* Try to add new event queue block */
+        if(SW_ERR == Moe_Event_Queue_Block_Add())
         {
             return SW_ERR;
         }
-
-        u16Blk    = sg_u16EvtFisrt % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block */
-        u16OffSet = sg_u16EvtFisrt / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block   */
-
-        /* Find the block which has the fisrt available event */
-        while(u16Blk)
-        {
-            ptEvtQueue = ptEvtQueue->ptNext;
-            u16Blk--;
-        }
-
-        for(u8Idx = 0; u8Idx < u16OffSet; u8Idx++)
-        {
-            ptTemp->atEvtQueue[u8Idx].u8Evt  = ptEvtQueue->atEvtQueue[u8Idx].u8Evt;
-            ptTemp->atEvtQueue[u8Idx].u8Task = ptEvtQueue->atEvtQueue[u8Idx].u8Task;
-        }
-
-        if(0 == u16Blk)
-        {
-            ptTemp->ptNext = ptEvtQueue;
-            sg_ptEvtHead   = ptTemp;
-        }
-        else
-        {
-            u16Blk--;
-            while(u16Blk)
-            {
-                ptPre = ptPre->ptNext;
-                u16Blk--;
-            }
-            ptPre->ptNext  = ptTemp;
-            ptTemp->ptNext = ptEvtQueue;
-        }
-
-        sg_u16EvtFisrt  += MAX_QUEUE_EVT_NUM;
-        sg_u16EvtCntMax += MAX_QUEUE_EVT_NUM;
     }
 
     
@@ -258,19 +221,19 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
     {
-        if(0 == sg_u16EvtFisrt)       /* If the first available data is in 0 position */
+        if(0 == sg_u16EvtFirst)       /* If the first available data is in 0 position */
         {
             u16EvtLast = MAX_QUEUE_EVT_NUM - 1;  /* Calculate the last empty position */
         }
         else
         {
-            u16EvtLast = sg_u16EvtFisrt - 1;     /* Calculate the last empty position */
+            u16EvtLast = sg_u16EvtFirst - 1;     /* Calculate the last empty position */
         }
-        sg_u16EvtFisrt = u16EvtLast;  /* Update the first event position */
+        sg_u16EvtFirst = u16EvtLast;  /* Update the first event position */
     }
     else/* If it is a normal event */
     {   /* Calculate the position for new event */
-        u16EvtLast = (sg_u16EvtFisrt + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;    
+        u16EvtLast = (sg_u16EvtFirst + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;    
     }
     sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;  /* Fill the task ID   */
     sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;     /* Fill the evnet     */
@@ -299,7 +262,7 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     uint32 u32IntSt;
 #ifdef __FLEXIBLE_EVENT_QUEUE
     uint16 u16Blk,u16OffSet;
-    T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead,ptTemp;
+    T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 #endif    
     /* Check if the task ID is invalid or NOT */
     if(NULL == ptEvt)
@@ -313,8 +276,8 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     }
 
 #ifdef __FLEXIBLE_EVENT_QUEUE    
-    u16Blk    = sg_u16EvtFisrt % MAX_QUEUE_EVT_NUM;
-    u16OffSet = sg_u16EvtFisrt / MAX_QUEUE_EVT_NUM;
+    u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;
+    u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;
     
     while(u16Blk)
     {
@@ -326,35 +289,25 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     ptEvt->u8Evt   = ptEvtQueue->atEvtQueue[u16OffSet].u8Evt;
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_u16EvtFisrt   = (sg_u16EvtFisrt + 1) % sg_u16EvtCntMax;
+    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % sg_u16EvtCntMax;
     sg_u16EvtCnt--;
 
     if((sg_u16BlkCnt > 1)\
-    && (sg_u16EvtFisrt < MOE_EVENT_BLK_RM_THRD) \
-    && ((sg_u16EvtFisrt + sg_u16EvtCnt) <MOE_EVENT_BLK_RM_THRD))
+    && (sg_u16EvtFirst < MOE_EVENT_BLK_RM_THRD) \
+    && ((sg_u16EvtFirst + sg_u16EvtCnt) < MOE_EVENT_BLK_RM_THRD))
     {
-        sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;
-        
-        u16Blk = sg_u16BlkCnt - 2;
-        ptEvtQueue = sg_ptEvtHead;
-        while(u16Blk)
-        {
-            ptEvtQueue = ptEvtQueue->ptNext;
-            u16Blk--;
-        }
-        ptTemp = ptEvtQueue->ptNext;
-        ptEvtQueue->ptNext = NULL;
-        MOE_FREE(ptTemp);
+
+        Moe_Event_Queue_Block_Del();
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
 #else
-    ptEvt->u8Task  = sg_atEvtQueue[sg_u16EvtFisrt].u8Task;
-    ptEvt->u8Evt   = sg_atEvtQueue[sg_u16EvtFisrt].u8Evt;
+    ptEvt->u8Task  = sg_atEvtQueue[sg_u16EvtFirst].u8Task;
+    ptEvt->u8Evt   = sg_atEvtQueue[sg_u16EvtFirst].u8Evt;
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_u16EvtFisrt   = (sg_u16EvtFisrt + 1) % MAX_QUEUE_EVT_NUM;
+    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % MAX_QUEUE_EVT_NUM;
     sg_u16EvtCnt--;
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -363,7 +316,109 @@ uint16 Moe_Event_Get(T_EVENT *ptEvt)
     return (uint16)ptEvt->u8Task;
 }
 
+/******************************************************************************
+* Name       : static uint32 Moe_Event_Queue_Block_Add(void)
+* Function   : Add a new event queue block.
+* Input      : None
+* Output:    : None
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 8th Aug 2016
+******************************************************************************/
+static uint32 Moe_Event_Queue_Block_Add(void)
+{
+    uint8  u8Idx;
+    uint16 u16Blk,u16OffSet;
+    T_EVENT_QUEUE *ptFirst = sg_ptEvtHead;
+    T_EVENT_QUEUE *ptPre   = sg_ptEvtHead;
+    T_EVENT_QUEUE *ptAdd;
 
+    /* Create a new event queue block */
+    ptAdd = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
+    if(NULL == ptAdd)
+    {   /* Return if failed */
+        return SW_ERR;
+    }
+
+    u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block for the first available event */
+    u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block for the first available event   */
+
+    /* Find the block which has the fisrt available event */
+    while(u16Blk)
+    {
+        ptFirst = ptFirst->ptNext;
+        u16Blk--;
+    }
+
+    /* Copy the last events into the new event queue block */
+    for(u8Idx = 0; u8Idx < u16OffSet; u8Idx++)
+    {
+        ptAdd->atEvtQueue[u8Idx].u8Evt  = ptFirst->atEvtQueue[u8Idx].u8Evt;
+        ptAdd->atEvtQueue[u8Idx].u8Task = ptFirst->atEvtQueue[u8Idx].u8Task;
+    }
+
+    /* If the first available event is located in the first event queue block */
+    if(0 == u16Blk)
+    {   /* Set the new block as the fisrt block */
+        ptAdd->ptNext = ptFirst;  
+        sg_ptEvtHead  = ptAdd;    
+    }
+    else
+    {   /* Calculate the previous event queue block of first available event */
+        u16Blk--;
+        while(u16Blk)
+        {
+            ptPre = ptPre->ptNext;
+            u16Blk--;
+        }
+        /* Insert into the link list */
+        ptPre->ptNext = ptAdd;
+        ptAdd->ptNext = ptFirst;
+    }
+
+    sg_u16BlkCnt++;
+    sg_u16EvtFirst  += MAX_QUEUE_EVT_NUM;  /* Update the first available event position */
+    sg_u16EvtCntMax += MAX_QUEUE_EVT_NUM;  /* Update the max number of events           */
+
+    return SW_OK;
+}
+
+/******************************************************************************
+* Name       : static void Moe_Event_Queue_Block_Del(void)
+* Function   : Delete the last unused event queue block.
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 8th Aug 2016
+******************************************************************************/
+static void Moe_Event_Queue_Block_Del(void)
+{
+    uint16 u16Blk,u16OffSet;
+    T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
+    T_EVENT_QUEUE *ptTemp;
+
+    sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;
+    sg_u16BlkCnt--;
+    
+    u16Blk = sg_u16BlkCnt - 1;
+    while(u16Blk)
+    {
+        ptEvtQueue = ptEvtQueue->ptNext;
+        u16Blk--;
+    }
+    ptTemp = ptEvtQueue->ptNext;
+    ptEvtQueue->ptNext = NULL;
+    sg_ptEvtTail = ptEvtQueue;
+    MOE_FREE(ptTemp);       
+
+    return;
+}
 
 
 
