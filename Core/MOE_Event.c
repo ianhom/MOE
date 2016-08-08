@@ -28,7 +28,6 @@ static uint32 Moe_Event_Queue_Block_Add(void);
 static void Moe_Event_Queue_Block_Del(void);
 
 static T_EVENT_QUEUE *sg_ptEvtHead = NULL;          /* Head node of event queue link list */
-static T_EVENT_QUEUE *sg_ptEvtTail = NULL;          /* Tail node of event queue link list */
 static uint16 sg_u16BlkCnt    = 0;                  /* Count of queue node block          */
 static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;  /* Max count of exsit events          */
 #endif
@@ -74,7 +73,6 @@ uint8 Moe_Event_Init(void)
     }
     else /* If new node is created successfully */
     {
-        sg_ptEvtTail = sg_ptEvtHead;      
         sg_ptEvtHead->ptNext = NULL;    /* Update link list head and tail information */
         Moe_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
         sg_u16BlkCnt++;                 /* Create the first event queue block */
@@ -245,11 +243,10 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint16 Event)
-* Function   : To be done
-* Input      : uint8  u8TaskID
-*              uint16 u16Evt
-* Output:    : None
+* Name       : uint8 Moe_Event_Get(T_EVENT *ptEvt)
+* Function   : To get a event from quque
+* Input      : None
+* Output:    : T_EVENT *ptEvt            Pointer to get event
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
 * description: To be done
@@ -257,63 +254,71 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint16 Moe_Event_Get(T_EVENT *ptEvt)
+uint8 Moe_Event_Get(T_EVENT *ptEvt)
 {  
     uint32 u32IntSt;
 #ifdef __FLEXIBLE_EVENT_QUEUE
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 #endif    
-    /* Check if the task ID is invalid or NOT */
+    /* Check if the pointer is invalid or NOT */
     if(NULL == ptEvt)
-    {   /* If task ID is wrong, return error */
-        return 0;
+    {   
+        return SW_ERR;
     }
 
+    /* If there is no event */
     if(0 == sg_u16EvtCnt) 
-    {
-        return 0;
+    {   
+        return SW_ERR;
     }
 
 #ifdef __FLEXIBLE_EVENT_QUEUE    
-    u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;
-    u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;
-    
+    u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block for the first available event */
+    u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block for the first available event   */
+
+    /* Find the block which has the fisrt available event */
     while(u16Blk)
     {
         ptEvtQueue = ptEvtQueue->ptNext;
         u16Blk--;
     }
 
-    ptEvt->u8Task  = ptEvtQueue->atEvtQueue[u16OffSet].u8Task;
-    ptEvt->u8Evt   = ptEvtQueue->atEvtQueue[u16OffSet].u8Evt;
+    /* Get the Task and event */
+    ptEvt->u8Task = ptEvtQueue->atEvtQueue[u16OffSet].u8Task;
+    ptEvt->u8Evt  = ptEvtQueue->atEvtQueue[u16OffSet].u8Evt;
+    
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % sg_u16EvtCntMax;
-    sg_u16EvtCnt--;
+    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % sg_u16EvtCntMax;  /* Update the position of first available event */
+    sg_u16EvtCnt--;                                           /* Update the event count */
 
+    /* If there are more then 1 event queue block */
+    /* And all events are located in safe zone (Total max limit - 1.5*block size) */
     if((sg_u16BlkCnt > 1)\
     && (sg_u16EvtFirst < MOE_EVENT_BLK_RM_THRD) \
     && ((sg_u16EvtFirst + sg_u16EvtCnt) < MOE_EVENT_BLK_RM_THRD))
-    {
+    {   
 
-        Moe_Event_Queue_Block_Del();
+        Moe_Event_Queue_Block_Del();  /* Delete the last unused event queue block */
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
 #else
-    ptEvt->u8Task  = sg_atEvtQueue[sg_u16EvtFirst].u8Task;
-    ptEvt->u8Evt   = sg_atEvtQueue[sg_u16EvtFirst].u8Evt;
+    /* Get the task and event */
+    ptEvt->u8Task = sg_atEvtQueue[sg_u16EvtFirst].u8Task;
+    ptEvt->u8Evt  = sg_atEvtQueue[sg_u16EvtFirst].u8Evt;
+    
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % MAX_QUEUE_EVT_NUM;
-    sg_u16EvtCnt--;
+    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % MAX_QUEUE_EVT_NUM; /* Update the position of first available event */
+    sg_u16EvtCnt--;                                           /* Update the event count */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
 #endif
-    return (uint16)ptEvt->u8Task;
+    return SW_OK;
 }
 
 /******************************************************************************
@@ -401,22 +406,21 @@ static void Moe_Event_Queue_Block_Del(void)
 {
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
-    T_EVENT_QUEUE *ptTemp;
 
-    sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;
-    sg_u16BlkCnt--;
-    
-    u16Blk = sg_u16BlkCnt - 1;
+    sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;  /* Update the max limit of event count */
+    sg_u16BlkCnt--;                        /* Update the event queue block count  */
+
+    /* Find the previous event queue block of the last one */
+    u16Blk = sg_u16BlkCnt - 1;              
     while(u16Blk)
     {
         ptEvtQueue = ptEvtQueue->ptNext;
         u16Blk--;
     }
-    ptTemp = ptEvtQueue->ptNext;
-    ptEvtQueue->ptNext = NULL;
-    sg_ptEvtTail = ptEvtQueue;
-    MOE_FREE(ptTemp);       
-
+    
+    MOE_FREE(ptEvtQueue->ptNext);  /* Free the last block  */
+    ptEvtQueue->ptNext = NULL;     /* Update the link list */
+          
     return;
 }
 
