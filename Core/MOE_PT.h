@@ -70,6 +70,9 @@ extern "C" {
 #define PT_DELAY(t)             Moe_Timer_Delay(t);\
                                 PT_WAIT_EVENT(EVENT_DELAY)
 
+#define PT_BREAK()              Moe_Event_Set(sg_u8TaskID, EVENT_BREAK, MOE_EVENT_NORMAL);\
+                                PT_YIELD()
+
 #define PT_WAIT_MSG()           PT_WAIT_EVENT(EVENT_MSG)
 
 #define PTV                     static
