@@ -41,7 +41,8 @@ extern "C" {
 #define EVENT_INT                   (0x04)                    /* There is an interrupt event              */
 #define EVENT_DELAY                 (0x05)
 #define EVENT_PERIODIC              (0x06)
-#define EVENT_TEST                  (0X07)
+#define EVENT_TEST                  (0x07)
+#define EVENT_BREAK                 (0x08)
 
 /*******************************************************************************
 * Structure  : T_EVENT
@@ -112,9 +113,6 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg) ;
 * Date       : 3rd May 2016
 ******************************************************************************/
 uint8 Moe_Event_Get(T_EVENT *ptEvt);
-
-
-
 
  
 #ifdef __cplusplus
