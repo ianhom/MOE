@@ -29,20 +29,21 @@ extern "C" {
 
 
 /* MACRO */
+/* Threshold for ready to delete unsued event queue block */
 #define MOE_EVENT_BLK_RM_THRD    ((((sg_u16BlkCnt << 1) - 3) * MAX_QUEUE_EVT_NUM) >> 1)
 
-#define MOE_EVENT_URGENT            (1)
-#define MOE_EVENT_NORMAL            (0)
+#define MOE_EVENT_URGENT            (1)                       /* It is an urgent event */
+#define MOE_EVENT_NORMAL            (0)                       /* It is a normal event  */
 
 #define EVENT_NONE                  (0x00)                    /* There is no events                       */
 #define EVENT_INIT                  (0x01)                    /* There is a test event                    */
 #define EVENT_TIMER                 (0x02)                    /* There is a timer event                   */
 #define EVENT_MSG                   (0x03)                    /* There is a message event                 */
 #define EVENT_INT                   (0x04)                    /* There is an interrupt event              */
-#define EVENT_DELAY                 (0x05)
-#define EVENT_PERIODIC              (0x06)
-#define EVENT_TEST                  (0x07)
-#define EVENT_BREAK                 (0x08)
+#define EVENT_DELAY                 (0x05)                    /* There is a deley event                   */
+#define EVENT_PERIODIC              (0x06)                    /* There is a periodic call event           */
+#define EVENT_TEST                  (0x07)                    /* There is a test event                    */
+#define EVENT_BREAK                 (0x08)                    /* There is an event after a break          */
 
 /*******************************************************************************
 * Structure  : T_EVENT
