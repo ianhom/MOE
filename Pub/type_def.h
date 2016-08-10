@@ -22,9 +22,9 @@ typedef unsigned char         uint8;       /* Type definition for 8-bit unsigned
 typedef unsigned short int    uint16;      /* Type definition for 16-bit unsigned short int */
 typedef unsigned int          uint32;      /* Type definition for 32-bit unsigned int       */
 
-typedef unsigned char         int8;        /* Type definition for 8-bit signed char         */
-typedef unsigned short int    int16;       /* Type definition for 16-bit signed short int   */
-typedef unsigned int          int32;       /* Type definition for 32-bit signed int         */
+typedef signed char           int8;        /* Type definition for 8-bit signed char         */
+typedef signed short int      int16;       /* Type definition for 16-bit signed short int   */
+typedef signed int            int32;       /* Type definition for 32-bit signed int         */
 
 #define NULL                  (0)           /* Value for NULL pointer                        */
 
