@@ -240,7 +240,9 @@ uint8 Moe_Event_Init(void)
     }
     else /* If new node is created successfully */
     {
-        sg_ptEvtHead->ptNext = NULL;    /* Update link list head and tail information */
+        /* Update link list head information */
+        sg_ptEvtHead->ptNext = NULL;    
+        sg_ptEvtHead->ptPre  = NULL;
         Moe_Memset((uint8*)(sg_ptEvtHead->atEvtQueue), 0, (MAX_QUEUE_EVT_NUM * sizeof(T_EVENT)));
         sg_u16BlkCnt++;                 /* Create the first event queue block */
         u8Return = SW_OK;
@@ -453,9 +455,7 @@ static uint32 Moe_Event_Queue_Block_Add(void)
 {
     uint8  u8Idx;
     uint16 u16Blk,u16OffSet;
-    T_EVENT_QUEUE *ptFirst = sg_ptEvtHead;
-    T_EVENT_QUEUE *ptPre   = sg_ptEvtHead;
-    T_EVENT_QUEUE *ptAdd;
+    T_EVENT_QUEUE *ptFirst = sg_ptEvtHead, *ptPre, * ptAdd;
 
     /* Create a new event queue block */
     ptAdd = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
@@ -482,22 +482,20 @@ static uint32 Moe_Event_Queue_Block_Add(void)
     }
 
     /* If the first available event is located in the first event queue block */
-    if(0 == u16Blk)
+    if(NULL == ptFirst->ptPre)
     {   /* Set the new block as the fisrt block */
-        ptAdd->ptNext = ptFirst;  
-        sg_ptEvtHead  = ptAdd;    
+        ptFirst->ptPre = ptAdd;
+        ptAdd->ptPre   = NULL;
+        ptAdd->ptNex   = ptFirst;
+        sg_ptEvtHead   = ptAdd;    
     }
     else
     {   /* Calculate the previous event queue block of first available event */
-        u16Blk--;
-        while(u16Blk)
-        {
-            ptPre = ptPre->ptNext;
-            u16Blk--;
-        }
-        /* Insert into the link list */
-        ptPre->ptNext = ptAdd;
-        ptAdd->ptNext = ptFirst;
+        ptPre          = ptFirst->ptPre;
+        ptAdd->ptPre   = ptPre;
+        ptAdd->ptNext  = ptFirst;
+        ptPre->ptNext  = ptAdd;
+        ptFirst->ptPre = ptAdd;
     }
 
     sg_u16BlkCnt++;
@@ -523,11 +521,8 @@ static void Moe_Event_Queue_Block_Del(void)
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
-    sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;  /* Update the max limit of event count */
-    sg_u16BlkCnt--;                        /* Update the event queue block count  */
-
     /* Find the previous event queue block of the last one */
-    u16Blk = sg_u16BlkCnt - 1;              
+    u16Blk = sg_u16BlkCnt - 2;              
     while(u16Blk)
     {
         ptEvtQueue = ptEvtQueue->ptNext;
@@ -536,6 +531,9 @@ static void Moe_Event_Queue_Block_Del(void)
     
     MOE_FREE(ptEvtQueue->ptNext);  /* Free the last block  */
     ptEvtQueue->ptNext = NULL;     /* Update the link list */
+    
+    sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;  /* Update the max limit of event count */
+    sg_u16BlkCnt--;                        /* Update the event queue block count  */
           
     return;
 }
@@ -543,7 +541,6 @@ static void Moe_Event_Queue_Block_Del(void)
 #endif /* #ifndef __FLEXIBLE_EVENT_QUEUE  */
 
 
-
-
-
 /* end of file */
+
+
