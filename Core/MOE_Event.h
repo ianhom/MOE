@@ -61,11 +61,13 @@ typedef struct _T_EVENT
 * Structure  : T_EVENT_QUEUE
 * Description: Structure of event queue.
 * Memebers   : struct _T_EVENT_QUEUE  *ptNext           Pointer for next event queue node
+*              struct _T_EVENT_QUEUE  *ptPre;           Pointer for previous event queue node
 *              T_EVENT atEvtQueue[MAX_QUEUE_EVT_NUM]    Event queue block
 *******************************************************************************/
 typedef struct _T_EVENT_QUEUE
 {
-    struct _T_EVENT_QUEUE  *ptNext;      /* Pointer for next event queue node */
+    struct _T_EVENT_QUEUE  *ptNext;      /* Pointer for next event queue node     */
+    struct _T_EVENT_QUEUE  *ptPre;       /* Pointer for previous event queue node */
     T_EVENT atEvtQueue[MAX_QUEUE_EVT_NUM];
 }T_EVENT_QUEUE;
 
