@@ -29,9 +29,6 @@ extern "C" {
 
 
 /* MACRO */
-/* Threshold for ready to delete unsued event queue block */
-#define MOE_EVENT_BLK_RM_THRD    ((((sg_u16BlkCnt << 1) - 3) * MAX_QUEUE_EVT_NUM) >> 1)
-
 #define MOE_EVENT_URGENT            (1)                       /* It is an urgent event */
 #define MOE_EVENT_NORMAL            (0)                       /* It is a normal event  */
 
