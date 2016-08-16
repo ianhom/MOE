@@ -1,4 +1,7 @@
 # Log
+## 16th Aug 2016
+Modify the event queue block deleting method, delete the added block.
+
 ## 10th Aug 2016
 100-days!!
 
