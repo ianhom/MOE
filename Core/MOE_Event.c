@@ -425,10 +425,11 @@ uint8 Moe_Event_Get(T_EVENT *ptEvt)
     sg_u16EvtCnt--;                                           /* Update the event count */
 
     /* If there are more then 1 event queue block */
-    /* And all events are located in safe zone (Total max limit - 1.5*block size) */
+    /* And all events are located in safe zone (The last block) */
     if((sg_u16BlkCnt > 1)\
-    && (sg_u16EvtFirst < MOE_EVENT_BLK_RM_THRD) \
-    && ((sg_u16EvtFirst + sg_u16EvtCnt) < MOE_EVENT_BLK_RM_THRD))
+    && (sg_u16EvtFirst > (sg_u16EvtCntMax - MAX_QUEUE_EVT_NUM))\
+    && (sg_u16EvtFirst < (sg_u16EvtCntMax - (MAX_QUEUE_EVT_NUM >> 1))\
+    && (sg_u16EvtCnt < (MAX_QUEUE_EVT_NUM >> 1)))
     {   
 
         Moe_Event_Queue_Block_Del();  /* Delete the last unused event queue block */
@@ -521,17 +522,11 @@ static void Moe_Event_Queue_Block_Del(void)
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
-    /* Find the previous event queue block of the last one */
-    u16Blk = sg_u16BlkCnt - 2;              
-    while(u16Blk)
-    {
-        ptEvtQueue = ptEvtQueue->ptNext;
-        u16Blk--;
-    }
-    
-    MOE_FREE(ptEvtQueue->ptNext);  /* Free the last block  */
-    ptEvtQueue->ptNext = NULL;     /* Update the link list */
-    
+    /* Delete the first block */
+    ptEvtQueue->ptNext->ptPre = NULL;      
+    sg_ptEvtHead = ptEvtQueue->ptNext;
+    MOE_FREE(ptEvtQueue);
+        
     sg_u16EvtCntMax -= MAX_QUEUE_EVT_NUM;  /* Update the max limit of event count */
     sg_u16BlkCnt--;                        /* Update the event queue block count  */
           
