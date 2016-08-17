@@ -18,9 +18,9 @@
 #include "debug.h"
 
 
-static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
+static T_MSG_HEAD* Moe_Msg_Create(uint8 *pu8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
 static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg);
-static uint16 Moe_Msg_Max_Cnt();
+static uint16 Moe_Msg_Max_Cnt(void);
 
 
 static T_MSG_HEAD  *sg_ptMsgListHead  = NULL;                     /* Head node of messages      */ 
@@ -30,7 +30,7 @@ static uint16       sg_u16MsgPollFlag = MOE_MSG_POLL_NONE;        /* Message pol
 static uint8        sg_au8RcvDone[MAX_TASK_NUM] = {0};
 
 /******************************************************************************
-* Name       : void Moe_Msg_Init()
+* Name       : void Moe_Msg_Init(void)
 * Function   : Init message function
 * Input      : None
 * Output:    : None
@@ -40,20 +40,20 @@ static uint8        sg_au8RcvDone[MAX_TASK_NUM] = {0};
 * Author     : Ian
 * Date       : 27 Jun 2016
 ******************************************************************************/
-void Moe_Msg_Init()
+void Moe_Msg_Init(void)
 {
     Moe_Memset(sg_au8RcvDone, 0, sizeof(sg_au8RcvDone));
     return;
 }
 
 /******************************************************************************
-* Name       : T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
+* Name       : T_MSG_HEAD* Moe_Msg_Create(uint8 *pu8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Create a message
-* Input      : uint8  u8DestTask    1~254     The destination task number
+* Input      : uint8  pu8DestTask   1~254     The destination task number
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
-* Output:    : None
+* Output:    : uint8  pu8DestTask   1~254     The destination task number
 * Return     : Pointer of the message data struct.
 *              NULL:  Failed.
 * description: To be done.
@@ -61,7 +61,7 @@ void Moe_Msg_Init()
 * Author     : Ian
 * Date       : 26th May 2016
 ******************************************************************************/
-static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
+static T_MSG_HEAD* Moe_Msg_Create(uint8 *pu8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 {
     uint32 u32IntSt;
     T_MSG_HEAD *ptMsgHead;
@@ -80,22 +80,24 @@ static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16S
         ptMsgHead->u16Size    = u16Size;
         ptMsgHead->u8MsgType  = u8MsgType;
         ptMsgHead->u8SrcTask  = TASK_CURRENT_TASK;
-        if(TASK_ALL_TASK == u8DestTask)
+        if(TASK_ALL_TASK == *pu8DestTask)
         {
             ptMsgHead->u8CopyCnt  = MAX_TASK_NUM - 1;     /* Message for all tasks                           */
 #ifdef __WANTED_A_LIVE_FOX
             ptMsgHead->u8DestTask = TASK_CURRENT_TASK % TASK_LAST_TASK + 1; /* Start with the next task      */
+            *pu8DestTask = ptMsgHead->u8DestTask;
             DBG_PRINT("Fox is ready to kill the next one!!\n");
 #else
             /* Check if it is the first task which sends a message to other tasks */
             /* If so, start with the second task                                  */
             /* Otherwise, start with the first task                               */
             ptMsgHead->u8DestTask = TASK_FIRST_TASK + (!(TASK_CURRENT_TASK - TASK_FIRST_TASK));
+            *pu8DestTask = ptMsgHead->u8DestTask;
 #endif        
         }
         else
         {
-            ptMsgHead->u8DestTask = u8DestTask;
+            ptMsgHead->u8DestTask = *pu8DestTask;
             ptMsgHead->u8CopyCnt  = 0;                    /* Message for single tasks                        */
         }
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED                     /* If the complier does NOT support flexible array */
@@ -143,32 +145,20 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
     T_MSG_HEAD *ptMsgNode;
        
     /* Check if the destination task is valid or NOT */
-    if((u8DestTask > MAX_TASK_NUM) && (u8DestTask != TASK_ALL_TASK)||(TASK_NO_TASK == u8DestTask))
-    {
-        DBG_PRINT("The destination task of the sending message is invalid!!\n");
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST(((u8DestTask >  TASK_NO_TASK)\
+                    && (u8DestTask <= MAX_TASK_NUM)\
+                    || (u8DestTask != TASK_ALL_TASK)),\
+                        "The destination task of the sending message should be valid!!");
 
     /* If the length of message is less then a message head */
-    if(0 == u16Size)
-    {   
-        DBG_PRINT("Can NOT create the message!! The length of message is invalid!!\n");
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((u16Size > 0),"The length of creating message is 0");
 
     /* Check if the message pointer is valid or NOT */
-    if(NULL == ptMsg)
-    {
-        DBG_PRINT("Can NOT create the message!! The message pointer is invalid!!\n");
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((ptMsg != NULL),"The message pointer should NOT be NULL");
 
-    ptMsgNode = Moe_Msg_Create(u8DestTask, u8MsgType, u16Size, ptMsg);
-    if(NULL == ptMsgNode)
-    {
-        DBG_PRINT("Message is NOT created!!\n");
-        return SW_ERR;
-    }
+    ptMsgNode = Moe_Msg_Create(&u8DestTask, u8MsgType, u16Size, ptMsg);
+    
+    MOE_ASSERT_RET_ST((NULL != ptMsgNode),"Message is NOT created!!");
 
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
@@ -212,18 +202,10 @@ uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
     /* Check if the task is valid or NOT                                     */
     /* The Destination task should NOT be TASK_NO_TASK, that is meaningless  */
     /* The Destination task should NOT be bigger than the max task number    */
-    if((TASK_NO_TASK == u8DestTask ) || (u8DestTask > MAX_TASK_NUM))
-    {
-        DBG_PRINT("Invalid task number when receiving a message!!\n");
-        return NULL;
-    }
+    MOE_ASSERT_RET_VAL(((u8DestTask - 1) < (MAX_TASK_NUM - 1)), NULL, "Message receiving task ID should be valid!!");
   
-    /* Check if the pointer is invalid or NOT */
-    if(NULL == pu8Type)
-    {
-        DBG_PRINT("Invalid pointer for message type!!\n");
-        return NULL;
-    }
+    /* Check if the pointer is invalid or NOT */    
+    MOE_ASSERT_RET_VAL((pu8Type != NULL), NULL, "Message type pointer should NOT be NULL");
 
     sg_au8RcvDone[u8DestTask - 1] = MOE_MSG_RCV_DONE;
 
@@ -364,11 +346,7 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 {
     /* Check if the pointer of message to be deteled is invalid or NOT */
-    if(NULL == ptMsg)
-    {
-        DBG_PRINT("The pointer of message to be deteled is invalid!!\n");
-        return NULL;
-    }
+    MOE_ASSERT_RET_VAL((ptMsg != NULL),"The pointer of message to be deteled is invalid!!");
     
     DBG_PRINT("Delete the message now.\n");
     MOE_FREE(ptMsg);
@@ -376,7 +354,7 @@ static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 }
 
 /******************************************************************************
-* Name       : uint8 Moe_Msg_Process()
+* Name       : uint8 Moe_Msg_Process(void)
 * Function   : Message process function, distribute "all task message" to each
 *              task, and delete useless message.
 * Input      : None
@@ -388,7 +366,7 @@ static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8 Moe_Msg_Process()
+uint8 Moe_Msg_Process(void)
 {
     T_MSG_HEAD *ptFind,*ptFound = NULL;
     T_MSG_HEAD *ptMsg;
@@ -495,7 +473,7 @@ void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
 
 
 /******************************************************************************
-* Name       : static uint16 Moe_Msg_Max_Cnt()
+* Name       : static uint16 Moe_Msg_Max_Cnt(void)
 * Function   : Get the max number of messages which can be created
 * Input      : None
 * Output:    : None
@@ -505,7 +483,7 @@ void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-static uint16 Moe_Msg_Max_Cnt()
+static uint16 Moe_Msg_Max_Cnt(void)
 {
     uint16      u16Cnt = 0;
     uint8       u8Type = 0;
@@ -539,7 +517,7 @@ static uint16 Moe_Msg_Max_Cnt()
 }
 
 /******************************************************************************
-* Name       : uint16 Moe_Msg_Total_Cnt()
+* Name       : uint16 Moe_Msg_Total_Cnt(void)
 * Function   : Get the max number of total messages in message link list.
 * Input      : None
 * Output:    : None
@@ -549,7 +527,7 @@ static uint16 Moe_Msg_Max_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Moe_Msg_Total_Cnt()
+uint16 Moe_Msg_Total_Cnt(void)
 {
     uint16      u16Cnt = 0;
     T_MSG_HEAD *ptMsg  = sg_ptMsgListHead;
@@ -566,7 +544,7 @@ uint16 Moe_Msg_Total_Cnt()
 
 
 /******************************************************************************
-* Name       : uint16 Moe_Msg_Read_Cnt()
+* Name       : uint16 Moe_Msg_Read_Cnt(void)
 * Function   : Get the max number of read messages
 * Input      : None
 * Output:    : None
@@ -576,7 +554,7 @@ uint16 Moe_Msg_Total_Cnt()
 * Author     : Ian
 * Date       : 8th Jun 2016
 ******************************************************************************/
-uint16 Moe_Msg_Read_Cnt()
+uint16 Moe_Msg_Read_Cnt(void)
 {
     DBG_PRINT("There are %d read messages!\n", sg_u16MsgPollFlag);
     return sg_u16MsgPollFlag;
@@ -584,7 +562,7 @@ uint16 Moe_Msg_Read_Cnt()
 
 
 /******************************************************************************
-* Name       : uint16 Moe_Msg_Unread_Cnt()
+* Name       : uint16 Moe_Msg_Unread_Cnt(void)
 * Function   : Get the max number of unread messages
 * Input      : None
 * Output:    : None
@@ -594,7 +572,7 @@ uint16 Moe_Msg_Read_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-uint16 Moe_Msg_Unread_Cnt()
+uint16 Moe_Msg_Unread_Cnt(void)
 {
     uint16      u16Cnt = 0;    
     
@@ -605,7 +583,7 @@ uint16 Moe_Msg_Unread_Cnt()
 }
 
 /******************************************************************************
-* Name       : void Moe_Msg_Test_General()
+* Name       : void Moe_Msg_Test_General(void)
 * Function   : General test for message
 * Input      : None
 * Output:    : None
@@ -615,7 +593,7 @@ uint16 Moe_Msg_Unread_Cnt()
 * Author     : Ian
 * Date       : 6th Jun 2016
 ******************************************************************************/
-void Moe_Msg_Test_General()
+void Moe_Msg_Test_General(void)
 {  
     uint8       u8Type = 0;
     T_TEST_MSG  tMsg;
