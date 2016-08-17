@@ -96,10 +96,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     }
 
     /* Check if the task ID is invalid or NOT */
-    if(u8TaskID > MAX_TASK_NUM)
-    {   /* If task ID is wrong, return error */
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST(!(u8TaskID > MAX_TASK_NUM),"Task ID should be valid");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -131,10 +128,7 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     uint16 u16EvtLast;
 
     /* If the current event count is equal to the max limit */
-    if(MAX_QUEUE_EVT_NUM == sg_u16EvtCnt)
-    {   
-        return SW_ERR;  /* Return error */
-    }
+    MOE_ASSERT_RET_ST((MAX_QUEUE_EVT_NUM != sg_u16EvtCnt), "Event queue is full");
 
     /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
