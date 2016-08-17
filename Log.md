@@ -1,4 +1,7 @@
 # Log
+## 17th Aug 2016
+Add assert MACRO
+
 ## 16th Aug 2016
 Modify the event queue block deleting method, delete the added block.
 
