@@ -50,7 +50,17 @@ extern "C" {
     #define DBG_PRINT(x,...)
 #endif
 
-#define MOE_ASSERT(Cond, ret, reason,...)    if(!Cond) {DBG_PRINT(reason,##__VA_ARGS__);return ret;}
+//#define MOE_ASSERT(Cond, ret, reason,...)    if(!Cond) {DBG_PRINT(reason,##__VA_ARGS__);return ret;}
+
+#ifdef __DEBUG_MODE
+#define MOE_ASSERT(Cond)                           if(!Cond) {printf("\n\n**ASSERT ERROR**: \nFILE: "__FILE__",  LINE: %d\n\n", __LINE__);while(1);}
+#else
+#define MOE_ASSERT(Cond) 
+#endif
+
+#define MOE_ASSERT_RET_VOID(Cond, reason,...)      if(!Cond) {DBG_PRINT(reason, ##__VA_ARGS__);return;}
+#define MOE_ASSERT_RET_VAL(Cond, ret, reason,...)  if(!Cond) {DBG_PRINT(reason, ##__VA_ARGS__);return ret;}
+
 
 #ifdef __cplusplus
 }
