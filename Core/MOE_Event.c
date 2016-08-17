@@ -308,10 +308,7 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
     /* If the current event counter is equal to the max limit */
-    if(sg_u16EvtCntMax == sg_u16EvtCnt)
-    {
-        return SW_ERR;  /* Return error */
-    }
+    MOE_ASSERT_RET_ST((sg_u16EvtCnt < sg_u16EvtCntMax),"Event queue is full");
 
     /* If it is an urgent event */
     if(MOE_EVENT_URGENT == u8Urg)
@@ -375,17 +372,12 @@ uint8 Moe_Event_Get(T_EVENT *ptEvt)
     uint32 u32IntSt;
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
+
     /* Check if the pointer is invalid or NOT */
-    if(NULL == ptEvt)
-    {   
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((NULL != ptEvt),"Event pointer should NOT be NULL");
 
     /* If there is no event */
-    if(0 == sg_u16EvtCnt) 
-    {   
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((0 != sg_u16EvtCnt), "Event count is 0");
 
     u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block for the first available event */
     u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block for the first available event   */
@@ -442,10 +434,7 @@ static uint32 Moe_Event_Queue_Block_Add(void)
 
     /* Create a new event queue block */
     ptAdd = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
-    if(NULL == ptAdd)
-    {   /* Return if failed */
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((NULL != ptAdd),"Malloc failed")!!
 
     u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block for the first available event */
     u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block for the first available event   */
