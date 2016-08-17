@@ -15,6 +15,7 @@
 #include "MOE_Core.h"
 #include "debug.h"
 #include "MOE_App.h"
+#include "MOE_HAL.h"
 #include "MOE_Event.h"
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
@@ -43,10 +44,8 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 {   
     uint8 u8Idx;
     /* Check if the pointer is invalid or NOT */
-    if (NULL == pDes)
-    {   /* Return error if invalid pointer */
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((pDes != NULL),"Memset invalid input\n");
+    
     /* Loop for the desired length bytes to be set */
     for(u8Idx = 0; u8Idx < u8Len; u8Idx++)
     {
@@ -74,17 +73,16 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 {
     /* Check if the input parameter is invalid or NOT */
-    if (NULL == pfSysTm)
-    {   
-        DBG_PRINT("Init input parameter is invalid!!\n");
-        return SW_ERR;    /* If invalid, return error */   
-    }
+    MOE_ASSERT_STOP_INFO((NULL != pfSysTm),"Timer function should NOT be NULL!");
    
     /* Get poll process function */
     sg_pfPoll = pfPoll;
 
     /* Init timer */
     Moe_Timer_Init(pfSysTm);
+
+    /* Init HAL */
+    Moe_HAL_Init();
 
     /* Init message */
     Moe_Msg_Init();
