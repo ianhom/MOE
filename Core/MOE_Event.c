@@ -214,10 +214,7 @@ uint8 Moe_Event_Init(void)
     uint8 u8Idx,u8Return;
 
     /* Check if head node is empty or NOT */
-    if(NULL != sg_ptEvtHead)
-    {   /* If it is NOT empty which means it had been inited, return error */
-        return SW_ERR;
-    }
+    MOE_ASSERT_STOP_INFO((NULL == sg_ptEvtHead),"Moe Event should NOT inited again!!");
  
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -277,10 +274,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     }
 
     /* Check if the task ID is invalid or NOT */
-    if(u8TaskID > MAX_TASK_NUM)
-    {   /* If task ID is wrong, return error */
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST(!(u8TaskID > MAX_TASK_NUM),"Task ID should be valid");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
