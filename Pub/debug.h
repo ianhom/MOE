@@ -50,6 +50,8 @@ extern "C" {
     #define DBG_PRINT(x,...)
 #endif
 
+#define MOE_ASSERT(Cond, ret, reason,...)    if(!Cond) {DBG_PRINT(reason,##__VA_ARGS__);return ret;}
+
 #ifdef __cplusplus
 }
 #endif
