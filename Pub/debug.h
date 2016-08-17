@@ -54,7 +54,7 @@ extern "C" {
 
 #ifdef __DEBUG_MODE
 #define MOE_ASSERT_STOP(Cond)                      if(!Cond) {printf("\n\n**ASSERT ERROR**: \nFILE: "__FILE__",  LINE: %d\n\n", __LINE__);while(1);}
-#define MOE_ASSERT_STOP_INFO(Cond,info)            if(!Cond) {printf("\n\n**ASSERT ERROR**: \n**"info"\nFILE: "__FILE__",  LINE: %d\n\n", __LINE__);while(1);}
+#define MOE_ASSERT_STOP_INFO(Cond,info)            if(!Cond) {printf("\n\n**ASSERT ERROR**: \n**"info"**FILE: "__FILE__",  LINE: %d\n**STOP RUNNING!!\n\n", __LINE__);while(1);}
 #else
 #define MOE_ASSERT_STOP(Cond) 
 #define MOE_ASSERT_STOP_INFO(Cond,info)
