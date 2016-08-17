@@ -172,16 +172,10 @@ uint8 Moe_Event_Get(T_EVENT *ptEvt)
     uint32 u32IntSt;
     
     /* Check if the pointer is invalid or NOT */
-    if(NULL == ptEvt)
-    {   
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((NULL != ptEvt),"Event pointer should NOT be NULL");
 
     /* If there is no event */
-    if(0 == sg_u16EvtCnt) 
-    {   
-        return SW_ERR;
-    }
+    MOE_ASSERT_RET_ST((0 != sg_u16EvtCnt), "Event count is 0");
 
     /* Get the task and event */
     ptEvt->u8Task = sg_atEvtQueue[sg_u16EvtFirst].u8Task;
