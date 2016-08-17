@@ -50,18 +50,23 @@ extern "C" {
     #define DBG_PRINT(x,...)
 #endif
 
-//#define MOE_ASSERT(Cond, ret, reason,...)    if(!Cond) {DBG_PRINT(reason,##__VA_ARGS__);return ret;}
-
+/* Assert Macros */
 #ifdef __DEBUG_MODE
+/* Stop running after assert error, report location of error */
 #define MOE_ASSERT_STOP(Cond)                      if(!(Cond)) {printf("\n\n**ASSERT ERROR**: \nFILE: "__FILE__",  LINE: %d\n**STOP RUNNING!!\n\n", __LINE__);while(1);}
+/* Stop running after assert error, report error information */
 #define MOE_ASSERT_STOP_INFO(Cond,info)            if(!(Cond)) {printf("\n\n**ASSERT ERROR**: \n**"info"\n**STOP RUNNING!!\n\n");while(1);}
 #else
+/* After debugging, assert code can be removed */
 #define MOE_ASSERT_STOP(Cond) 
 #define MOE_ASSERT_STOP_INFO(Cond,info)
 #endif
 
+/* Return void after assert error, with error information   */
 #define MOE_ASSERT_RET_VOID(Cond, reason,...)      if(!(Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return;}
+/* Return SW_ERR after assert error, with error information */
 #define MOE_ASSERT_RET_ST(Cond, reason,...)        if(!(Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return SW_ERR;}
+/* Return value after assert error, with error information  */
 #define MOE_ASSERT_RET_VAL(Cond, ret,reason,...)   if(!(Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return ret;}
 
 #ifdef __cplusplus
