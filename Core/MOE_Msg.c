@@ -346,7 +346,7 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 {
     /* Check if the pointer of message to be deteled is invalid or NOT */
-    MOE_ASSERT_RET_VAL((ptMsg != NULL),"The pointer of message to be deteled is invalid!!");
+    MOE_ASSERT_RET_VAL((ptMsg != NULL), NULL, "The pointer of message to be deteled is invalid!!");
     
     DBG_PRINT("Delete the message now.\n");
     MOE_FREE(ptMsg);
