@@ -1,6 +1,6 @@
 /******************************************************************************
-* File       : MOE.c
-* Function   : Provide the main function of MOE-like scheduler.
+* File       : MOE_Core.c
+* Function   : Provide the main function of scheduler.
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
@@ -44,7 +44,7 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 {   
     uint8 u8Idx;
     /* Check if the pointer is invalid or NOT */
-    MOE_ASSERT_RET_ST((pDes != NULL),"Memset invalid input\n");
+    MOE_CHECK_RET_ST((pDes != NULL),"Memset invalid input\n");
     
     /* Loop for the desired length bytes to be set */
     for(u8Idx = 0; u8Idx < u8Len; u8Idx++)
@@ -73,7 +73,7 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 {
     /* Check if the input parameter is invalid or NOT */
-    MOE_ASSERT_STOP_INFO((NULL != pfSysTm),"Timer function should NOT be NULL!");
+    MOE_ASSERT_INFO((NULL != pfSysTm),"Timer function should NOT be NULL!");
    
     /* Get poll process function */
     sg_pfPoll = pfPoll;
