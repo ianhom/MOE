@@ -63,11 +63,11 @@ extern "C" {
 #endif
 
 /* Return void after assert error, with error information   */
-#define MOE_CHECK_RET_VOID(Cond, reason,...)      if(!(Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return;}
+#define MOE_CHECK_IF_RET_VOID(Cond, reason,...)      if((Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return;}
 /* Return value after assert error, with error information  */
-#define MOE_CHECK_RET_VAL(Cond, ret,reason,...)   if(!(Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return ret;}
+#define MOE_CHECK_IF_RET_VAL(Cond, ret,reason,...)   if((Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return ret;}
 /* Return SW_ERR after assert error, with error information */
-#define MOE_CHECK_RET_ST(Cond, reason,...)        MOE_CHECK_RET_VAL(Cond, SW_ERR,reason,...)
+#define MOE_CHECK_IF_RET_ST(Cond, reason,...)        MOE_CHECK_IF_RET_VAL(Cond, SW_ERR,reason,...)
 
 
 #ifdef __cplusplus
