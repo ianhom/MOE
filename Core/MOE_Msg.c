@@ -148,17 +148,17 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
     MOE_CHECK_IF_RET_ST((MAX_TASK_NUM  <  u8DestTask)\
                      && (TASK_ALL_TASK != u8DestTask)\
                      || (TASK_NO_TASK  == u8DestTask)),\
-                       "The destination task of the sending message should be valid!!");
+                       "The destination task of the sending message should be valid!!\n");
 
     /* If the length of message is less then a message head */
-    MOE_CHECK_IF_RET_ST((0 ==u16Size),"The length of creating message is 0");
+    MOE_CHECK_IF_RET_ST((0 ==u16Size),"The length of creating message is 0\n");
 
     /* Check if the message pointer is valid or NOT */
-    MOE_CHECK_IF_RET_ST((ptMsg == NULL),"The message pointer should NOT be NULL");
+    MOE_CHECK_IF_RET_ST((ptMsg == NULL),"The message pointer should NOT be NULL\n");
 
     ptMsgNode = Moe_Msg_Create(&u8DestTask, u8MsgType, u16Size, ptMsg);
     
-    MOE_CHECK_IF_RET_ST((NULL == ptMsgNode),"Message is NOT created!!");
+    MOE_CHECK_IF_RET_ST((NULL == ptMsgNode),"Message is NOT created!!\n");
 
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
@@ -202,10 +202,10 @@ uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
     /* Check if the task is valid or NOT                                     */
     /* The Destination task should NOT be TASK_NO_TASK, that is meaningless  */
     /* The Destination task should NOT be bigger than the max task number    */
-    MOE_CHECK_IF_RET_VAL((TASK_NO_TASK == u8DestTask ) || (u8DestTask > MAX_TASK_NUM), NULL, "Message receiving task ID should be valid!!");
+    MOE_CHECK_IF_RET_VAL((TASK_NO_TASK == u8DestTask ) || (u8DestTask > MAX_TASK_NUM), NULL, "Message receiving task ID should be valid!!\n");
   
     /* Check if the pointer is invalid or NOT */    
-    MOE_CHECK_IF_RET_VAL((pu8Type == NULL), NULL, "Message type pointer should NOT be NULL");
+    MOE_CHECK_IF_RET_VAL((pu8Type == NULL), NULL, "Message type pointer should NOT be NULL\n");
 
     sg_au8RcvDone[u8DestTask - 1] = MOE_MSG_RCV_DONE;
 
@@ -346,7 +346,7 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask)
 static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
 {
     /* Check if the pointer of message to be deteled is invalid or NOT */
-    MOE_CHECK_IF_RET_VAL((ptMsg == NULL), NULL, "The pointer of message to be deteled is invalid!!");
+    MOE_CHECK_IF_RET_VAL((ptMsg == NULL), NULL, "The pointer of message to be deteled is invalid!!\n");
     
     DBG_PRINT("Delete the message now.\n");
     MOE_FREE(ptMsg);
