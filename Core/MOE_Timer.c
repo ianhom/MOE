@@ -42,12 +42,8 @@ static PF_TIMER_SRC  sg_pfSysTm  = NULL;
 * Date       : 6th May 2016
 ******************************************************************************/
 uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm)
-{   /* Check if the input function is NULL or NOT */
-    if (NULL == pfSysTm)
-    {   
-        DBG_PRINT("System time function pointer is invalid!!\n");
-        return SW_ERR;    /* If invalid, return error */   
-    }
+{   /* Check if the input function is NULL or NOT */ 
+    MOE_ASSERT_INFO((NULL == pfSysTm), "System time function pointer is invalid!!")
     /* If the input function is OK, then go on */
 
     sg_pfSysTm = pfSysTm;      /* Save the system time function for further using */
@@ -74,11 +70,7 @@ static T_TIMER_NODE* Moe_Timer_Add(void)
 
     ptNode = (T_TIMER_NODE*)MOE_MALLOC(sizeof(T_TIMER_NODE)); /* Allocate a timer node */
     /* If the allocation is FAILED */
-    if (NULL == ptNode)                                   
-    {
-        DBG_PRINT("No more heap space for timer node!!\n");
-        return NULL; /* Return NULL to indicate failed operation */
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptNode),"No more heap space for timer node!!\n");
     /* Else, new timer node is allocated */
 
     ptNode->ptNext = NULL;               /* Set the next node as NULL       */
@@ -202,21 +194,17 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
     T_TIMER_NODE* ptNode;
     uint32 u32IntSt;
 
-    if((NULL == ptTm) || (0 == ptTm->u16Cnt))             /* If the start count is 0            */
-    {
-        return NULL;                                      /* Unnecessary to start the timer     */
-    }
+    MOE_CHECK_IF_RET_VAL(((NULL == ptTm) || (0 == ptTm->u16Cnt)), NULL ,"Invalid timer info\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptNode = Moe_Timer_Add();                             /* Allocate a timer node              */
-    if (NULL == ptNode)                                   /* If new timer is failed to allocate */
-    {
-        DBG_PRINT("New timer node is failed to start\n");
-        return NULL;                                      /* Return NULL, fail to start a timer */
-    }
-    /* A timer node was added successfully */
-        
+    ptNode = Moe_Timer_Add();                             /* Allocate a timer node              */    
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    MOE_CHECK_IF_RET_VAL((NULL == ptNode), NULL,"New timer node is failed to start\n")
+
+    /* A timer node was added successfully */        
     ptNode->tTimer.u32TmStart   = sg_pfSysTm();           /* Get the system time                */     
     ptNode->tTimer.u32TmOut     = ptTm->u32TmOut;         /* Set the timeout time               */
     ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
@@ -234,8 +222,6 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
         ptNode->tTimer.pPara    = ptTm->pPara;            /* Set the parameter of callback      */
     }
 #endif
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
     DBG_PRINT("New timer is started!!\n");
 
@@ -262,10 +248,7 @@ static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE* ptNode)
 
     uint32 u32IntSt;
 
-    if (NULL == ptNode)                         /* If the input node pointer is invalid  */
-    {
-        return NULL;                            /* Return NULL, no node to be deleted    */
-    }
+    MOE_CHECK_IF_RET_VAL((NULL == ptNode), NULL, "Invalid pointer");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -332,18 +315,15 @@ T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE* ptNode)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptFind = Moe_Timer_Find(ptNode);      /* Search the timer node    */
-    if(NULL == ptFind)                    /* If the node is NOT found */
-    {
-        DBG_PRINT("The timer node to be stopped is NOT found!!\n");
-        return NULL;                      /* NOT found, return NULL   */
-    }
-    /* Else, the timer node is found */
-
-    ptNode->tTimer.u16Cnt = 0;            /* Set the count as 0       */
-
+    ptFind = Moe_Timer_Find(ptNode);      /* Search the timer node    */    
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    MOE_CHECK_IF_RET_VAL((NULL == ptFind), NULL,"The timer node to be stopped is NOT found!!\n");
+
+    /* Else, the timer node is found */
+    ptNode->tTimer.u16Cnt = 0;            /* Set the count as 0       */
+
     DBG_PRINT("Timer is stopped!!\n");
     return ptNode;
 }
@@ -397,17 +377,14 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE* ptNode)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptFind = Moe_Timer_Find(ptNode);           /* Search the timer node    */
-    if(NULL == ptFind)                         /* If the node is NOT found */
-    {
-        DBG_PRINT("The timer node to be restarted is NOT found!!\n");
-        return NULL;                           /* NOT found, return NULL   */
-    }
-    /* Else, the timer node is found */
-
-    ptNode->tTimer.u32TmStart = sg_pfSysTm();  /* Update the start point   */
+    ptFind = Moe_Timer_Find(ptNode);           /* Search the timer node    */    
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
+
+    MOE_CHECK_IF_RET_VAL((NULL == ptFind), NULL, "The timer node to be restarted is NOT found!!\n");
+
+    /* Else, the timer node is found */
+    ptNode->tTimer.u32TmStart = sg_pfSysTm();  /* Update the start point   */
     DBG_PRINT("Timer is restarted!!\n");
     return ptNode;                      
 }
@@ -569,7 +546,6 @@ static uint16 Moe_Timer_Test_Max_Cnt(void)
 static uint8 Moe_Timer_Test_StartStop(void)
 {
     T_TIMER_NODE *ptNode;
-    uint32 u32IntSt;
 
     T_TIMER tTm;
     /* Set time parameter */
@@ -578,15 +554,9 @@ static uint8 Moe_Timer_Test_StartStop(void)
     tTm.u16Cnt   = 1;
     tTm.u32TmOut = 10;
 
-    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/    
     DBG_PRINT("Try to start timer for 10ms\n"); 
     ptNode = Moe_Timer_Start(&tTm);                     /* Start a timer               */
-    if(NULL == ptNode)                                  /* Check if successful or NOT  */
-    {
-        DBG_PRINT("Failed to start a timer!!\n");       
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptNode), "Failed to start a timer!!\n");
     DBG_PRINT("The time is started successfully\n");
 
     /* Find the started timer */
@@ -602,11 +572,8 @@ static uint8 Moe_Timer_Test_StartStop(void)
 
     DBG_PRINT("Try to stop the timer\n"); 
     ptNode = Moe_Timer_Stop(ptNode);                    /* Stop the timer              */
-    if(NULL == ptNode)                                  /* Check if successful or NOT  */
-    {
-        DBG_PRINT("Failed to stop a timer!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptNode), "Failed to stop a timer!!\n");
+
     DBG_PRINT("The time is stopped successfully\n");
     
     Moe_Timer_Process();                                /* To delete the stopped timer */
@@ -614,11 +581,9 @@ static uint8 Moe_Timer_Test_StartStop(void)
     DBG_PRINT("Try to start another timer for 5000ms\n"); 
     tTm.u32TmOut = 5000;
     ptNode = Moe_Timer_Start(&tTm);                     /* Start a timer               */
-    if(NULL == ptNode)                                  /* Check if successful or NOT  */
-    {
-        DBG_PRINT("Failed to start a timer!!\n");       
-        return SW_ERR;
-    }
+
+    MOE_CHECK_IF_RET_ST((NULL == ptNode),"Failed to start a timer!!\n");
+
     DBG_PRINT("The time is started successfully\n");
 
     DBG_PRINT("Wait a time up message after 5000ms\n");
@@ -638,19 +603,14 @@ static uint8 Moe_Timer_Test_StartStop(void)
     DBG_PRINT("Start a 10-times 1 second timer!!\n");
     tTm.u32TmOut = 1000;
     ptNode = Moe_Timer_Start(&tTm);                     /* Start a timer               */
+    MOE_CHECK_IF_RET_ST((NULL == ptNode), "Failed to start a timer!!\n");
     if(NULL == ptNode)                                  /* Check if successful or NOT  */
-    {
-        DBG_PRINT("Failed to start a timer!!\n");       
-        return SW_ERR;
-    }
+
     while(NULL != sg_ptTmHead)
     {
         Moe_Timer_Process();                            /* Wait for time up            */
     }
     DBG_PRINT("General test for timer is finished!\n");
-
-    /**************************************************************************************************/
-    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
     return SW_OK;
 }
