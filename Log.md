@@ -1,4 +1,7 @@
 # Log
+##21st Aug 2016
+Add "assert" and "check if" into core, message, event, timer.
+
 ## 17th Aug 2016
 Add assert MACRO
 
