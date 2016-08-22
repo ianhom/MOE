@@ -60,11 +60,7 @@ uint8 Moe_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
     uint16 u16Size = u8Len * u8Cnt;
 
     /* If the buffer size is 0, return NULL */
-    if(0 == u16Size)
-    {
-        DBG_PRINT("The length of buffer is invalid!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((0 == u16Size), "The length of buffer is invalid!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -101,11 +97,7 @@ uint8 Moe_Queue_Delete(T_QUEUE_INFO *ptQueueInfo)
     uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
-    if(NULL == ptQueueInfo)
-    {
-        DBG_PRINT("The length of buffer is invalid!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueueInfo), "The length of buffer is invalid!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -136,18 +128,10 @@ uint8 Moe_Queue_Inc(T_QUEUE_INFO *ptQueue)
 {
     uint32 u32IntSt;
     /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueue), "Invalid pointer of queue information!!\n");
 
     /* If the used count is NOT less then the max count */
-    if(ptQueue->u8Cnt >= ptQueue->u8MaxCnt)
-    {
-        DBG_PRINT("The queue is full!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((ptQueue->u8Cnt >= ptQueue->u8MaxCnt), "The queue is full!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -178,18 +162,10 @@ uint8 Moe_Queue_Dec(T_QUEUE_INFO *ptQueue)
 {
     uint32 u32IntSt;
     /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueue), "Invalid pointer of queue information!!\n");
 
     /* If the used count is 0 */
-    if(0 == ptQueue->u8Cnt)
-    {
-        DBG_PRINT("The queue is empty!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((0 == ptQueue->u8Cnt), "The queue is empty!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -218,18 +194,11 @@ uint8 Moe_Queue_Dec(T_QUEUE_INFO *ptQueue)
 uint8 Moe_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
 {
     /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueue), "Invalid pointer of queue information!!\n");
 
     /* If the used count is NOT less then the max count */
-    if(ptQueue->u8Cnt >= ptQueue->u8MaxCnt)
-    {
-        DBG_PRINT("The queue is full!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((ptQueue->u8Cnt >= ptQueue->u8MaxCnt), "The queue is full!!\n");
+
     DBG_PRINT("The queue is NOT full!!\n");
     return SW_OK;
 }
@@ -251,18 +220,11 @@ uint8 Moe_Queue_Is_Free(T_QUEUE_INFO *ptQueue)
 uint8 Moe_Queue_Is_Not_Empty(T_QUEUE_INFO *ptQueue)
 {
     /* If the pointer of queue info is invalid */
-    if(NULL == ptQueue)
-    {
-        DBG_PRINT("Invalid pointer of queue informtion!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueue), "Invalid pointer of queue information!!\n");
 
     /* If the used count is NOT 0 */
-    if(0 == ptQueue->u8Cnt)
-    {
-        DBG_PRINT("The queue is empty!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((0 == ptQueue->u8Cnt), "The queue is empty!!\n");
+
     DBG_PRINT("The queue is NOT empty!!\n");
     return SW_OK;
 }
@@ -289,25 +251,16 @@ uint8 Moe_Queue_Write(T_QUEUE_INFO *ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
-    if((NULL == ptQueueInfo)||(NULL == ptQueueInfo->pu8Addr) || (NULL == pu8Data))
-    {
-        DBG_PRINT("Invalid pointer of queue information or data!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueueInfo)\
+                     || (NULL == ptQueueInfo->pu8Addr)\
+                     || (NULL == pu8Data),\
+                     "Invalid pointer of queue information or data!!\n");
     
     /* Check if the length is wrong */
-    if(u8Len > ptQueueInfo->u8Len)
-    {
-        DBG_PRINT("Invalid length to be writen!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((u8Len > ptQueueInfo->u8Len), "Invalid length to be writen!!\n");
   
     /* If the used count is NOT less then the max count */
-    if(ptQueueInfo->u8Cnt >= ptQueueInfo->u8MaxCnt)
-    {
-        DBG_PRINT("The queue is full!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((ptQueueInfo->u8Cnt >= ptQueueInfo->u8MaxCnt), "The queue is full!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -346,26 +299,16 @@ uint8 Moe_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     uint32 u32IntSt;
 
     /* If the pointer of queue information is invalid */
-    if((NULL == ptQueueInfo)||(NULL == ptQueueInfo->pu8Addr) || (NULL == pu8Data))
-    {
-        DBG_PRINT("Invalid pointer of queue information or data!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((NULL == ptQueueInfo)\
+                     || (NULL == ptQueueInfo->pu8Addr)
+                     || (NULL == pu8Data),\
+                     "Invalid pointer of queue information or data!!\n");
     
     /* Check if the length is wrong */
-    if(u8Len > ptQueueInfo->u8Len)
-    {
-        DBG_PRINT("Invalid length to be read!!\n");
-        return SW_ERR;
-    }
-
+    MOE_CHECK_IF_RET_ST((u8Len > ptQueueInfo->u8Len), "Invalid length to be read!!\n");
     
     /* If the used count is 0 */
-    if(0 == ptQueueInfo->u8Cnt)
-    {
-        DBG_PRINT("The queue is empty!!\n");
-        return SW_ERR;
-    }
+    MOE_CHECK_IF_RET_ST((0 == ptQueueInfo->u8Cnt), "The queue is empty!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
@@ -386,7 +329,7 @@ uint8 Moe_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 
 
 /******************************************************************************
-* Name       : void Moe_Queue_Test_General()
+* Name       : void Moe_Queue_Test_General(void)
 * Function   : General test for queue
 * Input      : None
 * Output:    : None
@@ -397,7 +340,7 @@ uint8 Moe_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
 * Author     : Ian
 * Date       : 11th Jun 2016
 ******************************************************************************/
-void Moe_Queue_Test_General()
+void Moe_Queue_Test_General(void)
 {
     static T_QUEUE_INFO sg_tQueue;
     static uint8 sg_au8DataW[4] = {4,3,2,1};
