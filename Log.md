@@ -1,4 +1,7 @@
 # Log
+##22nd Aug 2016
+Add "Check if" into queue.
+
 ##21st Aug 2016
 Add "assert" and "check if" into core, message, event, timer.
 
