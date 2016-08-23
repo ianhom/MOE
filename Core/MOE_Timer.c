@@ -43,7 +43,7 @@ static PF_TIMER_SRC  sg_pfSysTm  = NULL;
 ******************************************************************************/
 uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm)
 {   /* Check if the input function is NULL or NOT */ 
-    MOE_ASSERT_INFO((NULL == pfSysTm), "System time function pointer is invalid!!")
+    MOE_ASSERT_INFO((NULL != pfSysTm), "System time function pointer is invalid!!")
     /* If the input function is OK, then go on */
 
     sg_pfSysTm = pfSysTm;      /* Save the system time function for further using */
