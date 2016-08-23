@@ -1,4 +1,7 @@
 # Log
+##23rd Aug 2016
+Try a new way to improve timer.
+
 ##22nd Aug 2016
 Add "Check if" into queue.
 
