@@ -70,7 +70,7 @@ static T_TIMER_NODE* Moe_Timer_Add(void)
 
     ptNode = (T_TIMER_NODE*)MOE_MALLOC(sizeof(T_TIMER_NODE)); /* Allocate a timer node */
     /* If the allocation is FAILED */
-    MOE_CHECK_IF_RET_ST((NULL == ptNode),"No more heap space for timer node!!\n");
+    MOE_CHECK_IF_RET_VAL((NULL == ptNode), NULL, "No more heap space for timer node!!\n");
     /* Else, new timer node is allocated */
 
     ptNode->ptNext = NULL;               /* Set the next node as NULL       */
