@@ -33,6 +33,9 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 
 typedef uint32 (*PF_TIMER_CB)(void *pPara);
 
+#define MOE_TIMER_DEL_REQ                       (1)    /* Timer need to be deleted    */
+#define MOE_TIMER_DEL_REQ_NONE                  (0)    /* No timer need to be deleted */
+
 /*******************************************************************************
 * Structure  : T_TIMER
 * Description: Structure of timer.
@@ -49,8 +52,8 @@ typedef struct _T_TIMER
     PF_TIMER_CB  pfTmCallback;            /* Callback when time is up */
     void        *pPara;                   /* Parameters for callback  */
 #endif
-    uint32       u32TmStart;              /* Start time point         */
     uint32       u32TmOut;                /* Timeout time             */
+    uint32       u32TmLeft;               /* Left time                */
     uint16       u16Cnt;                  /* Count to start the timer */
     uint16       u16Evt;                  /* Timeout event to be set  */
     uint8        u8TaskID;                /* Timeout event task ID    */
