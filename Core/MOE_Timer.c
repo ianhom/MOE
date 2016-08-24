@@ -248,17 +248,23 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
 static void Moe_Timer_Update_Left_Time(uint32 *pu32TmDiff)
 {
     uint32 u32IntSt;
+    uint32 u32TmDiff = *pu32TmDiff;
     T_TIMER_NODE* ptNode = sg_ptTmHead;
     
     MOE_CHECK_IF_RET_VOID((0 == *pu32TmDiff),"Unnecessary to update!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
+    *pu32TmDiff = 0;
     while(ptNode)
     {
-        if(ptNode->tTimer.u32TmLeft > *pu32TmDiff)
+        if(ptNode->tTimer.u32TmLeft > u32TmDiff)
         {
-            ptNode->tTimer.u32TmLeft -= *pu32TmDiff;
+            ptNode->tTimer.u32TmLeft -= u32TmDiff;
+            if(ptNode->tTimer.u32TmLeft <= sg_u32Coming)
+            {
+                sg_u32Coming = ptNode->tTimer.u32TmLeft;
+            }
         }
         else
         {
@@ -266,13 +272,9 @@ static void Moe_Timer_Update_Left_Time(uint32 *pu32TmDiff)
             Moe_Timer_Time_Up(ptNode);
         }
         
-        if(ptNode->tTimer.u32TmLeft <= sg_u32Coming)
-        {
-            sg_u32Coming = ptNode->tTimer.u32TmLeft;
-        }
         ptNode = ptNode->ptNext;
     }    
-    *pu32TmDiff = 0;
+    
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -435,6 +437,7 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE* ptNode)
     MOE_CHECK_IF_RET_VAL((NULL == ptFind), NULL, "The timer node to be restarted is NOT found!!\n");
 
     /* Else, the timer node is found */
+    Moe_Timer_Update_Left_Time(&sg_u32TmDiff);
     ptNode->tTimer.u32TmLeft = ptNode->tTimer.u32TmOut;  /* Update the start point   */
     if(ptNode->tTimer.u32TmLeft <= sg_u32Coming)
     {
@@ -488,21 +491,32 @@ static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind)
 ******************************************************************************/
 uint8 Moe_Timer_Process(void)
 {
-    T_TIMER_NODE* ptFind;
+    T_TIMER_NODE* ptFind = sg_ptTmHead;
     T_TIMER_NODE* ptNodeFree;
 
+    static uint32 test = 0, oldDiff = 0;
+    
     uint32 u32IntSt;
     uint32 u32TmDiff = sg_pfSysTm() - sg_u32OldTm;
 
     sg_u32OldTm  += u32TmDiff;
     sg_u32TmDiff += u32TmDiff;
+    
+    if(oldDiff != u32TmDiff)
+    {
+        oldDiff = u32TmDiff;
+        test = 0;
+    }
+    else
+    {
+        test++;
+    }
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     if(MOE_TIMER_DEL_REQ == sg_u8DelReq)
     {
         sg_u8DelReq = MOE_TIMER_DEL_REQ_NONE;
-        ptFind = sg_ptTmHead;
         while(ptFind)
         {
             if(0 == ptFind->tTimer.u16Cnt)          /* If the timing count is 0   */
