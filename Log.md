@@ -1,4 +1,7 @@
 # Log
+##24th Aug 2016
+Merge the new way for a better timer.
+
 ##23rd Aug 2016
 Try a new way to improve timer.
 
