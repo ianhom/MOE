@@ -39,12 +39,14 @@ typedef uint32 (*PF_TIMER_CB)(void *pPara);
 /*******************************************************************************
 * Structure  : T_TIMER
 * Description: Structure of timer.
-* Memebers   : PF_TIMER_CB  pfTmCallback;                       Callback when time is up 
-*              void        *pPara;                              Parameters for callback  
-*              uint32       u32TmStart;     0~0xFFFFFFFF        Start time point         
-*              uint32       u32TmOut;       0~0xFFFFFFFF        Timeout time             
-*              uint16       u16Cnt;         0xFFFF              Periodic
-*                                           0~0xFFFE            Counts to start the timer  
+* Memebers   : PF_TIMER_CB  pfTmCallback                       Callback when time is up 
+*              void        *pPara                              Parameters for callback  
+*              uint32       u32TmOut       0~0xFFFFFFFF        Timeout time         
+*              uint32       u32TmLeft      0~0xFFFFFFFF        Leftt time         
+*              uint16       u16Cnt         0xFFFF              Periodic
+*                                          0~0xFFFE            Counts to start the timer  
+*              uint16       u16Evt         0~0xFFFF            Timeout event to be set  
+*              uint8        u8TaskID       0~255               Timeout event task ID    
 *******************************************************************************/
 typedef struct _T_TIMER
 {
@@ -144,9 +146,9 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 
 
 /******************************************************************************
-* Name       : T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE* ptNode)
+* Name       : T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE *ptNode)
 * Function   : Stop a started timer.
-* Input      : T_TIMER_NODE* ptNode  The pointer of node to be stopped
+* Input      : T_TIMER_NODE *ptNode  The pointer of node to be stopped
 * Output:    : None
 * Return     : NULL           Fail to stop a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is stopped.
@@ -155,15 +157,15 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE* ptNode);
+T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE *ptNode);
 
 
 
 
 /******************************************************************************
-* Name       : static T_TIMER_NODE *Moe_Timer_Find(T_TIMER_NODE* ptNode)
+* Name       : static T_TIMER_NODE* Moe_Timer_Find(T_TIMER_NODE *ptNode)
 * Function   : Try to find a node.
-* Input      : T_TIMER_NODE* ptNode  The pointer of node to be found
+* Input      : T_TIMER_NODE *ptNode  The pointer of node to be found
 * Output:    : None
 * Return     : NULL           Fail to find the node.
 *              T_TIMER_NODE*  The pointer of the founed node.
