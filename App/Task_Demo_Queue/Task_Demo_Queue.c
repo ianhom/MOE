@@ -32,7 +32,7 @@ static uint8 sg_au8DataR[TASK_DEMO_QUEUE_BUF_SIZE] = {0,0,0,0,0,0,0,0,0,0};
 static T_QUEUE_INFO sg_tQueue1,sg_tQueue2;
 
 /******************************************************************************
-* Name       : uint8 Task_Demo_Queue_Process(uint16 u16Evt)
+* Name       : uint8 Task_Demo_Queue_Process(uint8 u8Evt)
 * Function   : Task Demo Queue process
 * Input      : To be done
 * Output:    : None
@@ -178,7 +178,7 @@ uint8 Task_Demo_Queue_Process(uint8 u8Evt)
             /* Init timer */
             T_TIMER tTm;
             tTm.u8TaskID     = sg_u8TaskID;
-            tTm.u16Evt       = EVENT_TIMER;
+            tTm.u8Evt        = EVENT_TIMER;
             tTm.u16Cnt       = MOE_TMR_INFINITE_CNT;
             tTm.u32TmOut     = 1000;
 #ifdef __TIMER_CALLBACK_SUPPORTED
