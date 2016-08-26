@@ -117,7 +117,7 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
     T_TIMER tTmr;
 
     tTmr.u16Cnt       = MOE_TMR_INFINITE_CNT;   /* Infinite count  */
-    tTmr.u16Evt       = EVENT_PERIODIC;         /* Periodic event  */
+    tTmr.u8Evt        = EVENT_PERIODIC;         /* Periodic event  */
     tTmr.u8TaskID     = TASK_CURRENT_TASK;      /* Call itself     */
     tTmr.u32TmOut     = u32TmOut;               /* Set time out    */
 #ifdef __TIMER_CALLBACK_SUPPORTED
@@ -146,7 +146,7 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
     T_TIMER tTmr;
 
     tTmr.u16Cnt       = 1;                 /* Just once       */
-    tTmr.u16Evt       = EVENT_DELAY;       /* Delay event     */
+    tTmr.u8Evt        = EVENT_DELAY;       /* Delay event     */
     tTmr.u8TaskID     = TASK_CURRENT_TASK; /* Call itself     */
     tTmr.u32TmOut     = u32TmOut;          /* Set time out    */
 #ifdef __TIMER_CALLBACK_SUPPORTED
@@ -176,7 +176,7 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
     T_TIMER tTmr;
 
     tTmr.u16Cnt       = 1;           /* Just once            */
-    tTmr.u16Evt       = u8Evt;       /* Set time up event    */
+    tTmr.u8Evt        = u8Evt;       /* Set time up event    */
     tTmr.u8TaskID     = u8DesTask;   /* Set destination task */
     tTmr.u32TmOut     = u32TmOut;    /* Set time out         */
 #ifdef __TIMER_CALLBACK_SUPPORTED
@@ -189,7 +189,7 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 
 
 /******************************************************************************
-* Name       : T_TIMER_NODE* Moe_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+* Name       : T_TIMER_NODE* Moe_Timer_Start(uint8 u8TaskID, uint8 u8Evt, uint16 u16Cnt, uint32 u32TmOut)
 * Function   : Start a timer
 * Input      : T_TIMER *ptTm     Pointer of timers set by user.
 * Output:    : None
@@ -219,7 +219,7 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
     ptNode->tTimer.u32TmOut     = ptTm->u32TmOut;         /* Set the timeout time               */    
     ptNode->tTimer.u32TmLeft    = ptTm->u32TmOut;         /* Set the timeout time               */
     ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
-    ptNode->tTimer.u16Evt       = ptTm->u16Evt;           /* Set the event                      */
+    ptNode->tTimer.u8Evt        = ptTm->u8Evt;            /* Set the event                      */
     ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
@@ -479,8 +479,8 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE *ptNode)
 static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind)
 {   
     /* Set the desired evnet */
-    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt,MOE_EVENT_NORMAL);  
-    DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u16Evt);
+    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt,MOE_EVENT_NORMAL);  
+    DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt);
 #ifdef __TIMER_CALLBACK_SUPPORTED
     if (NULL != ptFind->tTimer.pfTmCallback)                /* If we have callback for such timer */
     {
@@ -620,7 +620,7 @@ static uint16 Moe_Timer_Test_Max_Cnt(void)
     T_TIMER tTm;
     /* Set time parameter */
     tTm.u8TaskID = 0;
-    tTm.u16Evt   = 0;
+    tTm.u8Evt    = 0;
     tTm.u16Cnt   = 1;
     tTm.u32TmOut = 10;
 
@@ -660,7 +660,7 @@ static uint8 Moe_Timer_Test_StartStop(void)
     T_TIMER tTm;
     /* Set time parameter */
     tTm.u8TaskID = 0;
-    tTm.u16Evt   = 0;
+    tTm.u8Evt    = 0;
     tTm.u16Cnt   = 1;
     tTm.u32TmOut = 10;
 
