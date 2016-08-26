@@ -45,7 +45,7 @@ typedef uint32 (*PF_TIMER_CB)(void *pPara);
 *              uint32       u32TmLeft      0~0xFFFFFFFF        Leftt time         
 *              uint16       u16Cnt         0xFFFF              Periodic
 *                                          0~0xFFFE            Counts to start the timer  
-*              uint16       u16Evt         0~0xFFFF            Timeout event to be set  
+*              uint8        u8Evt          0~255               Timeout event to be set  
 *              uint8        u8TaskID       0~255               Timeout event task ID    
 *******************************************************************************/
 typedef struct _T_TIMER
@@ -57,7 +57,7 @@ typedef struct _T_TIMER
     uint32       u32TmOut;                /* Timeout time             */
     uint32       u32TmLeft;               /* Left time                */
     uint16       u16Cnt;                  /* Count to start the timer */
-    uint16       u16Evt;                  /* Timeout event to be set  */
+    uint8        u8Evt;                   /* Timeout event to be set  */
     uint8        u8TaskID;                /* Timeout event task ID    */
 }T_TIMER;
 
@@ -87,7 +87,7 @@ typedef struct _T_TIMER_NODE
 uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm);
 
 /******************************************************************************
-* Name       : T_TIMER_NODE* Moe_Timer_Start(uint8 u8TaskID, uint16 u16Evt, uint16 u16Cnt, uint32 u32TmOut)
+* Name       : T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 * Function   : Start a timer
 * Input      : T_TIMER *ptTm     Pointer of timers set by user.
 * Output:    : None
