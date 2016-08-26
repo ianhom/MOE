@@ -36,7 +36,7 @@ extern "C" {
 #define TASK_DEMO_QUEUE_BUF_SIZE             (10)               /* Size of each buffer blocks */
 
 /******************************************************************************
-* Name       : uint8 Task_Demo_Queue_Process(uint16 u16Evt)
+* Name       : uint8 Task_Demo_Queue_Process(uint8 u8Evt)
 * Function   : Task Demo Queue process
 * Input      : To be done
 * Output:    : None
