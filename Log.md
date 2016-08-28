@@ -1,4 +1,7 @@
 # Log
+##28th Aug 2016
+Tye a new way for a better message
+
 ##24th Aug 2016
 Merge the new way for a better timer.
 
