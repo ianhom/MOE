@@ -1,5 +1,5 @@
 # MOE   
-![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.01.png)   
+![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.02.png)   
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 ## Introduce
 MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:   
