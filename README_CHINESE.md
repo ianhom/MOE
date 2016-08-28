@@ -1,5 +1,5 @@
 # MOE   
-![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.01.png)   
+![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.02.png)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 ## 简介
 MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点如下：   
