@@ -62,12 +62,13 @@ uint8 Moe_Event_Init(void)
 
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 * Function   : This function is used to set event for tasks.
 * Input      : uint8 u8TaskID   1~255               The task ID to receive such event
 *              uint8 u8Evt      1~255               The event type
 *              uint8 u8Urg      MOE_EVENT_URGENT    It is an urgent event
 *                               MOE_EVENT_NORMAL    It is a normal event
+*              uint8 pPara                          Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -76,7 +77,7 @@ uint8 Moe_Event_Init(void)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg) 
+uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara) 
 {  
     uint8  u8Idx;
     uint32 u32IntSt;
@@ -100,7 +101,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    Moe_Event_Setting(u8TaskID, u8Evt,u8Urg);
+    Moe_Event_Setting(u8TaskID, u8Evt, u8Urg, pPara);
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -108,12 +109,13 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 }
 
 /******************************************************************************
-* Name       : static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+* Name       : static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 * Function   : This function is used to set event for each tasks.
 * Input      : uint8 u8TaskID   1~255               The task ID to receive such event
 *              uint8 u8Evt      1~255               The event type
 *              uint8 u8Urg      MOE_EVENT_URGENT    It is an urgent event
 *                               MOE_EVENT_NORMAL    It is a normal event
+*              uint8 pPara                          Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -122,7 +124,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 {
     uint8  u8Idx;
     uint16 u16EvtLast;
@@ -147,49 +149,62 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
     {   /* Calculate the position for new event */
         u16EvtLast = (sg_u16EvtFirst + sg_u16EvtCnt) % MAX_QUEUE_EVT_NUM;    
     }
-    sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;  /* Fill the task ID   */
-    sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;     /* Fill the evnet     */
-    sg_u16EvtCnt++;                               /* Update event count */
+    sg_atEvtQueue[u16EvtLast].pPara  = pPara;             /* Fill the parameter           */
+    sg_atEvtQueue[u16EvtLast].u8Src  = TASK_CURRENT_TASK; /* Fill the source task ID      */
+    sg_atEvtQueue[u16EvtLast].u8Task = u8TaskID;          /* Fill the destination task ID */
+    sg_atEvtQueue[u16EvtLast].u8Evt  = u8Evt;             /* Fill the evnet               */
+    sg_u16EvtCnt++;                                       /* Update event count           */
 
     return SW_OK;
 }
 
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Get(T_EVENT *ptEvt)
+* Name       : T_EVENT* Moe_Event_Get(void)
 * Function   : To get a event from quque
 * Input      : None
-* Output:    : T_EVENT *ptEvt            Pointer to get event
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Output:    : None
+* Return     : NULL :     No event
+*              Other:     Event pointer
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Get(T_EVENT *ptEvt)
+T_EVENT* Moe_Event_Get(void)
+{      
+    /* If there is no event */
+    MOE_CHECK_IF_RET_VAL((0 == sg_u16EvtCnt), NULL, "Event count is 0\n");
+
+    /* Get the evenet information */
+    return &sg_atEvtQueue[sg_u16EvtFirst];
+}
+
+/******************************************************************************
+* Name       : void Moe_Event_Remove(void)
+* Function   : Remove the processed event
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Moe_Event_Remove(void)
 {  
     uint32 u32IntSt;
-    
-    /* Check if the pointer is invalid or NOT */
-    MOE_CHECK_IF_RET_ST((NULL == ptEvt),"Event pointer should NOT be NULL\n");
-
-    /* If there is no event */
-    MOE_CHECK_IF_RET_ST((0 == sg_u16EvtCnt), "Event count is 0\n");
-
-    /* Get the task and event */
-    ptEvt->u8Task = sg_atEvtQueue[sg_u16EvtFirst].u8Task;
-    ptEvt->u8Evt  = sg_atEvtQueue[sg_u16EvtFirst].u8Evt;
-    
+        
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     sg_u16EvtFirst = (sg_u16EvtFirst + 1) % MAX_QUEUE_EVT_NUM; /* Update the position of first available event */
-    sg_u16EvtCnt--;                                           /* Update the event count */
+    sg_u16EvtCnt--;                                            /* Update the event count */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return SW_OK;
+    return;
 }
+
 
 
     
