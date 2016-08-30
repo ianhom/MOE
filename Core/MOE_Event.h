@@ -45,11 +45,15 @@ extern "C" {
 /*******************************************************************************
 * Structure  : T_EVENT
 * Description: Structure of event information including task ID and event.
-* Memebers   : uint8 u8Task    1~255     The task ID for such event
+* Memebers   : void *pPara               Pointer of parameter
+*              uint8 u8Src     1~255     The source task ID which set such event
+*              uint8 u8Task    1~255     The destination task ID which receives such event
 *              uint8 u8Evt     1~255     The event
 *******************************************************************************/
 typedef struct _T_EVENT
 {
+    void *pPara;
+    uint8 u8Src;
     uint8 u8Task;
     uint8 u8Evt;
 }T_EVENT;
@@ -84,12 +88,13 @@ typedef struct _T_EVENT_QUEUE
 uint8 Moe_Event_Init(void);
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg)
+* Name       : uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 * Function   : This function is used to set event for tasks.
 * Input      : uint8 u8TaskID   1~255               The task ID to receive such event
 *              uint8 u8Evt      1~255               The event type
 *              uint8 u8Urg      MOE_EVENT_URGENT    It is an urgent event
 *                               MOE_EVENT_NORMAL    It is a normal event
+*              uint8 pPara                          Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
@@ -98,21 +103,35 @@ uint8 Moe_Event_Init(void);
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg) ;
+uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara);
 
 /******************************************************************************
-* Name       : uint8 Moe_Event_Get(T_EVENT *ptEvt)
+* Name       : T_EVENT* Moe_Event_Get(void)
 * Function   : To get a event from quque
 * Input      : None
-* Output:    : T_EVENT *ptEvt            Pointer to get event
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Output:    : None
+* Return     : NULL :     No event
+*              Other:     Event pointer
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Event_Get(T_EVENT *ptEvt);
+T_EVENT* Moe_Event_Get(void);
+
+/******************************************************************************
+* Name       : void Moe_Event_Remove(void)
+* Function   : Remove the processed event
+* Input      : None
+* Output:    : None
+* Return     : None
+* description: To be done
+* Version    : V1.00
+* Author     : Ian
+* Date       : 3rd May 2016
+******************************************************************************/
+void Moe_Event_Remove(void);
+
 
  
 #ifdef __cplusplus
