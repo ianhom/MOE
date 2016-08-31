@@ -1,4 +1,7 @@
 # Log
+##31st Aug 2016
+First contribution from Joe, thank  you!!
+
 ##30th Aug 2016
 Complete the modification of message
 
