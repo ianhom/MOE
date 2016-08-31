@@ -86,7 +86,7 @@ static T_TIMER_NODE* Moe_Timer_Add(void)
 
     ptNode->ptNext = NULL;               /* Set the next node as NULL       */
 
-    if(NULL == sg_ptTmTail)              /* If there is NO nodes            */
+    if(NULL == sg_ptTmHead)              /* If there is NO nodes            */
     {
         sg_ptTmHead = ptNode;            /* Add new node as the fisrt one   */
     }
