@@ -1,4 +1,7 @@
 # Log
+##4th Sep 2016
+Modify timer with new event structure
+
 ##31st Aug 2016
 First contribution from Joe, thank  you!!
 
