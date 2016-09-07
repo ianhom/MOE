@@ -392,7 +392,7 @@ T_EVENT* Moe_Event_Get(void)
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
     /* If there is no event */
-    MOE_CHECK_IF_RET_ST((0 == sg_u16EvtCnt), "Event count is 0\n");
+    MOE_CHECK_IF_RET_VAL((0 == sg_u16EvtCnt), NULL,  "Event count is 0\n");
 
     u16Blk    = sg_u16EvtFirst % MAX_QUEUE_EVT_NUM;   /* Calculate the event queue block for the first available event */
     u16OffSet = sg_u16EvtFirst / MAX_QUEUE_EVT_NUM;   /* Calculate the offset in block for the first available event   */
@@ -463,7 +463,7 @@ static uint32 Moe_Event_Queue_Block_Add(void)
 {
     uint8  u8Idx;
     uint16 u16Blk,u16OffSet;
-    T_EVENT_QUEUE *ptFirst = sg_ptEvtHead, *ptPre, * ptAdd;
+    T_EVENT_QUEUE *ptFirst = sg_ptEvtHead, *ptPre, *ptAdd;
 
     /* Create a new event queue block */
     ptAdd = (T_EVENT_QUEUE*)MOE_MALLOC(sizeof(T_EVENT_QUEUE));
