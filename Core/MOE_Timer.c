@@ -479,7 +479,7 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE *ptNode)
 static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind)
 {   
     /* Set the desired evnet */
-    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt,MOE_EVENT_NORMAL);  
+    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt,MOE_EVENT_NORMAL, NULL);  
     DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt);
 #ifdef __TIMER_CALLBACK_SUPPORTED
     if (NULL != ptFind->tTimer.pfTmCallback)                /* If we have callback for such timer */
