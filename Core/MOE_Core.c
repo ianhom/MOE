@@ -130,9 +130,17 @@ void Moe_Run(void)
         if(sg_ptEvt = Moe_Event_Get())   /* Check events                 */
         {
             cg_apfTaskFn[sg_ptEvt->u8Task - 1](sg_ptEvt);      /* Call the task process function */
-            Moe_Msg_Never_Rcv_Check(sg_ptEvt->u8Task, sg_ptEvt->u8Evt);
-            sg_ptEvt->u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
-            sg_ptEvt = &sg_tEvt;                               /* Point to a none event & task "event struct"        */   
+            /* If it is a message event */
+            /* AND the message destination task is such one(NOT forwarding) */
+            /* AND the message pointer is valid */
+            if((EVENT_MSG == sg_ptEvt->u8Evt)\
+            && ((T_MSG_HEAD*)(sg_ptEvt->pPara)->u8DestTask == sg_ptEvt->u8Evt)\
+            && (NULL != sg_ptEvt->pPara))
+            {
+                Moe_Msg_Process((T_MSG_HEAD*)(sg_ptEvt->pPara)); /* Call message process */
+            }
+            sg_ptEvt->u8Task = TASK_NO_TASK;                     /* Finish task processing and cancel active task mark */
+            sg_ptEvt = &sg_tEvt;                                 /* Point to a none event & task "event struct"        */   
         }
     }
 }
