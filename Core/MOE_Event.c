@@ -171,12 +171,25 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *p
 * Date       : 3rd May 2016
 ******************************************************************************/
 T_EVENT* Moe_Event_Get(void)
-{      
+{   
+    uint32 u32IntSt;
+    uint16 u16EvtFirst;
     /* If there is no event */
     MOE_CHECK_IF_RET_VAL((0 == sg_u16EvtCnt), NULL, "Event count is 0\n");
+    MOE_CHECK_IF_RET_VAL((0 == sg_atEvtQueue[sg_u16EvtFirst].u8Task), NULL, "Destination task is invalid!\n");
+
+    u16EvtFirst = sg_u16EvtFirst;
+
+     
+    ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
+    /**************************************************************************************************/
+    sg_u16EvtFirst = (sg_u16EvtFirst + 1) % MAX_QUEUE_EVT_NUM; /* Update the position of first available event */
+    sg_u16EvtCnt--;                                            /* Update the event count */
+    /**************************************************************************************************/
+    EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
     /* Get the evenet information */
-    return &sg_atEvtQueue[sg_u16EvtFirst];
+    return &sg_atEvtQueue[u16EvtFirst];
 }
 
 /******************************************************************************
@@ -386,7 +399,8 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *p
 * Date       : 3rd May 2016
 ******************************************************************************/
 T_EVENT* Moe_Event_Get(void)
-{  
+{      
+    uint32 u32IntSt;
     uint16 u16Blk,u16OffSet;
     T_EVENT_QUEUE *ptEvtQueue = sg_ptEvtHead;
 
@@ -403,27 +417,7 @@ T_EVENT* Moe_Event_Get(void)
         u16Blk--;
     }
 
-    /* Get the Task and event */
-    return &(ptEvtQueue->atEvtQueue[u16OffSet]);
-}
-
-
-/******************************************************************************
-* Name       : void Moe_Event_Remove(void)
-* Function   : Remove the processed event
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_Event_Remove(void)
-{  
-    uint32 u32IntSt;
-    uint16 u16Blk,u16OffSet;
-    
+ 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
     sg_u16EvtFirst = (sg_u16EvtFirst + 1) % sg_u16EvtCntMax;  /* Update the position of first available event */
@@ -436,14 +430,16 @@ void Moe_Event_Remove(void)
     && (sg_u16EvtFirst < (sg_u16EvtCntMax - (MAX_QUEUE_EVT_NUM >> 1))\
     && (sg_u16EvtCnt < (MAX_QUEUE_EVT_NUM >> 1)))
     {   
-
-        Moe_Event_Queue_Block_Del();  /* Delete the last unused event queue block */
+ 
+       Moe_Event_Queue_Block_Del();  /* Delete the last unused event queue block */
     }
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return;
+    /* Get the Task and event */
+    return &(ptEvtQueue->atEvtQueue[u16OffSet]);
 }
+
 
 
 /******************************************************************************
