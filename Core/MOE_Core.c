@@ -94,7 +94,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
     sg_tEvt.u8Evt  = EVENT_INIT;
     for(sg_tEvt.u8Task = 1; sg_tEvt.u8Task <= MAX_TASK_NUM; sg_tEvt.u8Task++)
     {
-        cg_apfTaskFn[tEvt.u8Task - 1](&sg_tEvt);
+        cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt, sg_tEvt.pPara);
     }
    
     sg_tEvt.u8Task = TASK_NO_TASK;
@@ -121,7 +121,6 @@ void Moe_Run(void)
     while(1)                             /* The main loop                */
     {
         Moe_Timer_Process();             /* Update all timers            */
-        Moe_Msg_Process();               /* Process messageas            */
         if (sg_pfPoll)
         {
             sg_pfPoll();                 /* Do polling process if needed */
@@ -129,12 +128,12 @@ void Moe_Run(void)
 
         if(sg_ptEvt = Moe_Event_Get())   /* Check events                 */
         {
-            cg_apfTaskFn[sg_ptEvt->u8Task - 1](sg_ptEvt);      /* Call the task process function */
+            cg_apfTaskFn[sg_ptEvt->u8Task - 1](sg_ptEvt->u8Evt, sg_ptEvt->pPara); /* Call the task process function */
             /* If it is a message event */
             /* AND the message destination task is such one(NOT forwarding) */
             /* AND the message pointer is valid */
             if((EVENT_MSG == sg_ptEvt->u8Evt)\
-            && ((T_MSG_HEAD*)(sg_ptEvt->pPara)->u8DestTask == sg_ptEvt->u8Evt)\
+            && (((T_MSG_HEAD*)(sg_ptEvt->pPara))->u8DestTask == sg_ptEvt->u8Task)\
             && (NULL != sg_ptEvt->pPara))
             {
                 Moe_Msg_Process((T_MSG_HEAD*)(sg_ptEvt->pPara)); /* Call message process */
