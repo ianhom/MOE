@@ -89,7 +89,7 @@ typedef struct _T_TEST_MSG
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: This function init the receive_done_flag array with all 0
+* description: None
 * Version    : V1.00
 * Author     : Ian
 * Date       : 27 Jun 2016
@@ -112,21 +112,6 @@ void Moe_Msg_Init(void);
 * Date       : 28th May 2016
 ******************************************************************************/
 uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
-
-
-/******************************************************************************
-* Name       : uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type)
-* Function   : Receive a message
-* Input      : uint8  u8DestTask    1~254     The destination task number
-* Output:    : uint8 *pu8Type       0~255     Type of message
-* Return     : NULL  Failed.
-*              The pointer of the message 
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 31st May 2016
-******************************************************************************/
-uint8* Moe_Msg_Receive(uint8 u8DestTask, uint8 *pu8Type);
 
 
 /******************************************************************************
@@ -163,74 +148,7 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 ******************************************************************************/
 uint8 Moe_Msg_Process(void);
 
-/******************************************************************************
-* Name       : void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
-* Function   : Check is the message is received or NOT after the EVENT_MSG task
-*              process. 
-* Input      : uint8     u8Task   1~254      Task number
-*              uint8     u8Evt    0~255      Event number
-* Output:    : None 
-* Return     : None
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 27th Jun 2016
-******************************************************************************/
-void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt);
 
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Total_Cnt(void)
-* Function   : Get the max number of total messages in message link list.
-* Input      : None
-* Output:    : None
-* Return     : The max number of total messages in message link list.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Total_Cnt(void);
-
-
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Read_Cnt(void)
-* Function   : Get the max number of read messages
-* Input      : None
-* Output:    : None
-* Return     : The max number of read messages
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 8th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Read_Cnt(void);
-
-
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Unread_Cnt(void)
-* Function   : Get the max number of unread messages
-* Input      : None
-* Output:    : None
-* Return     : The max number of unread messages
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Unread_Cnt(void);
-
-/******************************************************************************
-* Name       : void Moe_Msg_Test_General(void)
-* Function   : General test for message
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-void Moe_Msg_Test_General(void);
 
  
 #ifdef __cplusplus
