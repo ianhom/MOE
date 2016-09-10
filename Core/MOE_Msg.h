@@ -38,9 +38,9 @@ extern "C" {
 #define MOE_MSG_SEND(DstTsk, MsgType, Msg)     Moe_Msg_Send(DstTsk, MsgType, sizeof(Msg), (void*)(&Msg))
 
 #ifdef __FLEXIBLE_ARRAY_NOT_SUPPORTED
-#define MOE_MSG_CONTENT(p)  (p + 1);                  /* Return the data of message         */
+#define MOE_MSG_CONTENT(p)  ((T_MSG_HEAD*)p + 1);                 /* Return the data of message         */
 #else
-#define MOE_MSG_CONTENT(p)  (p->au8Data);             /* Return the data of message         */
+#define MOE_MSG_CONTENT(p)  (((T_MSG_HEAD*)p)->au8Data);          /* Return the data of message         */
 #endif      
 
 
@@ -130,7 +130,7 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
 * Author     : Ian
 * Date       : 5th Jun 2016
 ******************************************************************************/
-uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask);
+uint8 Moe_Msg_Forward(T_MSG_HEAD *ptMsg, uint8 u8NextTask);
 
 
 /******************************************************************************
@@ -146,7 +146,7 @@ uint8 Moe_Msg_Forward(void *ptMsg, uint8 u8NextTask);
 * Author     : Ian
 * Date       : 31st May 2016
 ******************************************************************************/
-uint8 Moe_Msg_Process(void);
+uint8 Moe_Msg_Process(T_MSG_HEAD *ptMsg);
 
 
 
