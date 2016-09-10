@@ -19,13 +19,6 @@
 
 
 static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
-static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg);
-static uint16 Moe_Msg_Max_Cnt(void);
-
-
-static uint16       sg_u16MsgPollFlag = MOE_MSG_POLL_NONE;        /* Message poll request flag  */
-
-static uint8        sg_au8RcvDone[MAX_TASK_NUM] = {0};
 
 /******************************************************************************
 * Name       : void Moe_Msg_Init(void)
@@ -33,14 +26,13 @@ static uint8        sg_au8RcvDone[MAX_TASK_NUM] = {0};
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: This function init the receive_done_flag array with all 0
+* description: None
 * Version    : V1.00
 * Author     : Ian
 * Date       : 27 Jun 2016
 ******************************************************************************/
 void Moe_Msg_Init(void)
 {
-    Moe_Memset(sg_au8RcvDone, 0, sizeof(sg_au8RcvDone));
     return;
 }
 
@@ -210,27 +202,6 @@ uint8 Moe_Msg_Forward(T_MSG_HEAD *ptMsg, uint8 u8NextTask)
 }
 
 
-/******************************************************************************
-* Name       : static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
-* Function   : Detele a message
-* Input      : T_MSG_HEAD *ptMsg  The message to be deteled.
-* Output:    : None
-* Return     : Pointer of the message data struct.
-*              NULL:  Failed.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 31st May 2016
-******************************************************************************/
-static T_MSG_HEAD* Moe_Msg_Del(T_MSG_HEAD *ptMsg)
-{
-    /* Check if the pointer of message to be deteled is invalid or NOT */
-    MOE_CHECK_IF_RET_VAL((ptMsg == NULL), NULL, "The pointer of message to be deteled is invalid!!\n");
-    
-    DBG_PRINT("Delete the message now.\n");
-    MOE_FREE(ptMsg);
-    return ptMsg;
-}
 
 /******************************************************************************
 * Name       : uint8 Moe_Msg_Process(void)
@@ -269,6 +240,7 @@ uint8 Moe_Msg_Process(T_MSG_HEAD *ptMsg)
 #endif
             Moe_Event_Set(ptMsg->u8DestTask, EVENT_MSG, MOE_EVENT_NORMAL, ptMsg);/* Set MSG event to next task */
             DBG_PRINT("The message to all tasks is processed by task %d, ready for next forwarding!!\n", TASK_CURRENT_TASK);
+            return SW_OK;
         }
                         
         /* If such message is for all task and this is the last forwarding */
@@ -276,226 +248,17 @@ uint8 Moe_Msg_Process(T_MSG_HEAD *ptMsg)
         else
         {        
             /* If it is a message for all tasks */
-            if(0 != ptMsg->u8CopyCnt)
-            {
 #ifdef __WANTED_A_LIVE_FOX
-                DBG_PRINT("Fox killed all except herself %d!!\n", ptMsg->u8SrcTask);                    
+            DBG_PRINT("Fox killed all except herself %d!!\n", ptMsg->u8SrcTask);                    
 #endif
-                DBG_PRINT("All tasks have received the message!!\n");
-            } 
-            MOE_FREE(ptMsg);
+            DBG_PRINT("All tasks have received the message!!\n");
         }
-        return SW_OK;
     }
 
-    return SW_ERR;
+    MOE_FREE(ptMsg);
+
+    return SW_OK;
 }
-
-
-/******************************************************************************
-* Name       : void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
-* Function   : Check is the message is received or NOT after the EVENT_MSG task
-*              process. 
-* Input      : uint8     u8Task   1~254      Task number
-*              uint8     u8Evt    0~255      Event number
-* Output:    : None
-* Return     : None
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 27th Jun 2016
-******************************************************************************/
-void Moe_Msg_Never_Rcv_Check(uint8 u8Task, uint8 u8Evt)
-{   
-    uint8 u8Temp;
- 
-    /* If it is a message event */
-    if((EVENT_MSG == u8Evt)&&((TASK_NO_TASK != u8Task)&&(TASK_ALL_TASK != u8Task)))
-    {   /* If the message has NOT been received after task process */
-        if(MOE_MSG_RCV_DONE_NONE == sg_au8RcvDone[u8Task - 1])
-        {   /* Received the message as a dummy reading */
-            Moe_Msg_Receive(u8Task,&u8Temp);
-        }
-        /* Clear the flag of received */
-        sg_au8RcvDone[u8Task - 1] = MOE_MSG_RCV_DONE_NONE;
-    }    
-
-    return;
-}
-
-
-/******************************************************************************
-* Name       : static uint16 Moe_Msg_Max_Cnt(void)
-* Function   : Get the max number of messages which can be created
-* Input      : None
-* Output:    : None
-* Return     : The max number of messages
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-static uint16 Moe_Msg_Max_Cnt(void)
-{
-    uint16      u16Cnt = 0;
-    uint8       u8Type = 0;
-    T_TEST_MSG  tMsg;
-    T_MSG_HEAD *ptMsg  = (T_MSG_HEAD*)Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
-    while(!ptMsg)
-    {
-         u16Cnt++;
-         ptMsg  = (T_MSG_HEAD*)Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
-    }
-    DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
-
-    ptMsg = (T_MSG_HEAD*)Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
-    while(ptMsg)
-    {
-        ptMsg = (T_MSG_HEAD*)Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
-    }
-
-    DBG_PRINT("%d messages are ready to be deleted!!\n", sg_u16MsgPollFlag);
-    Moe_Msg_Process();
-    if(NULL == sg_ptMsgListHead)
-    {   
-        DBG_PRINT("Max_count of message is %d!\n",u16Cnt);
-        DBG_PRINT("All messages are deleted!!\n");
-    }
-    else
-    {
-        DBG_PRINT("All messages are NOT deleted!!\n");
-    }
-    return u16Cnt;
-}
-
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Total_Cnt(void)
-* Function   : Get the max number of total messages in message link list.
-* Input      : None
-* Output:    : None
-* Return     : The max number of total messages in message link list.
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Total_Cnt(void)
-{
-    uint16      u16Cnt = 0;
-    T_MSG_HEAD *ptMsg  = sg_ptMsgListHead;
-    
-    /* Check if message exist or NOT  */
-    while(ptMsg)
-    {
-        u16Cnt++;              /* Increase the count */
-        ptMsg = ptMsg->ptNext; /* Check next one     */
-    }
-    DBG_PRINT("There are %d messages!\n", u16Cnt);
-    return u16Cnt;
-}
-
-
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Read_Cnt(void)
-* Function   : Get the max number of read messages
-* Input      : None
-* Output:    : None
-* Return     : The max number of read messages
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 8th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Read_Cnt(void)
-{
-    DBG_PRINT("There are %d read messages!\n", sg_u16MsgPollFlag);
-    return sg_u16MsgPollFlag;
-}
-
-
-/******************************************************************************
-* Name       : uint16 Moe_Msg_Unread_Cnt(void)
-* Function   : Get the max number of unread messages
-* Input      : None
-* Output:    : None
-* Return     : The max number of unread messages
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-uint16 Moe_Msg_Unread_Cnt(void)
-{
-    uint16      u16Cnt = 0;    
-    
-    u16Cnt = Moe_Msg_Total_Cnt() - Moe_Msg_Read_Cnt();
-
-    DBG_PRINT("There are %d unread messages!\n", u16Cnt);
-    return u16Cnt;
-}
-
-/******************************************************************************
-* Name       : void Moe_Msg_Test_General(void)
-* Function   : General test for message
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th Jun 2016
-******************************************************************************/
-void Moe_Msg_Test_General(void)
-{  
-    uint8       u8Type = 0;
-    T_TEST_MSG  tMsg;
-
-    Moe_Msg_Max_Cnt();
-    
-    for (uint8 u8Idx = 0; u8Idx < 10; u8Idx++)
-    {
-        Moe_Msg_Send(TASK_FIRST_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
-    }
-    
-    if(10 != Moe_Msg_Total_Cnt())
-    {
-        DBG_PRINT("Total message count is wrong!!\n");
-    }
-
-    for (uint8 u8Idx = 0; u8Idx < 6; u8Idx++)
-    {
-        Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
-    }
-
-    if(6 != Moe_Msg_Read_Cnt())
-    {
-        DBG_PRINT("Read message count is wrong!!\n");
-    }
-
-    if(4 != Moe_Msg_Unread_Cnt())
-    {
-        DBG_PRINT("Unead message count is wrong!!\n");
-    }
-
-    Moe_Msg_Process();
-    
-    if(4 != Moe_Msg_Total_Cnt())
-    {
-        DBG_PRINT("Total message count after deteling is wrong!!\n");
-    }
-    
-    for (uint8 u8Idx = 0; u8Idx < 4; u8Idx++)
-    {
-        Moe_Msg_Receive(TASK_FIRST_TASK, &u8Type);
-    }
-    Moe_Msg_Process();
-    if(0 != Moe_Msg_Total_Cnt())
-    {
-        DBG_PRINT("Total message count after deteling is wrong!!\n");
-    }
-    return;
-}
-
 
 
 /* end of file */
