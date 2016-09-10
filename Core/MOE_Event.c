@@ -89,7 +89,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
         /**************************************************************************************************/
         for(u8Idx = 1; u8Idx <= MAX_TASK_NUM; u8Idx++)
         {
-            Moe_Event_Setting(u8Idx, u8Evt,u8Urg);
+            Moe_Event_Setting(u8Idx, u8Evt,u8Urg, pPara);
         }
         /**************************************************************************************************/
         EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
@@ -126,7 +126,6 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 ******************************************************************************/
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 {
-    uint8  u8Idx;
     uint16 u16EvtLast;
 
     /* If the current event count is equal to the max limit */
