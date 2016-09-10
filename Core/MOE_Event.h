@@ -119,19 +119,6 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara);
 ******************************************************************************/
 T_EVENT* Moe_Event_Get(void);
 
-/******************************************************************************
-* Name       : void Moe_Event_Remove(void)
-* Function   : Remove the processed event
-* Input      : None
-* Output:    : None
-* Return     : None
-* description: To be done
-* Version    : V1.00
-* Author     : Ian
-* Date       : 3rd May 2016
-******************************************************************************/
-void Moe_Event_Remove(void);
-
 
  
 #ifdef __cplusplus
