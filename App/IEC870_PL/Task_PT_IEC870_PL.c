@@ -20,8 +20,6 @@
 #include "Task_PT_IEC870_PL.h"
 #include "debug.h"
 #include "MOE_DRV_CC1101.h"
-#include "knx_rf_Ll.h"
-
 
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
@@ -187,22 +185,22 @@ static void Print_RF_Info(void)
     
     switch(ptBlock1->ubStr)
     {
-        case KNX_RF_Ll_STR_NULL:
+        case RF_Ll_STR_NULL:
         {
             DBG_PRINT("RF str is NULL\n");
             break;
         }
-        case KNX_RF_Ll_STR_LOW:
+        case RF_Ll_STR_LOW:
         {
             DBG_PRINT("RF str is low\n");
             break;
         }
-        case KNX_RF_Ll_STR_MID:
+        case RF_Ll_STR_MID:
         {
             DBG_PRINT("RF str is MID\n");
             break;
         }
-        case KNX_RF_Ll_STR_HIGH:
+        case RF_Ll_STR_HIGH:
         {
             DBG_PRINT("RF str is HIGH\n");
             break;
@@ -213,11 +211,11 @@ static void Print_RF_Info(void)
         }
     }
     
-    if (KNX_RF_Ll_BTY_LOW == ptBlock1->ubBty)
+    if (RF_Ll_BTY_LOW == ptBlock1->ubBty)
     {
         DBG_PRINT("Battery is low\n");
     }
-    else if(KNX_RF_Ll_BTY_HIGH == ptBlock1->ubBty)
+    else if(RF_Ll_BTY_HIGH == ptBlock1->ubBty)
     {
         DBG_PRINT("Battery is high\n");
     }
@@ -226,11 +224,11 @@ static void Print_RF_Info(void)
         DBG_PRINT("Battery information is wrong!!\n");
     }
     
-    if (KNX_RF_LL_DIR_BI == ptBlock1->ubBi)
+    if (RF_LL_DIR_BI == ptBlock1->ubBi)
     {
         DBG_PRINT("Sender is bi-direction\n");
     }
-    else if(KNX_RF_LL_DIR_UNI == ptBlock1->ubBi)
+    else if(RF_LL_DIR_UNI == ptBlock1->ubBi)
     {
         DBG_PRINT("Sender is uni-direction\n");
     }
@@ -250,11 +248,11 @@ static void Print_RF_Info(void)
     DBG_PRINT("Source Address is 0x%x\n", ptBlock2->w16SrcAddr);
     DBG_PRINT("Destination Address is 0x%x\n", ptBlock2->w16DesAddr);
     
-    if(KNX_RF_Ll_FRAME_TYPE_STD == ptBlock2->ubAET)
+    if(RF_Ll_FRAME_TYPE_STD == ptBlock2->ubAET)
     {
         DBG_PRINT("It is a standard frame\n");
     }
-    else if(KNX_RF_Ll_FRAME_TYPE_EXT == ptBlock2->ubAET)
+    else if(RF_Ll_FRAME_TYPE_EXT == ptBlock2->ubAET)
     {
         DBG_PRINT("It is a extented frame\n");
     }
@@ -263,11 +261,11 @@ static void Print_RF_Info(void)
         DBG_PRINT("Frame type is wrong!\n");
     }
     
-    if(KNX_RF_LL_DEST_ADDR_PHY == ptBlock2->ubAT)
+    if(RF_LL_DEST_ADDR_PHY == ptBlock2->ubAT)
     {
         DBG_PRINT("Destination address is a physical address\n");
     }
-    else if(KNX_RF_LL_DEST_ADDR_GRP == ptBlock2->ubAT)
+    else if(RF_LL_DEST_ADDR_GRP == ptBlock2->ubAT)
     {
         DBG_PRINT("Destination address is a group address\n");
     }
