@@ -24,8 +24,8 @@ static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
 static PF_POLL   sg_pfPoll   = NULL;
 
-static T_EVENT sg_tEvt;
-
+static T_EVENT sg_tEvt = {NULL};
+static T_EVENT *sg_ptEvt = &sg_tEvt;
 /******************************************************************************
 * Name       : void Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 * Function   : Set a memory block with a desired value
@@ -94,7 +94,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
     sg_tEvt.u8Evt  = EVENT_INIT;
     for(sg_tEvt.u8Task = 1; sg_tEvt.u8Task <= MAX_TASK_NUM; sg_tEvt.u8Task++)
     {
-        cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt);
+        cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt, sg_tEvt.pPara);
     }
    
     sg_tEvt.u8Task = TASK_NO_TASK;
@@ -121,17 +121,25 @@ void Moe_Run(void)
     while(1)                             /* The main loop                */
     {
         Moe_Timer_Process();             /* Update all timers            */
-        Moe_Msg_Process();               /* Process messageas            */
         if (sg_pfPoll)
         {
             sg_pfPoll();                 /* Do polling process if needed */
         }
 
-        if(Moe_Event_Get(&sg_tEvt))      /* Check events                 */
+        if(sg_ptEvt = Moe_Event_Get())   /* Check events                 */
         {
-            cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt); /* Call the task process function */
-            Moe_Msg_Never_Rcv_Check(sg_tEvt.u8Task, sg_tEvt.u8Evt);
-            sg_tEvt.u8Task = TASK_NO_TASK;                   /* Finish task processing and cancel active task mark */
+            cg_apfTaskFn[sg_ptEvt->u8Task - 1](sg_ptEvt->u8Evt, sg_ptEvt->pPara); /* Call the task process function */
+            /* If it is a message event */
+            /* AND the message destination task is such one(NOT forwarding) */
+            /* AND the message pointer is valid */
+            if((EVENT_MSG == sg_ptEvt->u8Evt)\
+            && (((T_MSG_HEAD*)(sg_ptEvt->pPara))->u8DestTask == sg_ptEvt->u8Task)\
+            && (NULL != sg_ptEvt->pPara))
+            {
+                Moe_Msg_Process((T_MSG_HEAD*)(sg_ptEvt->pPara)); /* Call message process */
+            }
+            sg_ptEvt->u8Task = TASK_NO_TASK;                     /* Finish task processing and cancel active task mark */
+            sg_ptEvt = &sg_tEvt;                                 /* Point to a none event & task "event struct"        */   
         }
     }
 }
@@ -149,7 +157,7 @@ void Moe_Run(void)
 ******************************************************************************/
 uint8 Moe_Get_Acktive_Task(void)
 {
-    return sg_tEvt.u8Task;
+    return sg_ptEvt->u8Task;
 }
 
 /******************************************************************************
@@ -165,7 +173,7 @@ uint8 Moe_Get_Acktive_Task(void)
 ******************************************************************************/
 uint8 Moe_Get_Acktive_Evt(void)
 {
-    return sg_tEvt.u8Evt;
+    return sg_ptEvt->u8Evt;
 }
 
 /******************************************************************************

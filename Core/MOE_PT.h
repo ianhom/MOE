@@ -84,7 +84,7 @@ extern "C" {
                                 PT_WAIT_EVENT(EVENT_DELAY)
 
 /* Return and recall as soon as possible */
-#define PT_BREAK()              Moe_Event_Set(sg_u8TaskID, EVENT_BREAK, MOE_EVENT_NORMAL);\
+#define PT_BREAK()              Moe_Event_Set(sg_u8TaskID, EVENT_BREAK, MOE_EVENT_NORMAL, NULL);\
                                 PT_YIELD()
 
 /* Wait for a message event */
