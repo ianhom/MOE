@@ -21,7 +21,6 @@
 
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
-
 /******************************************************************************
 * Name       : uint8 Task2_Process(uint8 u8Evt)
 * Function   : Task 2 process
@@ -35,7 +34,7 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Task2_Process(uint8 u8Evt)
+uint8 Task2_Process(uint8 u8Evt, void *pPara)
 {   
     /* Check which event should be processed */
     switch (u8Evt)
@@ -50,27 +49,21 @@ uint8 Task2_Process(uint8 u8Evt)
         /* If it is a message event */
         case EVENT_MSG:       
         {
-            uint8  u8MsgType;
-            void  *ptMsg;
-            static uint8 sg_u8Cnt = 0;
+            uint8  u8MsgType = ((T_MSG_HEAD*)pPara)->u8MsgType;
 
-            ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
-            while(ptMsg)
-            {   sg_u8Cnt++;
-                switch(u8MsgType)
+            switch(u8MsgType)
+            {
+                case MSG_TYPE_TEST:
                 {
-                    case MSG_TYPE_TEST:
-                    {
-                        T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)ptMsg;
-                        DBG_PRINT("This is task %d\n",sg_u8TaskID);
-                        DBG_PRINT("Get %d messages\n",sg_u8Cnt);
-                        DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
-                        DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
-                        DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
-                    }
+                    T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)MOE_MSG_CONTENT(pPara);
+                    //DBG_PRINT("This is task %d\n",sg_u8TaskID);
+                    DBG_PRINT(" %d!\n",(ptTestMsg->DATA.u32Data));
+                    //DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
+                    //DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
+                    //DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
                 }
-                ptMsg = (void*)Moe_Msg_Receive(sg_u8TaskID, &u8MsgType);
             }
+
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
 
@@ -96,7 +89,7 @@ uint8 Task2_Process(uint8 u8Evt)
             /******************************************************************/
 
             /*--------------------   Add your init code here   ----------------------*/
-           // Moe_Timer_Periodic(1500);
+            //Moe_Timer_Periodic(1500);
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
