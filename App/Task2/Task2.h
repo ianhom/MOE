@@ -41,7 +41,7 @@ extern "C" {
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Task2_Process(uint8 u8Evt);
+uint8 Task2_Process(uint8 u8Evt, void *pPara);
 
 
 
