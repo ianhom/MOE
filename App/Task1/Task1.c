@@ -34,8 +34,10 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Task1_Process(uint8 u8Evt)
+uint8 Task1_Process(uint8 u8Evt, void *pPara)
 {   
+    static uint32 u32Temp = 0x0;
+    u32Temp += 0x1;
     /* Check which event should be processed */
     switch (u8Evt)
     {
@@ -46,8 +48,12 @@ uint8 Task1_Process(uint8 u8Evt)
 
             DBG_PRINT("I am task 1 and I am working!!\n");
 
-            tMsg.DATA.u32Data = 0x11223344;
-            Moe_Msg_Send(TASK_ALL_TASK, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
+            tMsg.DATA.u32Data = u32Temp;
+            if(SW_ERR == MOE_MSG_SEND(2, MSG_TYPE_TEST, tMsg))
+            {
+                DBG_PRINT("Heap is running out!!");
+            };
+            //Moe_Msg_Send(2, MSG_TYPE_TEST, sizeof(T_TEST_MSG), (void*)&tMsg);
 
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
@@ -81,7 +87,7 @@ uint8 Task1_Process(uint8 u8Evt)
             /******************************************************************/
 
             /*--------------------   Add your init code here   ----------------------*/
-            Moe_Timer_Periodic(4000);
+            Moe_Timer_Periodic(10);
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
@@ -95,6 +101,5 @@ uint8 Task1_Process(uint8 u8Evt)
 }
 
 /* End of file */
-
 
 
