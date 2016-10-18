@@ -28,18 +28,22 @@ extern "C" {
 
 /* Add your task process here */
 #define LIST_OF_REG_TASK \
-        REG_TASK(Task_PT_11xx_Test)\
-        REG_TASK(Task_PT_Demo_Process)\
-        REG_TASK(Task_PT_Demo2_Process)\
         REG_TASK(Task1_Process)\
-        REG_TASK(Task2_Process)\
-        REG_TASK(Task3_Process)\
-        REG_TASK(LED_Demo_Process)\
-        REG_TASK(Task_Demo_Queue_Process)
+        REG_TASK(Task2_Process)
+//        REG_TASK(Task2_Process)\
+//        REG_TASK(Task1_Process)
+//        REG_TASK(Task_PT_11xx_Test)\
+//        REG_TASK(Task_PT_Demo_Process)\
+//        REG_TASK(Task_PT_Demo2_Process)\
+//        REG_TASK(Task1_Process)\
+//        REG_TASK(Task2_Process)\
+//        REG_TASK(Task3_Process)\
+//        REG_TASK(LED_Demo_Process)\
+//        REG_TASK(Task_Demo_Queue_Process)
 //        REG_TASK(Task_PT_IEC870_PL_Process)
 
 
-#define REG_TASK(name) uint8 name(uint8 u8Evt);
+#define REG_TASK(name) uint8 name(uint8 u8Evt, void *pPara);
 LIST_OF_REG_TASK
 #undef REG_TASK
 
@@ -108,11 +112,11 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  //__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_TASK_LED_DEMO         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_1            __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_APP_TASK_1            __DEBUG_NONE//__DEBUG_BASIC_INFO
 #define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
 #define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
 #define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
-#define __DEBUG_MODE_MOE_EVENT             __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_MOE_EVENT             __DEBUG_NONE//__DEBUG_FILE_LINE_FUNC_INFO 
 #define __DEBUG_MODE_BOARD_CONFIG          __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_HAL               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO               __DEBUG_BASIC_INFO
