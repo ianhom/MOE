@@ -22,18 +22,20 @@
 
 __root const char cg_au8Version[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
 
-
 void Poll_Process(void)
 {
     return;
 }
 
-int main (void)
-{   
-    uint8 u8Idx;
-    Gpio_Init();
-    Timer_Init();
 
+int main (void)
+{      
+    uint8 u8Idx;
+
+    Gpio_Init();     /* Init GPIOs */
+    Timer_Init();    /* Init Timer */
+
+    /* Print all loaded tasks */
     DBG_PRINT("\n***** %s *****\n", cg_au8Version);
     DBG_PRINT("Task count is %d:\n",MAX_TASK_NUM);
     for(u8Idx = 0; u8Idx < MAX_TASK_NUM; u8Idx++)
@@ -42,10 +44,14 @@ int main (void)
     }
     DBG_PRINT("\n\n");
 
+    /* Init MOE  */
     Moe_Init(App_GetSystemTime_ms, Poll_Process);   
-    
+
+    /* Run MOE */
     Moe_Run();
- 
+    
+    /* Never reach here */
+    return 0;
 }
 /********************************************************************/
 
