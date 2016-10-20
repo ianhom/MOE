@@ -1,5 +1,5 @@
 # MOE   
-![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.03%20.png)   
+![logo](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE%20logo%20V0.1c.png)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 ## 简介
 MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点如下：   
@@ -17,3 +17,6 @@ MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点�
 - **步骤 2**: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.   
 - **步骤 3**: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.   
 - **步骤 4**: 运行，体验吧.   
+
+## 特别感谢
+- **蔡嘉楠小姐**对MOE Logo的精心绘制。
