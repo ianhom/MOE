@@ -1,5 +1,5 @@
-# MOE   
-![logo](https://github.com/ianhom/MOE/raw/master/Documents/Pic/MOE%20logo%20V0.03%20.png)   
+# MOE    
+![logo](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE%20logo%20V0.1c.png)   
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 ## Introduce
 MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:   
@@ -17,3 +17,6 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:
 - **Step 2**: Create your own tasks or use exist app tasks to build your application.   
 - **Step 3**: Register tasks in Project_Config.h and continue other configuration in the same file.   
 - **Step 4**: Run & Enjoy.   
+
+## Special Thanks 
+- MOE Logo drawing by **Miss Cai Jianan**.
