@@ -22,9 +22,10 @@
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
-* Name       : uint8 Task1_Process(uint8 u8Evt)
+* Name       : uint8 Task1_Process(uint8 u8Evt, void *pPara)
 * Function   : Task 1 process
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
