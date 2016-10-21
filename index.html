@@ -32,67 +32,69 @@
 <a id="moe" class="anchor" href="#moe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MOE</h1>
 
 <p><img src="https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE%20logo%20V0.1c.png" alt="logo"><br>
-<a href="https://github.com/ianhom/MOE/blob/master/README_CHINESE.md">中文说明</a> </p>
+<a href="https://github.com/ianhom/MOE/blob/master/README.md">English</a> </p>
 
 <h2>
-<a id="introduce" class="anchor" href="#introduce" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduce</h2>
+<a id="简介" class="anchor" href="#%E7%AE%80%E4%BB%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>简介</h2>
 
-<p>MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:   </p>
+<p>MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点如下：   </p>
 
 <table>
 <thead>
 <tr>
 <th></th>
-<th>Description</th>
+<th>描述</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Event-driven</strong></td>
-<td>Flexible event queue length, priority event supported.</td>
+<td><strong>事件驱动</strong></td>
+<td>可变的事件队列长度，支持高优先级事件插队.</td>
 </tr>
 <tr>
-<td><strong>Timer</strong></td>
-<td>Useful ms-timer with callback.</td>
+<td><strong>软件定时器</strong></td>
+<td>实用的软件定时器功能，支持回调.</td>
 </tr>
 <tr>
-<td><strong>Message</strong></td>
-<td>Easy-use message API for communication between tasks, To-All-Task message with low RAM comsuption supported.</td>
+<td><strong>消息机制</strong></td>
+<td>易用的消息API轻松实现任务间通讯，支持“To All”消息（低RAM消耗）.</td>
 </tr>
 <tr>
-<td><strong>Debug</strong></td>
-<td>Flexible debug print options for each task or module; Useful easy-assert.</td>
+<td><strong>调试选项</strong></td>
+<td>灵活的调试选项，每个模块可设置不同的调试信息打印等级;易用的ASSERT.</td>
 </tr>
 <tr>
 <td><strong>Protothread</strong></td>
-<td>Protothread is supported for application module.</td>
+<td>应用模块支持Protothread的编写方式.</td>
 </tr>
 </tbody>
 </table>
 
 <h2>
-<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
+<a id="如何使用" class="anchor" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>如何使用</h2>
 
 <ul>
 <li>
-<strong>Step 1</strong>: Port the MOE to your hardware, provide "system clock in ms" and "poll function", init and run MOE.<br>
+<strong>步骤 1</strong>: 将MOE移植到您的硬件上，并为其提供“系统毫秒时钟”及“需要时刻轮询的函数”，然后初始化并运行MOE.<br>
 </li>
 <li>
-<strong>Step 2</strong>: Create your own tasks or use exist app tasks to build your application.<br>
+<strong>步骤 2</strong>: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.<br>
 </li>
 <li>
-<strong>Step 3</strong>: Register tasks in Project_Config.h and continue other configuration in the same file.<br>
+<strong>步骤 3</strong>: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.<br>
 </li>
 <li>
-<strong>Step 4</strong>: Run &amp; Enjoy.<br>
+<strong>步骤 4</strong>: 运行，Enjoy.<br>
 </li>
 </ul>
 
 <h2>
-<a id="special-thanks" class="anchor" href="#special-thanks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Special Thanks</h2>
+<a id="特别感谢" class="anchor" href="#%E7%89%B9%E5%88%AB%E6%84%9F%E8%B0%A2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>特别感谢</h2>
 
 <ul>
-<li>MOE Logo drawing by <strong>Miss Cai Jianan</strong>.</li>
+<li>
+<g-emoji alias="tada" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png" ios-version="6.0">🎉</g-emoji><strong>蔡嘉楠小姐</strong>对MOE Logo的精心绘制。<g-emoji alias="tada" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png" ios-version="6.0">🎉</g-emoji>
+</li>
 </ul>
         </section>
 
