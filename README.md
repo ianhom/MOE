@@ -19,4 +19,4 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:
 - **Step 4**: Run & Enjoy.   
 
 ## Special Thanks 
-- MOE Logo drawing by **Miss Cai Jianan**.
+- :tada:MOE Logo drawing by **Miss Cai Jianan**.:tada:
