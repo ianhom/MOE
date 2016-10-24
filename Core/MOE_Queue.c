@@ -2,8 +2,8 @@
 * File       : MOE_Queue.c
 * Function   : General queue function.
 * description: This module realize common queue operations, You can create your 
-*              own queue in task space or use  Moe_Queue_Create() create a queue
-*              with malloc. Both method need a queue information data structure
+*              own queue in task space or use Moe_Queue_Create() create a queue
+*              with malloc. Both methods need a queue information data structure
 *              to record basic information used for queue operation. 
 *
 *              There are two method to use the queue:
@@ -60,6 +60,7 @@ uint8 Moe_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
     uint16 u16Size = u8Len * u8Cnt;
 
     /* If the buffer size is 0, return NULL */
+    MOE_CHECK_IF_RET_ST((NULL == ptQueueInfo), "Invalid pointer!\n");
     MOE_CHECK_IF_RET_ST((0 == u16Size), "The length of buffer is invalid!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
