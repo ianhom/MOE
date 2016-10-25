@@ -88,7 +88,7 @@ uint8 Task1_Process(uint8 u8Evt, void *pPara)
             /******************************************************************/
 
             /*--------------------   Add your init code here   ----------------------*/
-            Moe_Timer_Periodic(10);
+            Moe_Timer_Periodic(1000);
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
