@@ -130,7 +130,7 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
     T_MSG_HEAD *ptMsgNode;
        
     /* Check if the destination task is valid or NOT */
-    MOE_CHECK_IF_RET_ST(((MAX_TASK_NUM  >  u8DestTask)\
+    MOE_CHECK_IF_RET_ST(((u8DestTask > MAX_TASK_NUM)\
                       && (TASK_ALL_TASK != u8DestTask)\
                       || (TASK_NO_TASK  == u8DestTask)),\
                           "The destination task of the sending message should be valid!!\n");
