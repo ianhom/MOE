@@ -22,9 +22,10 @@
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 /******************************************************************************
-* Name       : uint8 Task3_Process(uint8 u8Evt)
+* Name       : uint8 Task3_Process(uint8 u8Evt, void *pPara)
 * Function   : Task 3 process
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -34,7 +35,7 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Task3_Process(uint8 u8Evt)
+uint8 Task3_Process(uint8 u8Evt, void *pPara)
 {   
     /* Check which event should be processed */
     switch (u8Evt)
@@ -44,6 +45,7 @@ uint8 Task3_Process(uint8 u8Evt)
         {
             DBG_PRINT("I am task 3 and I am working!!\n");
             return SW_OK;     /* Return SW_OK to indicate event is processed */
+            
         }
 
         /* If it is a message event */
@@ -83,7 +85,14 @@ uint8 Task3_Process(uint8 u8Evt)
         /* If it is a timer event */
         case EVENT_TIMER:       
         {
-            
+            DBG_PRINT("I am a restart timer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            return SW_OK;     /* Return SW_OK to indicate event is processed */
+        }
+
+        /* If it is a timer event */
+        case EVENT_DELAY:       
+        {
+            DBG_PRINT("I am a second delay!!!~~~~~~~~~~~~~~~~~~~~~\n");
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
 
@@ -95,7 +104,7 @@ uint8 Task3_Process(uint8 u8Evt)
             /******************************************************************/
 
             /*--------------------   Add your init code here   ----------------------*/
-           // Moe_Timer_Periodic(1500);
+            Moe_Timer_Periodic(5000);
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
