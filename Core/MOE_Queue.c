@@ -321,9 +321,7 @@ uint8 Moe_Queue_Read(T_QUEUE_INFO* ptQueueInfo, uint8 *pu8Data, uint8 u8Len)
     ptQueueInfo->u8Cnt--;                                               /* Update the used count    */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */    
-
-    Moe_Queue_Dec(ptQueueInfo); 
-
+    
     return SW_OK;
     
 }
