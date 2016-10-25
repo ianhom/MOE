@@ -30,9 +30,10 @@ extern "C" {
 #endif
 
 /******************************************************************************
-* Name       : uint8 Task3_Process(uint8 u8Evt)
+* Name       : uint8 Task3_Process(uint8 u8Evt, void *pPara)
 * Function   : Task 3 process
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -42,9 +43,7 @@ extern "C" {
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Task3_Process(uint8 u8Evt);
-
-
+uint8 Task3_Process(uint8 u8Evt, void *pPara);
 
 
 
