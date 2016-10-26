@@ -51,19 +51,18 @@ uint8 Task3_Process(uint8 u8Evt, void *pPara)
         /* If it is a message event */
         case EVENT_MSG:       
         {
-            uint8  u8MsgType;
-            void  *ptMsg;
+            uint8  u8MsgType = ((T_MSG_HEAD*)pPara)->u8MsgType;
             static uint8 sg_u8Cnt = 0;
 
-            ptMsg = pPara;
+            u8MsgType = ((T_MSG_HEAD*)pPara)->u8MsgType;
 
             switch(u8MsgType)
             {
                 case MSG_TYPE_TEST:
                 {
-                    T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)ptMsg;
-                    DBG_PRINT("This is task %d\n",sg_u8TaskID);
-                    DBG_PRINT("Get %d messages\n",sg_u8Cnt);
+                    T_TEST_MSG *ptTestMsg = (T_TEST_MSG*)MOE_MSG_CONTENT(pPara);
+                    DBG_PRINT("\n\nThis is task %d\n",sg_u8TaskID);
+                    DBG_PRINT("Get %d messages\n",sg_u8Cnt++);
                     DBG_PRINT("I get a uint32 data 0x%x!\n",(ptTestMsg->DATA.u32Data));
                     DBG_PRINT("I get a uint16 data 0x%x,0x%x!\n",(ptTestMsg->DATA.au16Data[0]),(ptTestMsg->DATA.au16Data[1]));
                     DBG_PRINT("I get a uint8 data 0x%x,0x%x,0x%x,0x%x!\n\n",(ptTestMsg->DATA.au8Data[0]),(ptTestMsg->DATA.au8Data[1]),(ptTestMsg->DATA.au8Data[2]),(ptTestMsg->DATA.au8Data[3]));
