@@ -36,9 +36,10 @@ extern "C" {
 #define TASK_DEMO_QUEUE_BUF_SIZE             (10)               /* Size of each buffer blocks */
 
 /******************************************************************************
-* Name       : uint8 Task_Demo_Queue_Process(uint8 u8Evt)
+* Name       : uint8 Task_Demo_Queue_Process(uint8 u8Evt, void *pPara)
 * Function   : Task Demo Queue process
-* Input      : To be done
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : To be done
 * description: To be done
@@ -46,7 +47,7 @@ extern "C" {
 * Author     : Ian
 * Date       : 19th Jun 2016
 ******************************************************************************/
-uint8 Task_Demo_Queue_Process(uint8 u8Evt);
+uint8 Task_Demo_Queue_Process(uint8 u8Evt, void *pPara);
 
 
 
