@@ -29,6 +29,7 @@ static void (*const TASK1_LED_On)(uint8 u8Clr)  = TASK1_LED_ON;
 * Name       : uint8 lED_Demo_Process(uint8 u8Evt)
 * Function   : LEd demo process
 * Input      : uint8 u8Evt  1~254     Event for the task
+*              void  *pPara           Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -38,7 +39,7 @@ static void (*const TASK1_LED_On)(uint8 u8Clr)  = TASK1_LED_ON;
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 LED_Demo_Process(uint8 u8Evt)
+uint8 LED_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     /* Check which event should be processed */
     switch (u8Evt)
