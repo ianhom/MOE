@@ -41,7 +41,8 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 /******************************************************************************
 * Name       : uint8 Task_PT_11xx_Test(uint8 u8Evt)
 * Function   : A test task for 11xx
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -51,7 +52,7 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 * Author     : Ian
 * Date       : 22nd Jul 2016
 ******************************************************************************/
-uint8 Task_PT_11xx_Test(uint8 u8Evt)
+uint8 Task_PT_11xx_Test(uint8 u8Evt, void *pPara)
 {   
     uint16 u16Idx;
     uint8  u8Temp = 0x07;
