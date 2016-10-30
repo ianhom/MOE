@@ -30,7 +30,7 @@ extern "C" {
 
 
 /******************************************************************************
-* Name       : uint8 Task_PT_11xx_Test(uint8 u8Evt)
+* Name       : uint8 Task_PT_11xx_Test(uint8 u8Evt, void *pPara)
 * Function   : A test task for 11xx
 * Input      : uint8  u8Evt  1~254     Event for the task
 *              void  *pPara            Pointer of parameter
