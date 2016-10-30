@@ -23,9 +23,10 @@
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
-* Name       : uint8 Task_PT_Demo2_Process(uint8 u8Evt)
+* Name       : uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 * Function   : A demo task for PT application
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -35,7 +36,7 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 * Author     : Ian
 * Date       : 8th Jul 2016
 ******************************************************************************/
-uint8 Task_PT_Demo2_Process(uint8 u8Evt)
+uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT();
     
@@ -58,3 +59,5 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt)
 }
 
 /* End of file */
+
+
