@@ -20,6 +20,8 @@
 #include "Task_PT_IEC870_PL.h"
 #include "debug.h"
 #include "MOE_DRV_CC1101.h"
+#include "knx_rf_Ll.h"
+
 
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
@@ -28,9 +30,10 @@ static void (*const TASK_PT_DEMO_LED_Off)(uint8 u8Clr)    = TASK_PT_DEMO_LED_OFF
 static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 //static void (*const TASK_PT_DEMO_LED_Toggle)(uint8 u8Clr) = TASK_PT_DEMO_LED_TOGGLE;
 
+#ifdef __PL_RCV_ENABLE
 static void Manchester_Decode(uint8 *pu8Src, uint8 *pu8Des);
 static void Print_RF_Info(void);
-
+#endif
 
 
 static uint8 sg_au8Test[100] = {0x96,\
@@ -42,8 +45,10 @@ static uint8 sg_au8Test[100] = {0x96,\
                                 0x56, 0x56, 0x55, 0x55, 0xA6, 0x69, 0x99, 0x6A, 0x55, 0x55,\
                                 0x55, 0x55, 0x55, 0xF9};
 
-
+#ifdef __PL_RCV_ENABLE
 static uint8 sg_au8RxFIFO[65] = {0x96};
+#endif
+
 static uint8 sg_au8RxData[32];
 
 static uint8 sg_au8PaTabal[8]   = {0xc0 ,0xc0 ,0xc0 ,0xc0 ,0xc0 ,0xc0 ,0xc0 ,0xc0};
@@ -53,18 +58,19 @@ static uint8 sg_au8RxConfig[47] = {0x06, 0x2E, 0x02, 0x07, 0x54, 0x76, 0xFF, 0x8
                                    0xF8, 0x47, 0x07, 0x30, 0x18, 0x2E, 0x6D, 0x04, 0x09, 0xB2,\
                                    0x87, 0x6B, 0xFB, 0xB6, 0x10, 0xEA, 0x2A, 0x00, 0x1F, 0x41,\
                                    0x00, 0x59, 0x7F, 0x3F, 0x81, 0x35, 0x09};
-
+#if(0)
 static uint8 sg_au8TxConfig[47] = {0x06, 0x2E, 0x02, 0x07, 0x54, 0x76, 0xFF, 0x80, 0x00, 0x00,\
                                    0x00, 0x08, 0x00, 0x21, 0x65, 0x6A, 0x6A, 0x4A, 0x05, 0x72,\
                                    0xF8, 0x47, 0x07, 0x30, 0x18, 0x2E, 0x6D, 0x04, 0x09, 0xB2,\
                                    0x87, 0x6B, 0xFB, 0xB6, 0x10, 0xEA, 0x2A, 0x00, 0x1F, 0x41,\
                                    0x00, 0x59, 0x7F, 0x3F, 0x81, 0x35, 0x09};
-
+#endif
 
 /******************************************************************************
 * Name       : uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt)
 * Function   : IEC870 physical layer test
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -74,7 +80,7 @@ static uint8 sg_au8TxConfig[47] = {0x06, 0x2E, 0x02, 0x07, 0x54, 0x76, 0xFF, 0x8
 * Author     : Ian
 * Date       : 13th Jul 2016
 ******************************************************************************/
-uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt)
+uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
     
@@ -185,22 +191,22 @@ static void Print_RF_Info(void)
     
     switch(ptBlock1->ubStr)
     {
-        case RF_Ll_STR_NULL:
+        case KNX_RF_Ll_STR_NULL:
         {
             DBG_PRINT("RF str is NULL\n");
             break;
         }
-        case RF_Ll_STR_LOW:
+        case KNX_RF_Ll_STR_LOW:
         {
             DBG_PRINT("RF str is low\n");
             break;
         }
-        case RF_Ll_STR_MID:
+        case KNX_RF_Ll_STR_MID:
         {
             DBG_PRINT("RF str is MID\n");
             break;
         }
-        case RF_Ll_STR_HIGH:
+        case KNX_RF_Ll_STR_HIGH:
         {
             DBG_PRINT("RF str is HIGH\n");
             break;
@@ -211,11 +217,11 @@ static void Print_RF_Info(void)
         }
     }
     
-    if (RF_Ll_BTY_LOW == ptBlock1->ubBty)
+    if (KNX_RF_Ll_BTY_LOW == ptBlock1->ubBty)
     {
         DBG_PRINT("Battery is low\n");
     }
-    else if(RF_Ll_BTY_HIGH == ptBlock1->ubBty)
+    else if(KNX_RF_Ll_BTY_HIGH == ptBlock1->ubBty)
     {
         DBG_PRINT("Battery is high\n");
     }
@@ -224,11 +230,11 @@ static void Print_RF_Info(void)
         DBG_PRINT("Battery information is wrong!!\n");
     }
     
-    if (RF_LL_DIR_BI == ptBlock1->ubBi)
+    if (KNX_RF_LL_DIR_BI == ptBlock1->ubBi)
     {
         DBG_PRINT("Sender is bi-direction\n");
     }
-    else if(RF_LL_DIR_UNI == ptBlock1->ubBi)
+    else if(KNX_RF_LL_DIR_UNI == ptBlock1->ubBi)
     {
         DBG_PRINT("Sender is uni-direction\n");
     }
@@ -248,11 +254,11 @@ static void Print_RF_Info(void)
     DBG_PRINT("Source Address is 0x%x\n", ptBlock2->w16SrcAddr);
     DBG_PRINT("Destination Address is 0x%x\n", ptBlock2->w16DesAddr);
     
-    if(RF_Ll_FRAME_TYPE_STD == ptBlock2->ubAET)
+    if(KNX_RF_Ll_FRAME_TYPE_STD == ptBlock2->ubAET)
     {
         DBG_PRINT("It is a standard frame\n");
     }
-    else if(RF_Ll_FRAME_TYPE_EXT == ptBlock2->ubAET)
+    else if(KNX_RF_Ll_FRAME_TYPE_EXT == ptBlock2->ubAET)
     {
         DBG_PRINT("It is a extented frame\n");
     }
@@ -261,11 +267,11 @@ static void Print_RF_Info(void)
         DBG_PRINT("Frame type is wrong!\n");
     }
     
-    if(RF_LL_DEST_ADDR_PHY == ptBlock2->ubAT)
+    if(KNX_RF_LL_DEST_ADDR_PHY == ptBlock2->ubAT)
     {
         DBG_PRINT("Destination address is a physical address\n");
     }
-    else if(RF_LL_DEST_ADDR_GRP == ptBlock2->ubAT)
+    else if(KNX_RF_LL_DEST_ADDR_GRP == ptBlock2->ubAT)
     {
         DBG_PRINT("Destination address is a group address\n");
     }
@@ -284,7 +290,10 @@ static void Print_RF_Info(void)
     
     DBG_PRINT("\n\n\n");
 
+    return;
 }
 
 
 /* End of file */
+
+
