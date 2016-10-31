@@ -27,7 +27,7 @@ extern "C" {
 #define __DEBUG_MODE      __DEBUG_MODE_PT_IEC870_PL   /* According the set from project_config.h */
 #endif
 
-#define __PL_RCV_ENABLE
+//#define __PL_RCV_ENABLE
 #define __PL_SND_ENABLE
 
 
@@ -58,9 +58,10 @@ extern "C" {
 
 
 /******************************************************************************
-* Name       : uint8 Task_PT_Demo_Process(uint8 u8Evt)
-* Function   : A demo task for PT application
-* Input      : uint8 u8Evt  1~254     Event for the task
+* Name       : uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt)
+* Function   : IEC870 physical layer test
+* Input      : uint8  u8Evt  1~254     Event for the task
+*              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
@@ -68,9 +69,9 @@ extern "C" {
 * description: To be done
 * Version    : V1.00
 * Author     : Ian
-* Date       : 8th Jul 2016
+* Date       : 13th Jul 2016
 ******************************************************************************/
-uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt);
+uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt, void *pPara);
 
 
 
