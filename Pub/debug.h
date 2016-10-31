@@ -30,23 +30,33 @@ extern "C" {
 #endif
 
 #if (__DEBUG_MODE  == __DEBUG_FILE_LINE_FUNC_INFO)
-    #pragma message("*** Debug printf outputs file name, function name, line number and desired info!! ***")
+    #ifdef IAR
+        #pragma message("*** Debug printf outputs file name, function name, line number and desired info!! ***")
+    #endif
     #define DBG_PRINT(x,...)        printf("FILE: "__FILE__", FUNC : %s, LINE: %d -- \n "x" \n", __func__ , __LINE__, ##__VA_ARGS__)
 
 #elif (__DEBUG_MODE  == __DEBUG_FILE_LINE_INFO)
-    #pragma message("*** Debug printf outputs file name, line number and desired info!! ***")
+    #ifdef IAR
+        #pragma message("*** Debug printf outputs file name, line number and desired info!! ***")
+    #endif
     #define DBG_PRINT(x,...)        printf("FILE: "__FILE__",  LINE: %d -- \n "x" \n", __LINE__, ##__VA_ARGS__)
 
 #elif (__DEBUG_MODE  == __DEBUG_FUNC_LINE_INFO)
-    #pragma message("*** Debug printf outputs function name, line number and desired info!! ***")
+    #ifdef IAR
+        #pragma message("*** Debug printf outputs function name, line number and desired info!! ***")
+    #endif
     #define DBG_PRINT(x,...)        printf("FUNC : %s, LINE: %d -- \n "x" \n", __func__ , __LINE__, ##__VA_ARGS__)
 
 #elif (__DEBUG_MODE == __DEBUG_BASIC_INFO)
-    #pragma message("*** Debug printf outputs desired basic info!! ***")
+    #ifdef IAR
+        #pragma message("*** Debug printf outputs desired basic info!! ***")
+    #endif
     #define DBG_PRINT(x,...)        printf(x, ##__VA_ARGS__)
 
 #else
-    #pragma message("*** Debug printf is DISABLED!! ***")
+    #ifdef IAR
+        #pragma message("*** Debug printf is DISABLED!! ***")
+    #endif
     #define DBG_PRINT(x,...)
 #endif
 
@@ -67,7 +77,7 @@ extern "C" {
 /* Return value after assert error, with error information  */
 #define MOE_CHECK_IF_RET_VAL(Cond, ret,reason,...)   if((Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return ret;}
 /* Return SW_ERR after assert error, with error information */
-#define MOE_CHECK_IF_RET_ST(Cond, reason,...)        MOE_CHECK_IF_RET_VAL(Cond, SW_ERR,reason,...)
+#define MOE_CHECK_IF_RET_ST(Cond, reason,...)        if((Cond)) {DBG_PRINT(reason, ##__VA_ARGS__);return SW_ERR;}//MOE_CHECK_IF_RET_VAL(Cond, SW_ERR,reason,...)
 
 
 #ifdef __cplusplus
