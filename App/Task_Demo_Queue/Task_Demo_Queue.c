@@ -177,17 +177,7 @@ uint8 Task_Demo_Queue_Process(uint8 u8Evt, void *pPara)
             Moe_Queue_Create(&sg_tQueue2, TASK_DEMO_QUEUE_BUF_SIZE, TASK_DEMO_QUEUE_BUF_NUM);
             
             /* Init timer */
-            T_TIMER tTm;
-            tTm.u8TaskID     = sg_u8TaskID;
-            tTm.u8Evt        = EVENT_TIMER;
-            tTm.u16Cnt       = MOE_TMR_INFINITE_CNT;
-            tTm.u32TmOut     = 1000;
-#ifdef __TIMER_CALLBACK_SUPPORTED
-            tTm.pfTmCallback = NULL;
-            tTm.pPara        = NULL;
-#endif
-            
-            Moe_Timer_Start(&tTm);
+            Moe_Timer_Periodic(1000);
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
@@ -201,3 +191,8 @@ uint8 Task_Demo_Queue_Process(uint8 u8Evt, void *pPara)
 }
 
 /* End of file */
+
+
+
+
+
