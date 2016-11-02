@@ -19,20 +19,18 @@ extern "C" {
 
 
 /* Definition of init and process function for tasks */
-typedef void (*PF_TASK_INIT)(uint8 u8Task);
-typedef uint8 (*PF_TASK_PROCESS)(uint8 u8Evt);
+typedef void  (*PF_TASK_INIT)(uint8 u8Task, void *pPara);
+typedef uint8 (*PF_TASK_PROCESS)(uint8 u8Evt, void *pPara);
 
-#define __DEBUG_NONE                0      /* No need to printf                                */
-#define __DEBUG_BASIC_INFO          1      /* Provide basic printf function                    */
-#define __DEBUG_FILE_LINE_INFO      2      /* Provide file and line information with printf    */
-#define __DEBUG_FUNC_LINE_INFO      3      /* Provide function and line info with printf       */
-#define __DEBUG_FILE_LINE_FUNC_INFO 4      /* Provode file, line and function info with printf */
+#define __DEBUG_NONE                  (0)      /* No need to printf                                */
+#define __DEBUG_BASIC_INFO            (1)      /* Provide basic printf function                    */
+#define __DEBUG_FILE_LINE_INFO        (2)      /* Provide file and line information with printf    */
+#define __DEBUG_FUNC_LINE_INFO        (3)      /* Provide function and line info with printf       */
+#define __DEBUG_FILE_LINE_FUNC_INFO   (4)      /* Provode file, line and function info with printf */
 
-
-#define __MALLOC_STD                0      /* Use standard malloc and free */
-#define __MALLOC_MOE                1      /* Use MOE malloc and free      */
-#define __MALLOC_MY                 2      /* Use your malloc and free     */
-
+#define __MALLOC_STD                  (0)      /* Use standard malloc and free */
+#define __MALLOC_MOE                  (1)      /* Use MOE malloc and free      */
+#define __MALLOC_MY                   (2)      /* Use your malloc and free     */
 
 #define ENTER_CRITICAL_ZONE(x) x=1;
 
