@@ -18,11 +18,11 @@ extern "C" {
 #endif
 
 #ifndef __DEBUG_NONE
-#define __DEBUG_NONE                0      /* No need to printf                                */
-#define __DEBUG_BASIC_INFO          1      /* Provide basic printf function                    */
-#define __DEBUG_FILE_LINE_INFO      2      /* Provide file and line information with printf    */
-#define __DEBUG_FUNC_LINE_INFO      3      /* Provide function and line info with printf       */
-#define __DEBUG_FILE_LINE_FUNC_INFO 4      /* Provode file, line and function info with printf */
+#define __DEBUG_NONE                   (0)      /* No need to printf                                */
+#define __DEBUG_BASIC_INFO             (1)      /* Provide basic printf function                    */
+#define __DEBUG_FILE_LINE_INFO         (2)      /* Provide file and line information with printf    */
+#define __DEBUG_FUNC_LINE_INFO         (3)      /* Provide function and line info with printf       */
+#define __DEBUG_FILE_LINE_FUNC_INFO    (4)      /* Provode file, line and function info with printf */
 #endif
 
 #ifndef __DEBUG_MODE
