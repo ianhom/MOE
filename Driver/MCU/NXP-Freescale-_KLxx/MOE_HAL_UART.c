@@ -78,7 +78,7 @@ uint8 Moe_HAL_UART_Init(void)
     
     /*------------Enable TX/RX interrupt after UART init -------*/
     //UART1_C2 |= UART_C2_RIE_MASK;
-    NVIC_ISER = 1<<(13);
+    //NVIC_ISER = 1<<(13);
     /* Enable Error interrupt. */
     //UART1_C3 |= (UART_C3_PEIE_MASK | UART_C3_FEIE_MASK | UART_C3_NEIE_MASK | UART_C3_ORIE_MASK); 
 #else
@@ -93,7 +93,7 @@ uint8 Moe_HAL_UART_Init(void)
 
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Uart_Byte_Receive()
+* Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
 * Function   : Get a single byte data from uart receiving buffer
 * Input      : None.
 * Output:    : None.
