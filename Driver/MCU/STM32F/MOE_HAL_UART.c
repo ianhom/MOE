@@ -30,7 +30,7 @@ static const uin32 sg_au32UartAddr[] =
 extern int periph_clk_khz;
 
 /******************************************************************************
-* Name       : uint8 uint8 Moe_HAL_UART_Init(void)
+* Name       : uint8 Moe_HAL_UART_Init(uint8 u8No)
 * Function   : Init hardware abstract layer for UART
 * Input      : None.
 * Output:    : None.
@@ -102,7 +102,7 @@ uint8 Moe_HAL_UART_Init(uint8 u8No)
 
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Uart_Byte_Receive()
+* Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
 * Function   : Get a single byte data from uart receiving buffer
 * Input      : None.
 * Output:    : None.
@@ -112,7 +112,7 @@ uint8 Moe_HAL_UART_Init(uint8 u8No)
 * Author     : Ian
 * Date       : 26th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_Uart_Byte_Receive()
+uint8 Moe_HAL_Uart_Byte_Receive(void)
 {
 
 }
