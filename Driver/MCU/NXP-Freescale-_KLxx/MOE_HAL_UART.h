@@ -50,7 +50,7 @@ extern "C" {
 uint8 Moe_HAL_UART_Init(void);
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Uart_Byte_Receive()
+* Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
 * Function   : Get a single byte data from uart receiving buffer
 * Input      : None.
 * Output:    : None.
@@ -60,7 +60,7 @@ uint8 Moe_HAL_UART_Init(void);
 * Author     : Ian
 * Date       : 20th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_Uart_Byte_Receive();
+uint8 Moe_HAL_Uart_Byte_Receive(void);
 
 /******************************************************************************
 * Name       : void Moe_HAL_Uart_Byte_Send(uint8 u8Data)
@@ -132,7 +132,7 @@ uint8 Moe_HAL_Uart_Got_Telegram(void);
 uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data);
 
 /******************************************************************************
-* Name       : void Moe_HAL_Uart_Rx_Int_Enable()
+* Name       : void Moe_HAL_Uart_Rx_Int_Enable(void)
 * Function   : Enable uart rx interrupt
 * Input      : None.
 * Output:    : None.
@@ -145,7 +145,7 @@ uint8 Moe_HAL_Uart_Tele_Receive(uint8 *pu8Data);
 void Moe_HAL_Uart_Rx_Int_Enable(void);
 
 /******************************************************************************
-* Name       : vvoid Moe_HAL_Uart_Rx_Int_Disable()
+* Name       : vvoid Moe_HAL_Uart_Rx_Int_Disable(void)
 * Function   : Disable uart rx interrupt
 * Input      : None.
 * Output:    : None.
