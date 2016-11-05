@@ -1,4 +1,7 @@
 # Log
+##5th Nov 2016
+Fix some bug with new event structure
+
 ##4th Sep 2016
 Modify timer with new event structure
 
@@ -114,3 +117,4 @@ Timer is added, however **the code is NOT debug yet**. Please wait for the updat
 
 ## 4th May 2016
 I have finished the basical parts of schudeler function, I use 3 tasks and set event to each others, it works. Also I add debug print MACROs with maybe useful. I will add software timer in next step.
+
