@@ -29,24 +29,12 @@ extern "C" {
 /* Add your task process here */
 #define LIST_OF_REG_TASK \
         REG_TASK(Task1_Process)\
-        REG_TASK(Task2_Process)
-//        REG_TASK(Task2_Process)\
-//        REG_TASK(Task1_Process)
-//        REG_TASK(Task_PT_11xx_Test)\
-//        REG_TASK(Task_PT_Demo_Process)\
-//        REG_TASK(Task_PT_Demo2_Process)\
-//        REG_TASK(Task1_Process)\
-//        REG_TASK(Task2_Process)\
-//        REG_TASK(Task3_Process)\
-//        REG_TASK(LED_Demo_Process)\
-//        REG_TASK(Task_Demo_Queue_Process)
-//        REG_TASK(Task_PT_IEC870_PL_Process)
-
+        REG_TASK(Task2_Process)\
+        REG_TASK(Task_Process)
 
 #define REG_TASK(name) uint8 name(uint8 u8Evt, void *pPara);
 LIST_OF_REG_TASK
 #undef REG_TASK
-
 
 static const PF_TASK_PROCESS cg_apfTaskFn[] = 
 {
@@ -79,25 +67,21 @@ LIST_OF_REG_TASK
 
 /*********************************************************
 NOTE: You have four ways to use malloc:
-1. Do not define __MALLOC_OPTION or define __MALLOC_OPTION
-   as __MALLOC_STD, and Do not re-write the malloc and 
-   free function, you will use the standard malloc and
-   free function in lib.
-2. Do not define __MALLOC_OPTION or define __MALLOC_OPTION
-   as __MALLOC_STD, and re-write the malloc and free 
-   function, you will use your malloc and free function, 
-   Please NOTE that the whole project use your malloc and 
-   free function
-3. Define __MALLOC_OPTION as __MALLOC_MY, now your can use
-   your own malloc and free function, however, if you use
-   the same name with "malloc" and "free", whole project
-   use your malloc and free just like situation 2.
-4. Define __MALLOC_OPTION as __MALLOC_MOE, the Moe_Malloc
-   and Moe_Free will be used.
+1. Do not define __MALLOC_OPTION or define __MALLOC_OPTION as __MALLOC_STD, 
+   and Do not re-write the malloc and free function, you will use the standard 
+   malloc and free function in lib.
+2. Do not define __MALLOC_OPTION or define __MALLOC_OPTION as __MALLOC_STD, 
+   and re-write the malloc and free function, you will use your malloc and free
+   function, please NOTE that the whole project use your malloc and free function
+3. Define __MALLOC_OPTION as __MALLOC_MY, now your can use your own malloc and 
+   free function, however, if you use the same name with "malloc" and "free", 
+   whole project use your malloc and free just like situation 2.
+4. Define __MALLOC_OPTION as __MALLOC_MOE, the Moe_Malloc and Moe_Free will be 
+   used.
 
 Options for __MALLOC_OPTION:
     __MALLOC_STD             Use standard malloc and free 
-    __MALLOC_MOE            Use MOE malloc and free     
+    __MALLOC_MOE             Use MOE malloc and free     
     __MALLOC_MY              Use your malloc and free     
 **********************************************************/  
 #define __MALLOC_OPTION                    __MALLOC_STD      /* Use standard malloc and free funciton  */
