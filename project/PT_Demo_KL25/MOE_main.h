@@ -1,12 +1,12 @@
 /******************************************************************************
 * File       : Moe_main.h
-* Function   : To be doen.
+* Function   : Main-start of the project.
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
-* Date       : 24th May 2016
+* Date       : 4th Noc 2016
 * History    :  No.  When           Who           What
-*               1    24/May/2016    Ian           Create
+*               1    04/Nov/2016    Ian           Create
 ******************************************************************************/
 
 #ifndef _MOE_MAIN_H_
