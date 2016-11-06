@@ -1,5 +1,7 @@
 #MOE projects
 This folder contains applications of different projects
-
-## Demo project
-This project is created as a demo to show how to use MOE to build a new project.
+   
+Project | Description   
+------- | ------------
+Demo    | Basic project to demo mutli-task
+PT_Demo_KL25 | Prototype demo project based on FRDM-KL25Z board
