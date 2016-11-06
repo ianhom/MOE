@@ -1,8 +1,13 @@
-/*
- * File:        Moe_main.c
- * Purpose:     Main process for PT demo function 
- *              based on FRDM-KL25Z board
- */
+/******************************************************************************
+* File       : Moe_main.d
+* Function   : Main-start of the project.
+* description: To be done.          
+* Version    : V1.00
+* Author     : Ian
+* Date       : 4th Nov 2016
+* History    :  No.  When           Who           What
+*               1    24/May/2016    Ian           Create
+******************************************************************************/
 #include "common.h"
 #include "common_head.h"
 #include "project_config.h"
@@ -14,9 +19,6 @@
 #include "MOE_Queue.h"
 #include "Board_Config.h"
 #include "KL25_Lpt_Time.h"
-#include "Btn_SM_Config.h"
-#include "Btn_SM_Module.h"
-#include "MOE_HAL_UART.h"
  
 /********************************************************************/
 
@@ -53,4 +55,6 @@ int main (void)
     /* Never reach here */
     return 0;
 }
-/********************************************************************/
+
+/* End of file */
+
