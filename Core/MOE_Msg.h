@@ -100,6 +100,7 @@ void Moe_Msg_Init(void);
 * Name       : uint8 Moe_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
 * Input      : uint8  u8DestTask    1~254     The destination task number
+*                                   255       It is a to-all-task message
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
@@ -147,8 +148,6 @@ uint8 Moe_Msg_Forward(T_MSG_HEAD *ptMsg, uint8 u8NextTask);
 * Date       : 31st May 2016
 ******************************************************************************/
 uint8 Moe_Msg_Process(T_MSG_HEAD *ptMsg);
-
-
 
  
 #ifdef __cplusplus
