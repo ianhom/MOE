@@ -1,4 +1,3 @@
-
 /******************************************************************************
 * File       : project_config.h
 * Function   : project configuration.
@@ -50,7 +49,7 @@ LIST_OF_REG_TASK
 #undef REG_TASK
 };
 
-#define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks                      */
+#define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks */
 
 #define MAX_QUEUE_EVT_NUM                    (MAX_TASK_NUM * 10)
  
@@ -65,7 +64,7 @@ LIST_OF_REG_TASK
 //#define __MOE_SPI_ENABLE
 #define __MOE_UART_ENABLE
 
-/*********************************************************
+/*********************************************************************************
 NOTE: You have four ways to use malloc:
 1. Do not define __MALLOC_OPTION or define __MALLOC_OPTION as __MALLOC_STD, 
    and Do not re-write the malloc and free function, you will use the standard 
@@ -83,24 +82,24 @@ Options for __MALLOC_OPTION:
     __MALLOC_STD             Use standard malloc and free 
     __MALLOC_MOE             Use MOE malloc and free     
     __MALLOC_MY              Use your malloc and free     
-**********************************************************/  
+*********************************************************************************/  
 #define __MALLOC_OPTION                    __MALLOC_STD      /* Use standard malloc and free funciton  */
 
 
 #ifdef __DEBUG_ENABLE
 #define __DEBUG_MODE_MAIN                  __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE                   __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_APP               __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE  //__DEBUG_NONE  
-#define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  //__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_TASK_LED_DEMO         __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_1            __DEBUG_NONE//__DEBUG_BASIC_INFO
-#define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO//__DEBUG_FUNC_LINE_INFO 
-#define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
-#define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO//__DEBUG_FILE_LINE_FUNC_INFO 
-#define __DEBUG_MODE_MOE_EVENT             __DEBUG_NONE//__DEBUG_FILE_LINE_FUNC_INFO 
+#define __DEBUG_MODE_MOE                   __DEBUG_NONE  
+#define __DEBUG_MODE_MOE_APP               __DEBUG_NONE 
+#define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE 
+#define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  
+#define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  
+#define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  
+#define __DEBUG_MODE_TASK_LED_DEMO         __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_APP_TASK_1            __DEBUG_NONE
+#define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO
+#define __DEBUG_MODE_MOE_EVENT             __DEBUG_NONE
 #define __DEBUG_MODE_BOARD_CONFIG          __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_HAL               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO               __DEBUG_BASIC_INFO
@@ -115,27 +114,10 @@ Options for __MALLOC_OPTION:
 #endif
 
                            
-#if (__MALLOC_OPTION == __MALLOC_MY)         /* If you want to use your malloc and free */
+#if (__MALLOC_OPTION == __MALLOC_MY)        /* If you want to use your malloc and free */
 #define MOE_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define MOE_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
-
-void LED_Off(uint8 u8Ch);
-#define TASK1_LED_OFF          LED_Off
-#define TASK_PT_DEMO_LED_OFF   LED_Off
-
-
-void LED_On(uint8 u8Ch);
-#define TASK1_LED_ON           LED_On
-#define TASK_PT_DEMO_LED_ON    LED_On
-
-void LED_Toggle(uint8 u8Ch);
-#define TASK_PT_DEMO_LED_TOGGLE LED_Toggle
-
-#define LED_BLUE                 (3)     /* Blue led        */
-#define LED_RED                  (2)     /* Red led         */
-#define LED_GREEN                (0)     /* Green led       */
-
 
 
 #ifdef __cplusplus
