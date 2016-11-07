@@ -31,7 +31,7 @@ MOE Queue            | 通用队列操作模块
 
 函数名           | void Moe_Init(void) 
 --------------- | ------------------------------------------------   
-文件             | MOE/Core/MOE_Core.c
+文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
 功能             | MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。
 函数入参         | 无
 函数出参         | 无
@@ -43,7 +43,7 @@ MOE Queue            | 通用队列操作模块
 
 函数名           | void Moe_Run_System(void)
 --------------- | ------------------------------------------------   
-文件             | MOE/Core/MOE_Core.c
+文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
 功能             | MOE系统启动函数，进入该函数后将无法退出，所有系统模块及任务的处理都将在该函数中进行。
 函数入参         | 无
 函数出参         | 无
@@ -55,7 +55,7 @@ MOE Queue            | 通用队列操作模块
 
 函数名           | uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 --------------- | ------------------------------------------------   
-文件             | MOE/Core/MOE_Event.c
+文件             | [MOE/Core/MOE_Event.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c) 
 功能             | 事件设置函数，通过该函数可以向目标任务设置对应事件。                           
 函数入参         | uint8 u8TaskID： 被设置事件的任务ID                                             
                 | uint16 u16Evt： 被设置事件的类型
