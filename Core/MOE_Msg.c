@@ -37,13 +37,14 @@ void Moe_Msg_Init(void)
 }
 
 /******************************************************************************
-* Name       : T_MSG_HEAD* Moe_Msg_Create(uint8 *pu8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
+* Name       : static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg)
 * Function   : Create a message
-* Input      : uint8  pu8DestTask   1~254     The destination task number
+* Input      : uint8  u8DestTask    1~254     The destination task number
+*                                   255       It is a to-all-task message
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
-* Output:    : uint8  pu8DestTask   1~254     The destination task number
+* Output:    : None.
 * Return     : Pointer of the message data struct.
 *              NULL:  Failed.
 * description: To be done.
@@ -114,6 +115,7 @@ static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16S
 * Name       : uint8 Moe_Msg_Send(uint8 u8DestTask,uint8 u8MsgType,uint16 u16Size,void *ptMsg)
 * Function   : Send the message to the destination task.
 * Input      : uint8  u8DestTask    1~254     The destination task number
+*                                   255       It is a to-all-task message
 *              uint8  u8MsgType     0~255     Type of message
 *              uint16 u16Size       0~65535   Length of the Message
 *              void *ptMsg                    Pointer of user message information
