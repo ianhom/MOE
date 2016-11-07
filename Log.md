@@ -1,4 +1,7 @@
 # Log
+##7th Nov 2016
+Add API description.
+
 ##5th Nov 2016
 Fix some bug with new event structure
 
