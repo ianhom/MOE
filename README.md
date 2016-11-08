@@ -20,5 +20,10 @@ For more discussion, please join our QQ Group: **475258651**
 - **Step 3**: Register tasks in Project_Config.h and continue other configuration in the same file.   
 - **Step 4**: Run & Enjoy.   
 
+## Useful Documents
+[API Description(Chinese)](https://github.com/ianhom/MOE/blob/master/Documents/API_Description_Chinese.md) 
+[Design Record(Chinese)](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md) 
+
+
 ## Special Thanks 
 - :tada:MOE Logo drawing by **Miss Cai Jianan**.:tada:
