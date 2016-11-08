@@ -20,5 +20,9 @@ MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点�
 - **步骤 3**: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.   
 - **步骤 4**: 运行，Enjoy.   
 
+## 文档参考
+ - [API Description(Chinese)](https://github.com/ianhom/MOE/blob/master/Documents/API_Description_Chinese.md)    
+ - [Design Record(Chinese)](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md)    
+ 
 ## 特别感谢
 - :tada:**蔡嘉楠小姐**对MOE Logo的精心绘制。:tada:
