@@ -12,8 +12,19 @@
 
 This document contains all description of MOE API, and help user for task coding.
 
-## Description
-To be done...
+## API Description
+APIs are classified by different modules:
+
+Module               | Description
+-------------------- | -----------------------------
+MOE Core             | Scheduler & Event process
+MOE message          | Messge mechanism
+MOE Timer            | Software timer
+MOE Queue            | General queue operation
+...                  | ...
+
+------------
+
 ### MOE Basic
 To be done...
 #### void Moe_Init()
