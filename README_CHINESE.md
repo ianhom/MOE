@@ -16,6 +16,26 @@ MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点�
 
 ## 如何使用
 - **步骤 1**: 将MOE移植到您的硬件上，并为其提供“系统毫秒时钟”及“需要时刻轮询的函数”，然后初始化并运行MOE.      
+```c
+/* Function to get ms clock */
+uint16 GetMsClock(void)
+{
+    return sg_u16SysClk;  /* System ms clock, increased every 1 ms in hardware timer interrupt */
+}
+
+/* Function to be Polled */
+void Poll(void)
+{
+    /* Something you want to do by polling */
+}
+
+void main(void)
+{
+    .... /* Board init operation */
+    MOE_Init(GetMsClock, Poll);
+    MOE_Run(); 
+}
+```
 - **步骤 2**: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.   
 - **步骤 3**: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.   
 - **步骤 4**: 运行，Enjoy.   
