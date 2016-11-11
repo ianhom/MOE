@@ -38,58 +38,58 @@ void main(void)
 }
 ```
 - **步骤 2**: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.  
+    * Task 1
 ```c
-uint8 Task1_Process(uint8 u8Evt, void *pPara)
+uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
-    /* Check which event should be processed */
-    switch (u8Evt)
+    PT_INIT();
+    PT_BEGIN();
+    /******************************************************************/
+    MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+    /******************************************************************/
+    while(1)
     {
-        /* If it is a timer event */
-        case EVENT_PERIODIC:       
-        {
-            DBG_PRINT("I am task 1 and I am working!!\n");
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
+        TASK_PT_DEMO_LED_On(LED_RED);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_RED);
 
-        /* If it is a message event */
-        case EVENT_MSG:       
-        {
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
+        TASK_PT_DEMO_LED_On(LED_GREEN);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_GREEN);
 
-        /* If it is a timer event */
-        case EVENT_TIMER:       
-        {         
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
-
-        /* If it is a message event */
-        case EVENT_INIT:       
-        {
-            /******************************************************************/
-            MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
-            /******************************************************************/
-
-            /*--------------------   Add your init code here   ----------------------*/
-            Moe_Timer_Periodic(1500);
-            /*-------------------   The end of your init code   ---------------------*/
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
-
-        /* If it is other event */
-        default:       
-        {
-            return u8Evt;     /* Return event to indicate event is NOT processed */
-        }
+        TASK_PT_DEMO_LED_On(LED_BLUE);
+        PT_DELAY(1000);
+        TASK_PT_DEMO_LED_Off(LED_BLUE);
     }
+    PT_END();
+    return SW_OK;
 }
 ```
+    * Task 2
+```c
+uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
+{    
+    PT_INIT(); 
+    PT_BEGIN();
+    /******************************************************************/
+    MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+    /******************************************************************/
+    while(1)
+    {
+        DBG_PRINT("I am another Task!!\n");
+        PT_DELAY(1000);
+    }
+
+    PT_END();
+    return SW_OK;
+}
+```
+
 - **步骤 3**: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.   
 ```c
 #define LIST_OF_REG_TASK \
-        REG_TASK(Task1_Process)\
-        REG_TASK(Task2_Process)\
-        REG_TASK(Task3_Process)
+        REG_TASK(Task_PT_Demo_Proces)\
+        REG_TASK(Task_PT_Demo2_Proces)
 ```
 - **步骤 4**: 运行，Enjoy.   
 
