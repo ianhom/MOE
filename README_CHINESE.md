@@ -15,7 +15,7 @@ MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点�
 更多讨论欢迎加入我们的QQ群：**[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
 ## 如何使用
-- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“系统毫秒时钟”及“需要时刻轮询的函数”，然后初始化并运行MOE.      
+- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数**”，然后初始化并运行MOE.      
 ```c
 /* Function to get ms clock */
 uint16 GetMsClock(void)
@@ -26,7 +26,7 @@ uint16 GetMsClock(void)
 /* Function to be Polled */
 void Poll(void)
 {
-    /* Something you want to do by polling */
+    /* Nothing or something you want to do by polling */
 }
 
 void main(void)
@@ -37,7 +37,7 @@ void main(void)
     return;
 }
 ```
-- **步骤 2**: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.  
+- **步骤 2**: **创建您的TASK**或**使用已有的经过测试的TASK**来实现您的应用功能.  
 ```c
 /* Task 1 */
 uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
@@ -86,7 +86,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 }
 ```
 
-- **步骤 3**: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.   
+- **步骤 3**: 在**Project_Config.h**文件中**注册**需要运行的TASK，并在该文件中进行其它**相关配置**.   
 ```c
 #define LIST_OF_REG_TASK \
         REG_TASK(Task_PT_Demo_Proces)\
