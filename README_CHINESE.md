@@ -38,8 +38,8 @@ void main(void)
 }
 ```
 - **步骤 2**: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.  
-    **Task 1**   
 ```c
+/* Task 1 */
 uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
@@ -65,8 +65,9 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
     return SW_OK;
 }
 ```   
-    **Task 2**
+
 ```c
+/* Task 2 */
 uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT(); 
