@@ -20,7 +20,7 @@
     <header>
       <div class="inner">
         <h1>MOE</h1>
-        <h2>MOE is an event-driven scheduler system for 8/16/32-bit MCUs. MOE means &quot;Minds Of Embedded system&quot;, It’s also the name of my lovely baby daughter :)</h2>
+        <h2>MOE is an event-driven scheduler system for 8/16/32-bit MCUs. MOE means &quot;Minds Of Embedded system&quot;, it’s also the name of my lovely baby daughter :)</h2>
         <a href="https://github.com/ianhom/MOE" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
@@ -31,14 +31,14 @@
           <h1>
 <a id="moe" class="anchor" href="#moe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MOE</h1>
 
-<p><img src="https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true" alt="LOGO"></p>
-
-<p><a href="https://github.com/ianhom/MOE/blob/master/README.md">English</a> </p>
+<p><img src="https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true" alt="LOGO"><br>
+<a href="https://github.com/ianhom/MOE/blob/master/README.md">English</a> </p>
 
 <h2>
 <a id="简介" class="anchor" href="#%E7%AE%80%E4%BB%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>简介</h2>
 
-<p>MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点如下：   </p>
+<p>MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。MOE的含义为"Minds Of Embedded system"，同时也是我宝贝女儿的小名<g-emoji alias="smile" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f604.png" ios-version="6.0">😄</g-emoji><br>
+MOE特点如下：      </p>
 
 <table>
 <thead>
@@ -71,23 +71,104 @@
 </tbody>
 </table>
 
-<p>更多讨论欢迎加入我们的QQ群：<strong>475258651</strong></p>
+<p>更多讨论欢迎加入我们的QQ群：<strong><a href="https://jq.qq.com/?_wv=1027&amp;k=41PrZvS">475258651</a></strong>   </p>
 
 <h2>
 <a id="如何使用" class="anchor" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>如何使用</h2>
 
 <ul>
 <li>
-<strong>步骤 1</strong>: 将MOE移植到您的硬件上，并为其提供“系统毫秒时钟”及“需要时刻轮询的函数”，然后初始化并运行MOE.<br>
+<strong>步骤 1</strong>: 将MOE移植到您的硬件上，并为其提供“<strong>系统毫秒时钟</strong>”及“<strong>需要时刻轮询的函数（如果有的话）</strong>”，然后初始化并运行MOE.<br>
 </li>
+</ul>
+
+<div class="highlight highlight-source-c"><pre><span class="pl-c">/* 示例代码 */</span>
+<span class="pl-c">/* 获取系统毫秒时钟 */</span>
+uint16 <span class="pl-en">GetMsClock</span>(<span class="pl-k">void</span>)
+{
+    <span class="pl-k">return</span> sg_u16SysClk;  <span class="pl-c">/* 返回系统ms时钟，sg_u16SysClk每1毫秒自增1，例如在为定时1毫秒的硬件定时器中断中实现 */</span>
+}
+
+<span class="pl-c">/* 需要被轮询的程序 */</span>
+<span class="pl-k">void</span> <span class="pl-en">Poll</span>(<span class="pl-k">void</span>)
+{
+    <span class="pl-c">/* 在这里添加需要轮询的程序 */</span>
+    <span class="pl-k">return</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">void</span>)
+{
+    ....                         <span class="pl-c">/* 板级初始化 */</span>
+    <span class="pl-c1">MOE_Init</span>(GetMsClock, Poll);  <span class="pl-c">/* MOE初始化，提供系统毫秒获取时钟函数，及需要被轮询的函数（若无则填写NULL） */</span>
+    <span class="pl-c1">MOE_Run</span>();                   <span class="pl-c">/* 启动MOE， */</span>
+    <span class="pl-k">return</span>;
+}</pre></div>
+
+<ul>
 <li>
-<strong>步骤 2</strong>: 创建您的TASK或使用已有的经过测试的TASK来实现你的应用功能.<br>
+<strong>步骤 2</strong>: <strong>创建</strong>您的TASK或<strong>复用</strong>已有的经过测试的TASK来实现您的应用功能.<br>
 </li>
+</ul>
+
+<div class="highlight highlight-source-c"><pre><span class="pl-c">/* 示例代码 */</span>
+<span class="pl-c">/* Task 1： LED闪烁*/</span>
+uint8 <span class="pl-en">Task_PT_Demo_Process</span>(uint8 u8Evt, <span class="pl-k">void</span> *pPara)
+{   
+    <span class="pl-c1">PT_INIT</span>();
+    <span class="pl-c1">PT_BEGIN</span>();
+    <span class="pl-c">/******************************************************************/</span>
+    <span class="pl-c1">MOE_MANDATORY_INIT</span>();  <span class="pl-c">/* Mandatory init, shout call it here only */</span>
+    <span class="pl-c">/******************************************************************/</span>
+    <span class="pl-k">while</span>(<span class="pl-c1">1</span>)
+    {
+        <span class="pl-c1">TASK_PT_DEMO_LED_On</span>(LED_RED);
+        <span class="pl-c1">PT_DELAY</span>(<span class="pl-c1">1000</span>);
+        <span class="pl-c1">TASK_PT_DEMO_LED_Off</span>(LED_RED);
+
+        <span class="pl-c1">TASK_PT_DEMO_LED_On</span>(LED_GREEN);
+        <span class="pl-c1">PT_DELAY</span>(<span class="pl-c1">1000</span>);
+        <span class="pl-c1">TASK_PT_DEMO_LED_Off</span>(LED_GREEN);
+
+        <span class="pl-c1">TASK_PT_DEMO_LED_On</span>(LED_BLUE);
+        <span class="pl-c1">PT_DELAY</span>(<span class="pl-c1">1000</span>);
+        <span class="pl-c1">TASK_PT_DEMO_LED_Off</span>(LED_BLUE);
+    }
+    <span class="pl-c1">PT_END</span>();
+    <span class="pl-k">return</span> SW_OK;
+}</pre></div>
+
+<div class="highlight highlight-source-c"><pre><span class="pl-c">/* 示例代码 */</span>
+<span class="pl-c">/* Task 2：周期打印 */</span>
+uint8 <span class="pl-en">Task_PT_Demo2_Process</span>(uint8 u8Evt, <span class="pl-k">void</span> *pPara)
+{    
+    <span class="pl-c1">PT_INIT</span>(); 
+    <span class="pl-c1">PT_BEGIN</span>();
+    <span class="pl-c">/******************************************************************/</span>
+    <span class="pl-c1">MOE_MANDATORY_INIT</span>();  <span class="pl-c">/* Mandatory init, shout call it here only */</span>
+    <span class="pl-c">/******************************************************************/</span>
+    <span class="pl-k">while</span>(<span class="pl-c1">1</span>)
+    {
+        <span class="pl-c1">DBG_PRINT</span>(<span class="pl-s"><span class="pl-pds">"</span>I am another Task!!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+        <span class="pl-c1">PT_DELAY</span>(<span class="pl-c1">1000</span>);
+    }
+
+    <span class="pl-c1">PT_END</span>();
+    <span class="pl-k">return</span> SW_OK;
+}</pre></div>
+
+<ul>
 <li>
-<strong>步骤 3</strong>: 在Project_Config.h文件中注册需要运行的TASK，并在该文件中进行其他相关配置.<br>
+<strong>步骤 3</strong>: 在<strong>Project_Config.h</strong>文件中<strong>注册</strong>需要运行的TASK，并在该文件中进行其它<strong>相关配置</strong>.<br>
 </li>
+</ul>
+
+<div class="highlight highlight-source-c"><pre>#<span class="pl-k">define</span> <span class="pl-en">LIST_OF_REG_TASK</span> \
+        <span class="pl-en">REG_TASK</span>(Task_PT_Demo_Proces)\
+        REG_TASK(Task_PT_Demo2_Proces)</pre></div>
+
+<ul>
 <li>
-<strong>步骤 4</strong>: 运行，Enjoy.<g-emoji alias="tada" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png" ios-version="6.0">🎉</g-emoji><br>
+<strong>步骤 4</strong>: 运行，Enjoy. <g-emoji alias="smile" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f604.png" ios-version="6.0">😄</g-emoji>
 </li>
 </ul>
 
