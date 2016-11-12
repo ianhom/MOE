@@ -15,31 +15,33 @@ MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点�
 更多讨论欢迎加入我们的QQ群：**[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
 ## 如何使用
-- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数**”，然后初始化并运行MOE.      
+- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数（如果有的话）**”，然后初始化并运行MOE.      
 ```c
-/* Function to get ms clock */
+/* 示例代码 */
+/* 获取系统毫秒时钟 */
 uint16 GetMsClock(void)
 {
-    return sg_u16SysClk;  /* System ms clock, increased every 1 ms in hardware timer interrupt */
+    return sg_u16SysClk;  /* 返回系统ms时钟，sg_u16SysClk每1毫秒自增1，例如在为定时1毫秒的硬件定时器中断中实现 */
 }
 
-/* Function to be Polled */
+/* 需要被轮询的程序 */
 void Poll(void)
 {
-    /* Nothing or something you want to do by polling */
+    /* 在这里添加需要轮询的程序 */
 }
 
 void main(void)
 {
-    .... /* Board init operation */
-    MOE_Init(GetMsClock, Poll);
-    MOE_Run(); 
+    ....                         /* 板级初始化 */
+    MOE_Init(GetMsClock, Poll);  /* MOE初始化，提供系统毫秒获取时钟函数，及需要被轮询的函数（若无则填写NULL） */
+    MOE_Run();                   /* 启动MOE， */
     return;
 }
 ```
-- **步骤 2**: **创建您的TASK**或**使用已有的经过测试的TASK**来实现您的应用功能.  
+- **步骤 2**: **创建**您的TASK或**复用**已有的经过测试的TASK来实现您的应用功能.  
 ```c
-/* Task 1 */
+/* 示例代码 */
+/* Task 1： LED闪烁*/
 uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
@@ -67,7 +69,8 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 ```   
 
 ```c
-/* Task 2 */
+/* 示例代码 */
+/* Task 2：周期打印 */
 uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT(); 
@@ -92,7 +95,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
         REG_TASK(Task_PT_Demo_Proces)\
         REG_TASK(Task_PT_Demo2_Proces)
 ```
-- **步骤 4**: 运行，Enjoy.   
+- **步骤 4**: 运行，Enjoy. :smile:
 
 ## 文档参考
  - [API说明](https://github.com/ianhom/MOE/blob/master/Documents/API_Description_Chinese.md)    
