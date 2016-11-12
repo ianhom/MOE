@@ -15,7 +15,7 @@ MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:
 For more discussion, please join our QQ Group: **[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
 ## How to use
-- **Step 1**: Port the MOE to your hardware, provide "**system clock in ms**" and "**poll function**", init and run MOE.  
+- **Step 1**: Port the MOE to your hardware, provide "**system clock in ms**" and "**poll function(if available)**", init and run MOE.  
 ```c
 /* EXAMPLE CODE */
 /* Function to get ms clock */
@@ -27,21 +27,22 @@ uint16 GetMsClock(void)
 /* Function to be Polled */
 void Poll(void)
 {
-    /* Nothing or something you want to do by polling */
+    /* Something you want to do by polling */
+    return;
 }
 
 void main(void)
 {
-    .... /* Board init operation */
-    MOE_Init(GetMsClock, Poll);
-    MOE_Run(); 
+    ....                         /* Board init operation */
+    MOE_Init(GetMsClock, Poll);  /* Init MOE with system clock funtion, and poll function(fill "NULL" if NOT available) */
+    MOE_Run();                   /* Start MOE            */
     return;
 }
 ```
 - **Step 2**: **Create** your own tasks or **re-use** exist app tasks to build your application.   
 ```c
 /* EXAMPLE CODE */
-/* Task 1 */
+/* Task 1: Blinking LED */
 uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
@@ -70,7 +71,7 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 
 ```c
 /* EXAMPLE CODE */
-/* Task 2 */
+/* Task 2: Periodic printing */
 uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT(); 
