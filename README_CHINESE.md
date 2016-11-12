@@ -2,7 +2,8 @@
 ![LOGO](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 ## 简介
-MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。特点如下：   
+MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。MOE的含义为"Minds Of Embedded system"，同时也是我宝贝女儿的小名:smile:   
+MOE特点如下：      
 
  | 描述     
 ----------------- | ---------------------------------------------   
