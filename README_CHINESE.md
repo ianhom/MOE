@@ -28,6 +28,7 @@ uint16 GetMsClock(void)
 void Poll(void)
 {
     /* 在这里添加需要轮询的程序 */
+    return;
 }
 
 void main(void)
