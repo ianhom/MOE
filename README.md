@@ -2,7 +2,8 @@
 ![LOGO](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true)    
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 ## Introduce
-MOE is an event-driven scheduler system for 8/16/32-bit MCUs. Features with:   
+MOE is an event-driven scheduler system for 8/16/32-bit MCUs. MOE means "Minds Of Embedded system", it’s also the name of my lovely baby daughter :smile:    
+Features with:   
 
  | Description   
 ----------------- | ---------------------------------------------   
