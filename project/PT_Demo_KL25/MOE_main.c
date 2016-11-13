@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : Moe_main.d
+* File       : Moe_main.c
 * Function   : Main-start of the project.
 * description: To be done.          
 * Version    : V1.00
@@ -16,7 +16,6 @@
 #include "MOE_Core.h"
 #include "MOE_Timer.h"
 #include "MOE_Msg.h"
-#include "MOE_Queue.h"
 #include "Board_Config.h"
 #include "KL25_Lpt_Time.h"
  
