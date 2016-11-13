@@ -1,4 +1,7 @@
 # Log
+##12th Nov 2016
+Add more descriptions to introduction.
+
 ##7th Nov 2016
 Add API description.
 
