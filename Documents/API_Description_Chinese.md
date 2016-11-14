@@ -78,8 +78,18 @@ MOE Queue            | 通用队列操作模块
 说明             | 该函数可用于清空数组、队列等数据，如事件队列初始化。
 
 
-#### uint8 Moe_Get_Acktive_Task()
-To be done...
+#### uint8 Moe_Get_Acktive_Task(void)
+
+函数名           | uint8 Moe_Get_Acktive_Task(void)
+--------------- | ------------------------------------------------   
+文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
+功能             | 获取当前正在执行的任务编号。
+函数入参         | 无
+函数出参         | 无
+返回值           | TASK_NO_TASK(0)： 无任务在执行；
+                | 1~254:            正在执行的任务的编号
+说明             | 无
+   
 #### void Moe_Reg_Malloc_Free()
 To be done...
 #### void* Moe_Malloc(uint32 u32Size)
