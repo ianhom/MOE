@@ -240,7 +240,7 @@ void Moe_Free(void *p);
 }
 #endif
 
-#endif /* _MOE_H_ */
+#endif /* _MOE_CORE_H_ */
 
 /* End of file */
 
