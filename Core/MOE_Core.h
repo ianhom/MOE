@@ -9,21 +9,21 @@
 *               1    29/Apr/2016    Ian           Create
 ******************************************************************************/
 
-#ifndef _MOE_H_
-#define _MOE_H_
+#ifndef _MOE_CORE_H_
+#define _MOE_CORE_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Check if specified option is set for debugging */
-#ifndef __DEBUG_MODE_MOE                    
+#ifndef __DEBUG_MODE_MOE_CORE                    
 #define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
 #else
 #ifdef __DEBUG_MODE
 #undef __DEBUG_MODE
 #endif
-#define __DEBUG_MODE      __DEBUG_MODE_MOE            /* According the set from project_config.h */
+#define __DEBUG_MODE      __DEBUG_MODE_MOE_CORE       /* According the set from project_config.h */
 #endif
 
 #define MOE_VERSION       "MOE V0.11"
@@ -58,7 +58,7 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 
 #define MOE_MANDATORY_INIT()        if(TASK_NO_TASK == sg_u8TaskID)\
                                     {\
-                                        sg_u8TaskID = Moe_Get_Active_Task();\
+                                        sg_u8TaskID = TASK_CURRENT_TASK;\
                                     }\
                                     else\
                                     {\
