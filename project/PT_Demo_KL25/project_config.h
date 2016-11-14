@@ -90,7 +90,7 @@ Options for __MALLOC_OPTION:
 
 #ifdef __DEBUG_ENABLE
 #define __DEBUG_MODE_MAIN                  __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE                   __DEBUG_NONE  
+#define __DEBUG_MODE_MOE_CORE              __DEBUG_NONE  
 #define __DEBUG_MODE_MOE_APP               __DEBUG_NONE  
 #define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE  
 #define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  
