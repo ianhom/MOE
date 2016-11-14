@@ -145,7 +145,7 @@ void Moe_Run(void)
 }
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Task(void)
+* Name       : uint8 Moe_Get_Active_Task(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -155,13 +155,13 @@ void Moe_Run(void)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Task(void)
+uint8 Moe_Get_Active_Task(void)
 {
     return sg_ptEvt->u8Task;
 }
 
 /******************************************************************************
-* Name       : uint8 Moe_Get_Acktive_Evt(void)
+* Name       : uint8 Moe_Get_Active_Evt(void)
 * Function   : To be done.
 * Input      : None
 * Output:    : None
@@ -171,7 +171,7 @@ uint8 Moe_Get_Acktive_Task(void)
 * Author     : Ian
 * Date       : 3rd May 2016
 ******************************************************************************/
-uint8 Moe_Get_Acktive_Evt(void)
+uint8 Moe_Get_Active_Evt(void)
 {
     return sg_ptEvt->u8Evt;
 }
