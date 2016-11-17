@@ -6,4 +6,4 @@
  Hardware | KL27-MiniBoard                           
  CPU      | KL27                                     
 
- ![KL27-MiniBoard](https://github.com/ianhom/MOE/blob/master/Documents/Pic/KL27-MiniBoard-1.png?raw=true)
+ ![KL27-MiniBoard](https://github.com/ianhom/MOE/blob/master/Documents/Pic/KL27-MINIBOARD.png?raw=true)
