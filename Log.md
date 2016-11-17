@@ -1,4 +1,7 @@
 # Log
+##17th Nov 2016
+Port MOE on KL27-MiniBoard
+
 ##12th Nov 2016
 Add more descriptions to introduction.
 
