@@ -1,4 +1,10 @@
 # Log
+##19th Nov 2016
+Update API-description
+
+##18th Nov 2016
+Port MOE on Nucleo-STM32L011K4
+
 ##17th Nov 2016
 Port MOE on KL27-MiniBoard
 
