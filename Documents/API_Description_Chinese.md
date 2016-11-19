@@ -70,9 +70,9 @@ MOE Queue            | 通用队列操作模块
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
 功能             | 在内存指定位置写入指定长度的指定数值                           
-函数入参         | uint8* pDes  ： 被写入内存的起始位置                                          
-                |  uint8 u8Val : 被写入的值
-                |  uint8 u8Len : 被写入的指定长度
+函数入参         | uint8* pDes  : 被写入内存的起始位置                                          
+                | uint8  u8Val : 被写入的值
+                | uint8  u8Len : 被写入的指定长度
 函数出参         | 无
 返回值           | SW_OK：操作成功 / SW_ERR：操作失败
 说明             | 该函数可用于清空数组、队列等数据，如事件队列初始化。
