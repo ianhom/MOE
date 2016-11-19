@@ -57,8 +57,8 @@ MOE Queue            | 通用队列操作模块
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Event.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c) 
 功能             | 事件设置函数，通过该函数可以向目标任务设置对应事件。                           
-函数入参         | uint8 u8TaskID： 被设置事件的任务ID                                             
-                | uint16 u16Evt： 被设置事件的类型
+函数入参         | uint8  u8TaskID: 被设置事件的任务ID                                             
+                | uint16 u16Evt  : 被设置事件的类型
 函数出参         | 无
 返回值           | SW_OK：操作成功 / SW_ERR：操作失败
 说明             | 无   
