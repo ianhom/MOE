@@ -1,31 +1,3 @@
-
-Skip to content
-This repository
-
-    Pull requests
-    Issues
-    Gist
-
-    @ianhom
-
-2
-4
-
-    4
-
-ianhom/MOE
-Code
-Issues 10
-Pull requests 0
-Projects 1
-Wiki
-Pulse
-Graphs
-Settings
-MOE/project/PT_Demo_KL25/MOE_main.h
-7f2a874 14 days ago
-@ianhom ianhom Update MOE_main.h
-39 lines (29 sloc) 965 Bytes
 /******************************************************************************
 * File       : Moe_main.h
 * Function   : Main-start of the project.
@@ -63,8 +35,3 @@ extern "C" {
 #endif /* _MOE_MAIN_H */
 
 /* End of file */
-
-    Contact GitHub API Training Shop Blog About 
-
-    © 2016 GitHub, Inc. Terms Privacy Security Status Help 
-
