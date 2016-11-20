@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : Task_PT_Demo2.h
+* File       : Task_PT_Demo2.c
 * Function   : Another demo task for PT application
 * description: To be done.           
 * Version    : V1.00
@@ -9,25 +9,18 @@
 *               1    08/Jul/2016    Ian           Create
 ******************************************************************************/
 
+#include "type_def.h"
+#include "common_head.h"
+#include "project_config.h"
+#include "MOE_Core.h"
+#include "MOE_Event.h"
+#include "MOE_Timer.h"
+#include "MOE_Msg.h"
+#include "MOE_PT.h"
+#include "Task_PT_Demo.h"
+#include "debug.h"
 
-#ifndef _TASK_PT_DEMO2_H_
-#define _TASK_PT_DEMO2_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* Check if specified option is set for debugging */
-#ifndef __DEBUG_MODE_PT_DEMO2                    
-#define __DEBUG_MODE      __DEBUG_NONE                /* Default: None debugging info            */
-#else
-#ifdef __DEBUG_MODE
-#undef __DEBUG_MODE
-#endif
-#define __DEBUG_MODE      __DEBUG_MODE_PT_DEMO2       /* According the set from project_config.h */
-#endif
-
-
+static uint8 sg_u8TaskID = TASK_NO_TASK;
 
 /******************************************************************************
 * Name       : uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
@@ -43,16 +36,28 @@ extern "C" {
 * Author     : Ian
 * Date       : 8th Jul 2016
 ******************************************************************************/
-uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara);
+uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
+{    
+    PT_INIT();
+    
+    PT_BEGIN();
 
+    /******************************************************************/
+    MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
+    /******************************************************************/
 
+    while(1)
+    {
+        printf("I am another Task!!\n");
+        PT_DELAY(1000);
+    }
 
+    PT_END();
 
-#ifdef __cplusplus
+    return SW_OK;
+
 }
-#endif
-
-#endif /* _TASK_PT_DEMO2_H */
 
 /* End of file */
+
 
