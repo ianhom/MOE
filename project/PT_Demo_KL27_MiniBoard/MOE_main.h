@@ -6,7 +6,7 @@
 * Author     : Ian
 * Date       : 4th Noc 2016
 * History    :  No.  When           Who           What
-*               1    04/Nov/2016    Ian           Create
+*               1    13/Nov/2016    Ian           Create
 ******************************************************************************/
 
 #ifndef _MOE_MAIN_H_
