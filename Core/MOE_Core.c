@@ -44,7 +44,7 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 {   
     uint8 u8Idx;
     /* Check if the pointer is invalid or NOT */
-     MOE_CHECK_IF_RET_ST((pDes == NULL),"Memset invalid input\n");
+    MOE_CHECK_IF_RET_ST((pDes == NULL),"Memset invalid input\n");
     
     /* Loop for the desired length bytes to be set */
     for(u8Idx = 0; u8Idx < u8Len; u8Idx++)
