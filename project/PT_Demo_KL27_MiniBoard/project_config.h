@@ -6,7 +6,7 @@
 * Author     : Ian
 * Date       : 24th May 2016
 * History    :  No.  When           Who           What
-*               1    24/May/2016    Ian           Create
+*               1    13/Nov/2016    Ian           Create
 ******************************************************************************/
 
 #ifndef _PROJECT_CONFIG_H_
@@ -93,26 +93,13 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_MOE_CORE              __DEBUG_NONE  
 #define __DEBUG_MODE_MOE_APP               __DEBUG_NONE  
 #define __DEBUG_MODE_MOE_TIMER             __DEBUG_NONE  
-#define __DEBUG_MODE_MOE_LINK_LIST         __DEBUG_BASIC_INFO  
 #define __DEBUG_MODE_MOE_QUEUE             __DEBUG_BASIC_INFO  
 #define __DEBUG_MODE_MOE_MSG               __DEBUG_NONE  
-#define __DEBUG_MODE_TASK_LED_DEMO         __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_APP_TASK_1            __DEBUG_NONE
-#define __DEBUG_MODE_APP_TASK_2            __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_APP_TASK_3            __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_APP_TASK__DEMO_QUEUE  __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_EVENT             __DEBUG_NONE
 #define __DEBUG_MODE_BOARD_CONFIG          __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_HAL               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO2              __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_HAL_SPI           __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_DRV_CC1101        __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_KNX_RF_LL             __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_PT_IEC870_PL          __DEBUG_BASIC_INFO
-#define __DEBUG_MODE_MOE_HAL_UART          __DEBUG_FUNC_LINE_INFO
-#define __DEBUG_MODE_MOE_DRV_11XX          __DEBUG_FUNC_LINE_INFO
-#define __DEBUG_MODE_PT_11XX_TEST          __DEBUG_BASIC_INFO
 #endif
 
                            
