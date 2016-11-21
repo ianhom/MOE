@@ -1,12 +1,12 @@
 /******************************************************************************
 * File       : Board_Config.h
 * Function   : Hardware configurations
-* description: Used in PT_Demo_KL25 project.           
+* description: Used in PT_Demo_KL27_MiniBoard project.             
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
 * History    :  No.  When           Who           What
-*               1    04/Nov/2016    Ian           Create
+*               1    13/Nov/2016    Ian           Create
 ******************************************************************************/
 
 #ifndef _BOARD_CONFIG_H_
