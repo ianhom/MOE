@@ -1,5 +1,8 @@
 # Log
-##21rd Nov 2016
+##22nd Nov 2016
+Fix the bug of debug.h
+
+##21st Nov 2016
 Update project code of Nucleo-STM32L011K4
 
 ##19th Nov 2016
