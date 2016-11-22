@@ -38,9 +38,9 @@ extern "C" {
     #pragma message("*** Debug printf outputs function name, line number and desired info!! ***")
     #define DBG_PRINT(x,...)        printf("FUNC : %s, LINE: %d -- \n "x" \n", __func__ , __LINE__, ##__VA_ARGS__)
 #endif
+#endif
 
-
-#elif (__DEBUG_MODE  == __DEBUG_FILE_LINE_INFO)
+#if (__DEBUG_MODE  == __DEBUG_FILE_LINE_INFO)
     #ifdef IAR
         #pragma message("*** Debug printf outputs file name, line number and desired info!! ***")
     #endif
