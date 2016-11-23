@@ -4,7 +4,7 @@
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
-* Date       : 22nd Jul 2016
+* Date       : 22nd Novl 2016
 * History    :  No.  When           Who           What
 *               1    22/Nov/2016    Ian           Create
 ******************************************************************************/
@@ -50,7 +50,7 @@ extern "C" {
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 4th Jul 2016
+* Date       : 22nd Nov 2016
 ******************************************************************************/
 void LED_Off(uint8 u8Ch);
  
@@ -63,7 +63,7 @@ void LED_Off(uint8 u8Ch);
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 4th Jul 2016
+* Date       : 22nd Nov 2016
 ******************************************************************************/
 void LED_On(uint8 u8Ch);
 
