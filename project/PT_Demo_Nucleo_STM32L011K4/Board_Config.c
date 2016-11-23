@@ -4,7 +4,7 @@
 * description: To be done.           
 * Version    : V1.00
 * Author     : Ian
-* Date       : 3rd Jul 2016
+* Date       : 22nd Nov 2016
 * History    :  No.  When           Who           What
 *               1    22/Nov/2016    Ian           Create
 ******************************************************************************/
@@ -59,8 +59,8 @@ void SysTick_Ms_Int_Init(uint32_t u32Tick)
 {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk;  /* Set clock source = core clock */
     SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;    /* Enable systick interrupt      */
-    SysTick->LOAD = u32Tick;                      /* Set tick count for 1ms        */
-    SysTick->VAL  = 0;
+    SysTick->LOAD  = u32Tick;                     /* Set tick count for 1ms        */
+    SysTick->VAL   = 0;
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;     /* Enable SysTick                */
     return;   
 }
@@ -82,6 +82,7 @@ void out_char(char u8C)
 {
     while(!(USART2->ISR & USART_ISR_TXE_Msk));  
     USART2->TDR = u8C;
+    return;
 }
 
 /** System Clock Configuration*/
@@ -123,6 +124,7 @@ static void SystemClock_Config(void)
 
     /* SysTick_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+    return;
 }
 
 /* USART2 init function */
@@ -139,6 +141,7 @@ static void USART2_UART_Init(void)
     huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
     huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
     HAL_UART_Init(&huart2);
+    return;
 }
 
 /** Configure pins as */
@@ -160,16 +163,19 @@ static void GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(LD3_GPIO_Port, &GPIO_InitStruct);
+    return;
 }
 
 void LED_On(uint8 u8Ch)
 {
     HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+    return;
 }
 
 void LED_Off(uint8 u8Ch)
 {
     HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+    return;
 }
 
 
