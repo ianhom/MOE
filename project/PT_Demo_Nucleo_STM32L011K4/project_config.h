@@ -4,7 +4,7 @@
 * description: To be done.          
 * Version    : V1.00
 * Author     : Ian
-* Date       : 24th May 2016
+* Date       : 22nd Nov 2016
 * History    :  No.  When           Who           What
 *               1    22/Nov/2016    Ian           Create
 ******************************************************************************/
@@ -89,7 +89,6 @@ Options for __MALLOC_OPTION:
 **********************************************************/  
 #define __MALLOC_OPTION                    __MALLOC_STD      /* Use standard malloc and free funciton  */
 
-
 #ifdef __DEBUG_ENABLE
 #define __DEBUG_MODE_MAIN                  __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_MOE_CORE              __DEBUG_NONE  
@@ -103,9 +102,8 @@ Options for __MALLOC_OPTION:
 #define __DEBUG_MODE_PT_DEMO               __DEBUG_BASIC_INFO
 #define __DEBUG_MODE_PT_DEMO2              __DEBUG_BASIC_INFO
 #endif
-
-                           
-#if (__MALLOC_OPTION == __MALLOC_MY)         /* If you want to use your malloc and free */
+                    
+#if (__MALLOC_OPTION == __MALLOC_MY)        /* If you want to use your malloc and free */
 #define MOE_MALLOC(size)   My_Malloc(size)  /* Add your malloc function here           */
 #define MOE_FREE(p)        My_Free(p)       /* Add your free function here             */
 #endif
@@ -116,15 +114,7 @@ void LED_Off(uint8 u8Ch);
 void LED_On(uint8 u8Ch);
 #define TASK_PT_DEMO_LED_ON        LED_On
 
-void LED_Toggle(uint8 u8Ch);
-#define TASK_PT_DEMO_LED_TOGGLE    LED_Toggle
-
-#define LED_RED                    (0)     /* Red led         */
-#define LED_YELLOW                 (1)     /* Yellow led      */
-#define LED_BLUE                   (2)     /* Blue led        */
 #define LED_GREEN                  (3)     /* Green led       */
-
-
 
 #ifdef __cplusplus
 }
