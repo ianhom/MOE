@@ -1,4 +1,3 @@
-
 /******************************************************************************
 * File       : MOE_PT.h
 * Function   : PT definitions.
@@ -7,7 +6,8 @@
 * Author     : Ian
 * Date       : 8th Jul 2016
 * History    :  No.  When           Who           What
-*               1   0 8/Jul/2016    Ian           Create
+*               1    08/Jul/2016    Ian           Create
+*               2    25/Nov/2016    Ian           Extend the range of running point
 ******************************************************************************/
 
 #ifndef _PT_H_
@@ -18,24 +18,24 @@ extern "C" {
 #endif
 
 /* PT init, use this macro at the beginning of PT task */
-#define PT_INIT()               static unsigned char sg_u8RunPoint = 0;
+#define PT_INIT()               static unsigned short int sg_u16RunPoint = 0;
 
 /* PT begin, use it with PT_END to contain the pt process */
 #define PT_BEGIN()              unsigned char u8YieldFlag = 1;\
-                                switch(sg_u8RunPoint)\
+                                switch(sg_u16RunPoint)\
                                 {\
                                      case 0:
 
 /* PT end, use it with PT_BEGIN to contain the pt process */
 #define PT_END()                }\
                                 u8YieldFlag   = 0;\
-                                sg_u8RunPoint = 0;
+                                sg_u16RunPoint = 0;
 
 /* PT yield, return from process */
 #define PT_YIELD()              do\
                                 {\
                                     u8YieldFlag = 0;\
-                                    sg_u8RunPoint = __LINE__;case __LINE__:\
+                                    sg_u16RunPoint = __LINE__;case __LINE__:\
                                     if(0 == u8YieldFlag)\
                                     {\
                                         return SW_OK;\
@@ -47,7 +47,7 @@ extern "C" {
 #define PT_YIELD_UNTIL(c)       do\
                                 {\
                                     u8YieldFlag = 0;\
-                                    sg_u8RunPoint = __LINE__;case __LINE__:\
+                                    sg_u16RunPoint = __LINE__;case __LINE__:\
                                     if((0 == u8YieldFlag) || !(c))\
                                     {\
                                         return SW_OK;\
@@ -59,7 +59,7 @@ extern "C" {
 #define PT_WAIT_UNTIL(c)       do\
                                {\
                                    u8YieldFlag = 0;\
-                                   sg_u8RunPoint = __LINE__;case __LINE__:\
+                                   sg_u16RunPoint = __LINE__;case __LINE__:\
                                    if(!(c))\
                                    {\
                                        return SW_OK;\
