@@ -12,7 +12,7 @@
  peripheral | 3-color LED * 1
             | LED * 4
             | Button * 4
-            | MMA8451Q Accelerate sensor *　１
+            | MMA8451Q Accelerate sensor * 1
             
            
  ![FRDM-Mini-Shield](https://github.com/ianhom/MOE/blob/master/Documents/Pic/mini-shield.png?raw=true)
