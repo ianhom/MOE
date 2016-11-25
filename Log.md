@@ -1,4 +1,7 @@
 # Log
+##24th Nov 2016
+Fix the bug in PT.h, extend the range of running point which stores the line number of last running.
+
 ##22nd Nov 2016
 Fix the bug of debug.h
 
