@@ -1,4 +1,7 @@
 # Log
+##26th Nov 2016
+Update design record about portable.
+
 ##24th Nov 2016
 Fix the bug in PT.h, extend the range of running point which stores the line number of last running.
 
