@@ -19,14 +19,12 @@ For more discussion, please join our QQ Group: **[475258651](https://jq.qq.com/?
 - **Step 1**: Port the MOE to your hardware, provide "**system clock in ms**" and "**poll function(if available)**", init and run MOE.  
 ```c
 /* EXAMPLE CODE */
-/* Function to get ms clock */
-uint16 GetMsClock(void)
+uint16 GetMsClock(void)    /* Function to get ms clock */
 {
     return sg_u16SysClk;  /* System ms clock, increased every 1 ms in hardware timer interrupt */
 }
 
-/* Function to be Polled */
-void Poll(void)
+void Poll(void)    /* Function to be Polled */
 {
     /* Something you want to do by polling */
     return;
@@ -48,9 +46,8 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
     PT_BEGIN();
-    /******************************************************************/
     MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
-    /******************************************************************/
+
     while(1)
     {
         TASK_PT_DEMO_LED_On(LED_RED);
@@ -77,15 +74,13 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT(); 
     PT_BEGIN();
-    /******************************************************************/
     MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
-    /******************************************************************/
+
     while(1)
     {
         DBG_PRINT("I am another Task!!\n");
         PT_DELAY(1000);
     }
-
     PT_END();
     return SW_OK;
 }
