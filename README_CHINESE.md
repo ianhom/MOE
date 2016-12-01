@@ -19,14 +19,12 @@ MOE特点如下：
 - **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数（如果有的话）**”，然后初始化并运行MOE.      
 ```c
 /* 示例代码 */
-/* 获取系统毫秒时钟 */
-uint16 GetMsClock(void)
+uint16 GetMsClock(void)   /* 获取系统毫秒时钟 */
 {
     return sg_u16SysClk;  /* 返回系统ms时钟，sg_u16SysClk每1毫秒自增1，例如在为定时1毫秒的硬件定时器中断中实现 */
 }
 
-/* 需要被轮询的程序 */
-void Poll(void)
+void Poll(void)           /* 需要被轮询的程序 */
 {
     /* 在这里添加需要轮询的程序 */
     return;
@@ -48,9 +46,8 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 {   
     PT_INIT();
     PT_BEGIN();
-    /******************************************************************/
     MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
-    /******************************************************************/
+    
     while(1)
     {
         TASK_PT_DEMO_LED_On(LED_RED);
@@ -77,15 +74,13 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 {    
     PT_INIT(); 
     PT_BEGIN();
-    /******************************************************************/
     MOE_MANDATORY_INIT();  /* Mandatory init, shout call it here only */
-    /******************************************************************/
+    
     while(1)
     {
         DBG_PRINT("I am another Task!!\n");
         PT_DELAY(1000);
     }
-
     PT_END();
     return SW_OK;
 }
@@ -101,7 +96,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 
 ## 项目目录   
    文件夹          |   说明   
-    :-----:       | ------------   
+    :-----        | ------------   
    **App/**       | 应用任务模块，与具体工程无关，新工程可复用该文件夹下模块或根据需求添加模块
    **Core/**      | 内核文件，包含调度、事件驱动处理、定时器、消息处理
    **Cpu/**       | MCU芯片内核、时钟、启动相关文件
