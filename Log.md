@@ -1,4 +1,7 @@
 # Log
+##02nd Dec 2016
+Add project code of NAVOTA
+
 ##26th Nov 2016
 Update design record about portable.    
 Create "Utility" folder   
