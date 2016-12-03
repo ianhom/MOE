@@ -111,5 +111,6 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
  - [API说明](https://github.com/ianhom/MOE/blob/master/Documents/API_Description_Chinese.md)    
  - [设计笔记](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md)    
  
-## 特别感谢
-- :tada:**蔡嘉楠小姐**对MOE Logo的精心绘制。:tada:
+## 特别感谢   
+- :tada:**感谢萌萌(MOE)的支持**:tada:
+- :tada:**蔡嘉楠小姐**对MOE Logo的精心绘制。:tada:   
