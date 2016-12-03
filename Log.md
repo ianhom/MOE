@@ -1,5 +1,8 @@
 # Log
-##02nd Dec 2016
+##3rd Dec 2016
+MOE's younger brother is born:smile:
+
+##2nd Dec 2016
 Add project code of NAVOTA
 
 ##26th Nov 2016
