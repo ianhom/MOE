@@ -1,4 +1,7 @@
 # Log
+##4th Dec 2016
+Update design record.
+
 ##3rd Dec 2016
 MOE's younger brother is born:smile:
 
