@@ -86,7 +86,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 }
 ```
 
-- **步骤 3**: 在**Project_Config.h**文件中**注册**需要运行的TASK，并在该文件中进行其它**相关配置**.   
+- **步骤 3**: 在**Project_Config.h**文件中[**注册**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于任务注册)需要运行的TASK，并在该文件中进行其它**相关配置**.   
 ```c
 #define LIST_OF_REG_TASK \
         REG_TASK(Task_PT_Demo_Proces)\
