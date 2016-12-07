@@ -6,7 +6,7 @@
 * Author     : Ian
 * Date       : 4th Nov 2016
 * History    :  No.  When           Who           What
-*               1    13/Nov/2016    Ian           Create
+*               1   04/Nov/2016    Ian           Create
 ******************************************************************************/
 
 #include "common.h"
@@ -14,8 +14,6 @@
 #include "project_config.h"
 #include "MOE_Core.h"
 #include "MOE_Event.h"
-#include "MOE_Timer.h"
-#include "MOE_Msg.h"
 #include "Board_Config.h"
 #include "debug.h"
 #include "Btn_SM_Config.h"
@@ -30,7 +28,7 @@
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 3rd Jul 2016
+* Date       : 4th Nov 2016
 ******************************************************************************/
 void Gpio_Init(void)
 {
@@ -70,7 +68,7 @@ void Gpio_Init(void)
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 4th Jul 2016
+* Date       : 4th Nov 2016
 ******************************************************************************/
 void LED_Toggle(uint8 u8Ch)
 {
@@ -114,7 +112,7 @@ void LED_Toggle(uint8 u8Ch)
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 4th Jul 2016
+* Date       : 4th Nov 2016
 ******************************************************************************/
 void LED_Off(uint8 u8Ch)
 {
@@ -159,7 +157,7 @@ void LED_Off(uint8 u8Ch)
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 4th Jul 2016
+* Date       : 4th Nov 2016
 ******************************************************************************/
 void LED_On(uint8 u8Ch)
 {
@@ -205,7 +203,7 @@ void LED_On(uint8 u8Ch)
 * description: To be done.
 * Version    : V1.00
 * Author     : Ian
-* Date       : 3rd Jul 2016
+* Date       : 4th Nov 2016
 ******************************************************************************/
 uint8 Btn_St_Get(uint8 u8Ch)
 {
