@@ -11,7 +11,7 @@ MOE特点如下：
 [**事件驱动**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | 可变的事件队列长度，支持高优先级事件插队.   
 [**软件定时器**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | 实用的软件定时器功能，支持回调.   
 [**消息机制**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#再谈消息机制) | 易用的消息API轻松实现任务间通讯，支持“To All”消息（低RAM消耗）.   
-**调试选项** | 灵活的调试选项，每个模块可设置不同的调试信息打印等级;易用的ASSERT.  
+[**调试选项**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | 灵活的调试选项，每个模块可设置不同的调试信息打印等级;易用的ASSERT.  
 [**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于PT协程应用) | 应用模块支持Protothread的编写方式.
 
 更多讨论欢迎加入我们的QQ群：**[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
