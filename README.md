@@ -7,11 +7,11 @@ Features with:
 
  | Description   
 ----------------- | ---------------------------------------------   
-**Event-driven** | Flexible event queue length, priority event supported.   
-**Timer** | Useful ms-timer with callback.   
-**Message** | Easy-use message API for communication between tasks, To-All-Task message with low RAM comsuption supported.   
-**Debug** | Flexible debug print options for each task or module; Useful easy-assert.  
-**Protothread** | Protothread is supported for application module.   
+[**Event-driven**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | Flexible event queue length, priority event supported.   
+[**Timer**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | Useful ms-timer with callback.   
+[**Message**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#再谈消息机制) | Easy-use message API for communication between tasks, To-All-Task message with low RAM comsuption supported.   
+[**Debug**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | Flexible debug print options for each task or module; Useful easy-assert.  
+[**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于PT协程应用) | Protothread is supported for application module.   
 
 For more discussion, please join our QQ Group: **[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
@@ -86,7 +86,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 }
 ```
 
-- **Step 3**: **Register tasks** in **Project_Config.h** and continue other **configuration** in the same file.   
+- **Step 3**: [**Register tasks**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于任务注册) in **Project_Config.h** and continue other **configuration** in the same file.   
 ```c
 #define LIST_OF_REG_TASK \
         REG_TASK(Task_PT_Demo_Proces)\
