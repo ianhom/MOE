@@ -9,13 +9,13 @@
 *               1    26/May/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../Pub/type_def.h"
+#include "../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Event.h"
-#include "MOE_Msg.h"
-#include "debug.h"
+#include "./MOE_Core.h"
+#include "./MOE_Event.h"
+#include "./MOE_Msg.h"
+#include "../Pub/debug.h"
 
 
 static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMsg);
