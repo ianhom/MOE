@@ -9,12 +9,12 @@
 *               1    21/Jun/2016    Ian           V1.00: Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../Pub/type_def.h"
+#include "../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Event.h"
-#include "debug.h"
+#include "./MOE_Core.h"
+#include "./MOE_Event.h"
+#include "../Pub/debug.h"
 
 /* Declaration of static function */
 static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara);
