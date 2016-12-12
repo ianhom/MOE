@@ -9,16 +9,15 @@
 *               1    28/Apr/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "./Pub/type_def.h"
+#include "./Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "debug.h"
-#include "MOE_App.h"
-#include "MOE_HAL.h"
-#include "MOE_Event.h"
-#include "MOE_Timer.h"
-#include "MOE_Msg.h"
+#include "./MOE_Core.h"
+#include "../Pub/debug.h"
+#include "./MOE_HAL.h"
+#include "./MOE_Event.h"
+#include "./MOE_Timer.h"
+#include "./MOE_Msg.h"
 
 static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
