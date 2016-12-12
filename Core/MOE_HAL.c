@@ -9,21 +9,21 @@
 *               1    04/Jul/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../Pub/type_def.h"
+#include "../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Msg.h"
-#include "MOE_HAL.h"
-#include "debug.h"
+#include "./MOE_Core.h"
+#include "./MOE_Msg.h"
+#include "./MOE_HAL.h"
+#include "../Pub/debug.h"
 #ifdef __MOE_SPI_ENABLE
-#include "MOE_HAL_SPI.h"
+#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_SPI.h"
 #endif
 #ifdef __MOE_I2C_ENABLE
-#include "MOE_HAL_I2C.h"
+#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_I2C.h"
 #endif
 #ifdef __MOE_UART_ENABLE
-#include "MOE_HAL_UART.h"
+#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_UART.h"
 #endif
 
 
