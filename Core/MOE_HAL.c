@@ -17,13 +17,13 @@
 #include "./MOE_HAL.h"
 #include "../Pub/debug.h"
 #ifdef __MOE_SPI_ENABLE
-#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_SPI.h"
+#include "MOE_HAL_SPI.h"
 #endif
 #ifdef __MOE_I2C_ENABLE
-#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_I2C.h"
+#include "MOE_HAL_I2C.h"
 #endif
 #ifdef __MOE_UART_ENABLE
-#include "../Driver/MCU/$(PLATFORM)/MOE_HAL_UART.h"
+#include "MOE_HAL_UART.h"
 #endif
 
 
