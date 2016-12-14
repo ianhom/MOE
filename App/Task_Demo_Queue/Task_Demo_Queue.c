@@ -11,16 +11,16 @@
 *               1    19/Jun/2016    Ian      V1.00: Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../../Pub/type_def.h"
+#include "../../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Event.h"
-#include "MOE_Timer.h"
-#include "MOE_Queue.h"
-#include "MOE_Msg.h"
-#include "Task_Demo_Queue.h"
-#include "debug.h"
+#include "../../Core/MOE_Core.h"
+#include "../../Core/MOE_Event.h"
+#include "../../Core/MOE_Timer.h"
+#include "../../Core/MOE_Queue.h"
+#include "../../Core/MOE_Msg.h"
+#include "./Task_Demo_Queue.h"
+#include "../../Pub/debug.h"
 
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
