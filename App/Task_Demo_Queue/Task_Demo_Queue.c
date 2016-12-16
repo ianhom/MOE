@@ -17,7 +17,7 @@
 #include "../../Core/MOE_Core.h"
 #include "../../Core/MOE_Event.h"
 #include "../../Core/MOE_Timer.h"
-#include "../../Core/MOE_Queue.h"
+#include "../../Utility/MOE_Queue.h"
 #include "../../Core/MOE_Msg.h"
 #include "./Task_Demo_Queue.h"
 #include "../../Pub/debug.h"
