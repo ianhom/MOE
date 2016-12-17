@@ -9,15 +9,15 @@
 *               1    13/Jul/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../../../Pub/type_def.h"
+#include "../../../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Msg.h"
-#include "MOE_HAL.h"
+#include "../../../Core/MOE_Core.h"
+#include "../../../Core/MOE_Msg.h"
+#include "../../../Core/MOE_HAL.h"
 #include "MOE_HAL_SPI.h"
-#include "MOE_DRV_CC1101.h"
-#include "debug.h"
+#include "./MOE_DRV_CC1101.h"
+#include "../../../Pub/debug.h"
 
 /******************************************************************************
 * Name       : uint8 CC1101_Init(void)
