@@ -9,15 +9,15 @@
 *               1    20/Jul/2016    Ian           Create
 ******************************************************************************/
 
-#include "../../Pub/type_def.h"
-#include "../../Pub/common_head.h"
+#include "../../../Pub/type_def.h"
+#include "../../../Pub/common_head.h"
 #include "project_config.h"
-#include "../../Core/MOE_Core.h"
-#include "../../Core/MOE_Msg.h"
-#include "../../Core/MOE_HAL.h"
+#include "../../../Core/MOE_Core.h"
+#include "../../../Core/MOE_Msg.h"
+#include "../../../Core/MOE_HAL.h"
 #include "MOE_HAL_UART.h"
 #include "./MOE_DRV_11xx.h"
-#include "../../Pub/debug.h"
+#include "../../../Pub/debug.h"
 #include "Board_Config.h"
 
 /******************************************************************************
