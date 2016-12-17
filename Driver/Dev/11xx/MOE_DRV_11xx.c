@@ -9,17 +9,16 @@
 *               1    20/Jul/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../../Pub/type_def.h"
+#include "../../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Msg.h"
-#include "MOE_HAL.h"
+#include "../../Core/MOE_Core.h"
+#include "../../Core/MOE_Msg.h"
+#include "../../Core/MOE_HAL.h"
 #include "MOE_HAL_UART.h"
-#include "MOE_DRV_11xx.h"
-#include "debug.h"
+#include "./MOE_DRV_11xx.h"
+#include "../../Pub/debug.h"
 #include "Board_Config.h"
-#include "KL25_Lpt_Time.h"
 
 /******************************************************************************
 * Name       : uint8 Drv_11xx_Init(void)
