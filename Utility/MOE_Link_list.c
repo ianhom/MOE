@@ -9,12 +9,12 @@
 *               1    02/Jun/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../Pub/type_def.h"
+#include "../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Link_List.h"
-#include "debug.h"
+#include "../Core/MOE_Core.h"
+#include "./MOE_Link_List.h"
+#include "../Pub/debug.h"
 
 
 /******************************************************************************
