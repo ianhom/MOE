@@ -29,12 +29,12 @@
 *               1    10/Jun/2016    Ian           Create
 ******************************************************************************/
 
-#include "type_def.h"
-#include "common_head.h"
+#include "../Pub/type_def.h"
+#include "../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Queue.h"
-#include "debug.h"
+#include "../Core/MOE_Core.h"
+#include "./MOE_Queue.h"
+#include "../Pub/debug.h"
 
 /******************************************************************************
 * Name       : uint8 Moe_Queue_Create(T_QUEUE_INFO *ptQueueInfo, uint8 u8Len, uint8 u8Cnt)
