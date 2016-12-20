@@ -8,15 +8,15 @@
 * History    :  No.  When           Who           What
 *               1    24/May/2016    Ian           Create
 ******************************************************************************/
-#include "common.h"
-#include "common_head.h"
-#include "project_config.h"
-#include "Moe_main.h"
-#include "debug.h"
-#include "MOE_Core.h"
-#include "MOE_Timer.h"
-#include "MOE_Msg.h"
-#include "Board_Config.h"
+#include "../../Pub/common.h"
+#include "../../Pub/common_head.h"
+#include "./project_config.h"
+#include "./Moe_main.h"
+#include "../../Pub/debug.h"
+#include "../../Core/MOE_Core.h"
+#include "../../Core/MOE_Timer.h"
+#include "../../Core/MOE_Msg.h"
+#include "./Board_Config.h"
 #include "KL25_Lpt_Time.h"
  
 /********************************************************************/
