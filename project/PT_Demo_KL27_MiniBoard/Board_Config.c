@@ -10,12 +10,12 @@
 ******************************************************************************/
 
 #include "common.h"
-#include "common_head.h"
-#include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Event.h"
-#include "Board_Config.h"
-#include "debug.h"
+#include "../../Pub/common_head.h"
+#include "./project_config.h"
+#include "../../Core/MOE_Core.h"
+#include "../../Core/MOE_Event.h"
+#include "./Board_Config.h"
+#include "../../Pub/debug.h"
 #include "Btn_SM_Config.h"
 #include "Btn_SM_Module.h"
 
