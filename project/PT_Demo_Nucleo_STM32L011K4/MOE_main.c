@@ -9,11 +9,11 @@
 *               1    21/Nov/2016    Ian           Create
 ******************************************************************************/
 #include "type_def.h"
-#include "common_head.h"
-#include "project_config.h"
-#include "Moe_main.h"
-#include "debug.h"
-#include "MOE_Core.h"
+#include "../../Pub/common_head.h"
+#include "./project_config.h"
+#include "./Moe_main.h"
+#include "../../COre/debug.h"
+#include "../../COre/MOE_Core.h"
 #include "Board_Config.h"
 
 __root const char cg_au8Version[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
