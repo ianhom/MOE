@@ -50,17 +50,14 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
 
     while(1)
     {
-        TASK_PT_DEMO_LED_On(LED_RED);
+        TASK_PT_DEMO_LED_Toggle(LED_RED);
         PT_DELAY(1000);
-        TASK_PT_DEMO_LED_Off(LED_RED);
 
-        TASK_PT_DEMO_LED_On(LED_GREEN);
+        TASK_PT_DEMO_LED_Toggle(LED_GREEN);
         PT_DELAY(1000);
-        TASK_PT_DEMO_LED_Off(LED_GREEN);
 
-        TASK_PT_DEMO_LED_On(LED_BLUE);
+        TASK_PT_DEMO_LED_Toggle(LED_BLUE);
         PT_DELAY(1000);
-        TASK_PT_DEMO_LED_Off(LED_BLUE);
     }
     PT_END();
     return SW_OK;
