@@ -10,13 +10,13 @@
 ******************************************************************************/
 
 #include "common.h"
-#include "common_head.h"
+#include "../../../Pub/common_head.h"
 #include "project_config.h"
-#include "MOE_Core.h"
-#include "MOE_Msg.h"
-#include "MOE_HAL.h"
-#include "MOE_HAL_UART.h"
-#include "debug.h"
+#include "../../../Core/MOE_Core.h"
+#include "../../../Core/MOE_Msg.h"
+#include "../../../Core/MOE_HAL.h"
+#include "./MOE_HAL_UART.h"
+#include "../../../Pub/debug.h"
 
 extern int periph_clk_khz;
 
