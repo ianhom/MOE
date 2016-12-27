@@ -11,12 +11,7 @@
 
 
 #include "type_def.h"
-#include "Sw_common.h"
 #include "Pub.h"
-#include "Boardctrl.h"
-#include "Comm_interface.h"
-#include "Hardware.h"
-#include "Api.h"
 #include "rcc.h"
 
 
