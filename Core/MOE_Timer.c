@@ -29,6 +29,11 @@ static uint8  Moe_Timer_Test_StartStop(void);
 static T_TIMER_NODE *sg_ptTmHead = NULL;               /* Head node of timer link list                 */
 static T_TIMER_NODE *sg_ptTmTail = NULL;               /* Tail node of timer link list                 */
 
+#ifdef __DEBUG_ENABLE
+static uint32 sg_u32TmrAddCnt = 0;                     /* The count of added timer                     */
+static uint32 sg_u32TmrDelCnt = 0;                     /* The count of deleted timer                   */
+#endif
+
 static uint32 sg_u32TmDiff = 0;                        /* Time difference between all left time update */
 static uint32 sg_u32OldTm  = 0;                        /* Old time of last comming left time update    */
 static uint32 sg_u32Coming = 0xFFFFFFFF;               /* The left time of the comming timer           */
@@ -209,7 +214,8 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    ptNode = Moe_Timer_Add();                             /* Allocate a timer node              */    
+    ptNode = Moe_Timer_Add();                                   /* Allocate a timer node              */    
+    MOE_TMR_ADD_CNT_UPDATE;                                     /* Update the added timer count       */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
@@ -318,7 +324,6 @@ static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE *ptNode)
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-
     if(ptNode == sg_ptTmHead)                   /* If the deleting node is the head node */
     {
         if(ptNode == sg_ptTmTail)               /* And if it is the unique node          */
@@ -354,6 +359,7 @@ static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE *ptNode)
         ptFind = ptFind->ptNext;                /* Update the searching node             */
     }
 
+    MOE_TMR_DEL_CNT_UPDATE;                     /* Update the deleted timer count        */
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
