@@ -30,6 +30,14 @@ extern "C" {
 #define PF_TIMER_SRC PF_TIMER_SRC
 typedef uint32 (*PF_TIMER_SRC)(void);
 #endif
+    
+#ifdef __DEBUG_ENABLE
+MOE_TMR_ADD_CNT_UPDATE       (sg_u32TmrAddCnt++)       /* Update the added timer count   */    
+MOE_TMR_DEL_CNT_UPDATE       (sg_u32TmrDelCnt++)       /* Update the deleted timer count */
+#else
+MOE_TMR_ADD_CNT_UPDATE 
+MOE_TMR_DEL_CNT_UPDATE 
+#endif
 
 typedef uint32 (*PF_TIMER_CB)(void *pPara);
 
