@@ -45,7 +45,20 @@ extern "C" {
 * Date       : 26th Jul 2016
 ******************************************************************************/
 uint8 Moe_HAL_UART_Init(void);
-
+ 
+/******************************************************************************
+* Name       : uint8 Moe_HAL_Uart_Ctrl(void)
+* Function   : None.
+* Input      : None.
+* Output:    : None.
+* Return     : uint8 Received data.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 26th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_Uart_Ctrl(void);
+ 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
 * Function   : Get a single byte data from uart receiving buffer
