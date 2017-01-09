@@ -171,3 +171,17 @@ LIST                                 //将生成代码为：Function_X_CallCnt =
     1. MOE项目公共部分：内核、调试组件、复用的应用模块
     2. 项目定制化的部分：MCU启动文件、驱动等    
 - 目前MOE还未提供makefile文件以便在gcc类开源编译器进行项目编译，后面会适时完善 
+
+## 关于文件布局   
+
+   文件夹          |   说明   
+    :-----        | :------------   
+   [**App/**](https://github.com/ianhom/MOE/tree/master/App)             | 应用任务模块，与具体工程无关，新工程可复用该文件夹下模块或根据需求添加模块
+   [**Core/**](https://github.com/ianhom/MOE/tree/master/Core)           | 内核文件，包含调度、事件驱动处理、定时器、消息处理
+   [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu)             | MCU芯片内核、时钟、启动相关文件
+   [**Driver/**](https://github.com/ianhom/MOE/tree/master/Driver)       | 驱动文件，包含MCU外设驱动、扩展设备驱动（RF模块，传感器等）
+   [**Pub/**](https://github.com/ianhom/MOE/tree/master/Pub)             | 项目公共文件，包含公共头文件、宏定义、调试文件
+   [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility)     | 常用功能模块，包含队列、链表、printf等
+   [**project/**](https://github.com/ianhom/MOE/tree/master/project)     | 具体工程相关文件，包含工程配置文件，硬件配置配件和main文件
+   [**Documents/**](https://github.com/ianhom/MOE/tree/master/Documents) | 说明性文档，包含设计说明，API说明、图片   
+    
