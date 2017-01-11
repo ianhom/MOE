@@ -36,8 +36,8 @@ extern "C" {
 #define MOE_HAL_UART_NO_RCV_TEL                     (0)   /* Uart do NOT get a entiry telegram       */
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Init_UART(void)
-* Function   : Init hardware abstract layer for UART
+* Name       : uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg)
+* Function   : Configure hardware abstract layer for UART
 * Input      : None.
 * Output:    : None.
 * Return     : SW_OK   Successful.
@@ -47,7 +47,21 @@ extern "C" {
 * Author     : Ian
 * Date       : 19th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_UART_Init(void);
+uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg);
+
+/******************************************************************************
+* Name       : uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl)
+* Function   : Send control command to UART
+* Input      : None.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 19th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl);
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
