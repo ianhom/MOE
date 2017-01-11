@@ -26,8 +26,8 @@ static uint8 sg_au8RcvData[40] = {0};
 static uint8 sg_u8GetTel = MOE_HAL_UART_NO_RCV_TEL;
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_UART_Init(void)
-* Function   : Init hardware abstract layer for UART
+* Name       : uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg)
+* Function   : Configure hardware abstract layer for UART
 * Input      : None.
 * Output:    : None.
 * Return     : SW_OK   Successful.
@@ -37,7 +37,7 @@ static uint8 sg_u8GetTel = MOE_HAL_UART_NO_RCV_TEL;
 * Author     : Ian
 * Date       : 19th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_UART_Init(void)
+uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg)
 {
     volatile uint8 u8Data = 0;
     uint16         U16SBR = 0; 
@@ -84,7 +84,22 @@ uint8 Moe_HAL_UART_Init(void)
     return SW_OK;  
 }
 
-
+/******************************************************************************
+* Name       : uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl)
+* Function   : Send control command to UART
+* Input      : None.
+* Output:    : None.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 19th Jul 2016
+******************************************************************************/
+uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl)
+{
+    reutrn SW_OK;
+}
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
