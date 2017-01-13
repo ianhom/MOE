@@ -40,6 +40,14 @@ extern "C" {
 ******************************************************************************/
 uint8 Moe_HAL_Init();
 
+typedef strucrt _T_MOE_PERIPHERAL_DRV
+{
+    void    (*pIntCallBackHandler)(T_SW_INT_EVENT *ptReason);              
+    uint16   wType;
+    uint16   wBufLen;
+    uint8   *pucBuf;                                                                                                     
+}T_MOE_PERIPHERAL_DRV;
+ 
  
 #ifdef __cplusplus
 }
