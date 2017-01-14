@@ -42,10 +42,10 @@ uint8 Moe_HAL_Init();
 
 typedef strucrt _T_MOE_PERIPHERAL_DRV
 {
-    void    (*pIntCallBackHandler)(T_SW_INT_EVENT *ptReason);              
-    uint16   wType;
-    uint16   wBufLen;
-    uint8   *pucBuf;                                                                                                     
+    void     (*pfCallBack)(void *pPara);    /* Callback pointer                 */            
+    uint16   u16Type;                       /* Type of command or configuration */
+    uint16   u16BufLen;                     /* Length of pararmeters in byte    */
+    uint8   *pu8Buf;                        /* Pointer for parameter            */                                          
 }T_MOE_PERIPHERAL_DRV;
  
  
