@@ -5,6 +5,7 @@
 MOE is an event-driven scheduler system for 8/16/32-bit MCUs. MOE means "Minds Of Embedded system", it’s also the name of my lovely baby daughter :smile:    
 Features with:   
 
+
  | Description   
 ----------------- | ---------------------------------------------   
 [**Event-driven**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | Flexible event queue length, priority event supported.   
