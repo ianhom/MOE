@@ -32,11 +32,6 @@ typedef uint8 (*PF_TASK_PROCESS)(uint8 u8Evt, void *pPara);
 #define __MALLOC_MOE                  (1)      /* Use MOE malloc and free      */
 #define __MALLOC_MY                   (2)      /* Use your malloc and free     */
 
-#define ENTER_CRITICAL_ZONE(x) x=1;
-
-#define EXIT_CRITICAL_ZONE(x) if(1 == x) x=0;
-
-
 #define SW_OK             (0)         /* Return: Successful */
 #define SW_ERR            (0xFF)      /* Return: Failed     */
 
