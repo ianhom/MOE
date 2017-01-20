@@ -52,6 +52,11 @@ LIST_OF_REG_TASK
 #undef REG_TASK
 };
 
+/* Critical zone define */
+#define ENTER_CRITICAL_ZONE(x)   x=1;
+#define EXIT_CRITICAL_ZONE(x)    if(1 == x) x=0;  
+
+  
 #define MAX_TASK_NUM                         (sizeof(cg_apfTaskFn)/sizeof(cg_apfTaskFn[0]))      /* Max number of tasks                      */
 
 #define MAX_QUEUE_EVT_NUM                    (MAX_TASK_NUM * 10)
