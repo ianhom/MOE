@@ -192,3 +192,5 @@ LIST                                 //将生成代码为：Function_X_CallCnt =
    [**project/**](https://github.com/ianhom/MOE/tree/master/project)     | 具体工程相关文件，包含工程配置文件，硬件配置配件和main文件
    [**Documents/**](https://github.com/ianhom/MOE/tree/master/Documents) | 说明性文档，包含设计说明，API说明、图片   
     
+## 关于开发板
+- MOE目前已经移植了多款开发板（Nucleo系列、FRDM系列），当然，为了更好展现MOE，也在为MOE定制一款开发板。MOE开发板将采用大容量MCU，用于支持复杂的应用及脚本解释器
