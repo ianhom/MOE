@@ -25,6 +25,31 @@ extern "C" {
 #endif
 #define __DEBUG_MODE      __DEBUG_MODE_MOE_HAL            /* According the set from project_config.h */
 #endif
+    
+    
+/* Driver configuration commmand type */
+#define MOE_DRV_INIT                      (0)      /* Init command            */
+#define MOE_DRV_CONFIG                    (1)      /* Configure command       */
+#define MOE_DRV_CTRL                      (2)      /* Control command         */
+#define MOE_DRV_FUNC_EN                   (3)      /* Enable driver function  */
+#define MOE_DRV_FUNC_DIS                  (4)      /* Disable driver function */
+#define MOE_DRV_INT_EN                    (5)      /* Enable interrupt        */
+#define MOE_DRV_INT_DIS                   (6)      /* Disable interrupt       */
+#define MOE_DRV_RX_EN                     (7)      /* Enable Rx               */
+#define MOE_DRV_RX_DIS                    (8)      /* Disable RX              */
+#define MOE_DRV_TX_EN                     (9)      /* Enable Tx               */
+#define MOE_DRV_TX_DIS                    (10)     /* Disable TX              */
+#define MOE_DRV_DMA_EN                    (11)     /* Enable DMA function     */
+#define MOE_DRV_DMA_DIS                   (12)     /* Disable DMA function    */
+    
+typedef strucrt _T_MOE_PERIPHERAL_DRV
+{
+    void     (*pfCallBack)(void *pPara);    /* Callback pointer                 */  
+    uint8   *pu8Buf;                        /* Pointer for parameter            */  
+    uint16   u16BufLen;                     /* Length of pararmeters in byte    */
+    uint8    u8Type;                        /* Type of command or configuration */                                            
+}T_MOE_PERIPHERAL_DRV;    
+    
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Init()
@@ -39,14 +64,6 @@ extern "C" {
 * Date       : 4th Jul 2016
 ******************************************************************************/
 uint8 Moe_HAL_Init();
-
-typedef strucrt _T_MOE_PERIPHERAL_DRV
-{
-    void     (*pfCallBack)(void *pPara);    /* Callback pointer                 */            
-    uint16   u16Type;                       /* Type of command or configuration */
-    uint16   u16BufLen;                     /* Length of pararmeters in byte    */
-    uint8   *pu8Buf;                        /* Pointer for parameter            */                                          
-}T_MOE_PERIPHERAL_DRV;
  
  
 #ifdef __cplusplus
