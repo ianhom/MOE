@@ -41,16 +41,26 @@ extern "C" {
 #define MOE_DRV_TX_DIS                    (10)     /* Disable TX              */
 #define MOE_DRV_DMA_EN                    (11)     /* Enable DMA function     */
 #define MOE_DRV_DMA_DIS                   (12)     /* Disable DMA function    */
-    
-typedef strucrt _T_MOE_PERIPHERAL_DRV
+
+/* Structure of driver parameters */
+typedef struct _T_MOE_DRV_PARA
 {
     void     (*pfCallBack)(void *pPara);    /* Callback pointer                 */  
     uint8   *pu8Buf;                        /* Pointer for parameter            */  
     uint16   u16BufLen;                     /* Length of pararmeters in byte    */
     uint8    u8Type;                        /* Type of command or configuration */                                            
-}T_MOE_PERIPHERAL_DRV;    
+}T_MOE_DRV_PARA;    
     
-
+/* Structure of driver operation interface */
+ typedef struct _T_MOE_DRV_OP
+ {
+     uint8 (*pfInit)(T_MOE_DRV_PARA *ptPara);   /* Init operation    */
+     uint8 (*pfCtrl)(T_MOE_DRV_PARA *ptPara);   /* Control operation */
+     uint8 (*pfRead)(T_MOE_DRV_PARA *ptPara);   /* Read operation    */
+     uint8 (*pfWrite)(T_MOE_DRV_PARA *ptPara);  /* Write operation   */
+ }T_MOE_DRV_OP;
+    
+    
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Init()
 * Function   : Init hardware abstract layer
