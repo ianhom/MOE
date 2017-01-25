@@ -36,7 +36,7 @@ extern "C" {
 #define MOE_HAL_UART_NO_RCV_TEL                     (0)   /* Uart do NOT get a entiry telegram       */
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg)
+* Name       : uint8 Moe_HAL_UART_Cfg(T_MOE_DRV_PARA *ptCfg)
 * Function   : Configure hardware abstract layer for UART
 * Input      : None.
 * Output:    : None.
@@ -47,10 +47,10 @@ extern "C" {
 * Author     : Ian
 * Date       : 19th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg);
+uint8 Moe_HAL_UART_Cfg(T_MOE_DRV_PARA *ptCfg);
 
 /******************************************************************************
-* Name       : uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl)
+* Name       : uint8 Moe_HAL_UART_Ctrl(T_MOE_DRV_PARA *ptCtrl)
 * Function   : Send control command to UART
 * Input      : None.
 * Output:    : None.
@@ -61,7 +61,7 @@ uint8 Moe_HAL_UART_Cfg(T_MOE_PERIPHERAL_DRV *ptCfg);
 * Author     : Ian
 * Date       : 19th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_UART_Ctrl(T_MOE_PERIPHERAL_DRV *ptCtrl);
+uint8 Moe_HAL_UART_Ctrl(T_MOE_DRV_PARA *ptCtrl);
 
 /******************************************************************************
 * Name       : uint8 Moe_HAL_Uart_Byte_Receive(void)
