@@ -12,8 +12,8 @@
 #include "../../Pub/common_head.h"
 #include "./project_config.h"
 #include "./Moe_main.h"
-#include "../../COre/debug.h"
-#include "../../COre/MOE_Core.h"
+#include "../../Core/debug.h"
+#include "../../Core/MOE_Core.h"
 #include "Board_Config.h"
 
 __root const char cg_au8Version[] = MOE_VERSION" ("__DATE__" - " __TIME__ ")";
