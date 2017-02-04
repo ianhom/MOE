@@ -11,7 +11,7 @@
 
 #include "../../Pub/type_def.h"
 #include "../../Pub/common_head.h"
-#include "../../Core/project_config.h"
+#include "project_config.h"
 #include "../../Core/MOE_Core.h"
 #include "../../Core/MOE_Event.h"
 #include "../../Core/MOE_Timer.h"
