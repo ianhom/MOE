@@ -9,7 +9,7 @@
 *               1    04/Nov/2016    Ian           Create
 ******************************************************************************/
 
-#include "../../Pub/common.h"
+#include "common.h"
 #include "../../Pub/common_head.h"
 #include "./project_config.h"
 #include "../../Core/MOE_Core.h"
