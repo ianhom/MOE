@@ -17,7 +17,7 @@
 #include "../../Core/MOE_Timer.h"
 #include "../../Core/MOE_Msg.h"
 #include "../../Core/MOE_PT.h"
-#include "./Task_PT_Demo.h"
+#include "./Task_PT_Demo2.h"
 #include "../../Pub/debug.h"
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
