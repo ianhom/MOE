@@ -62,7 +62,7 @@ typedef struct _T_MOE_DRV_PARA
     
     
 /******************************************************************************
-* Name       : uint8 Moe_HAL_Init()
+* Name       : uint8 Moe_HAL_Init(void)
 * Function   : Init hardware abstract layer
 * Input      : None.
 * Output:    : None.
@@ -73,7 +73,7 @@ typedef struct _T_MOE_DRV_PARA
 * Author     : Ian
 * Date       : 4th Jul 2016
 ******************************************************************************/
-uint8 Moe_HAL_Init();
+uint8 Moe_HAL_Init(void);
  
  
 #ifdef __cplusplus
