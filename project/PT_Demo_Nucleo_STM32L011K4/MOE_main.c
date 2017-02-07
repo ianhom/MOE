@@ -12,7 +12,7 @@
 #include "../../Pub/common_head.h"
 #include "./project_config.h"
 #include "./Moe_main.h"
-#include "../../Core/debug.h"
+#include "../../Pub/debug.h"
 #include "../../Core/MOE_Core.h"
 #include "Board_Config.h"
 
