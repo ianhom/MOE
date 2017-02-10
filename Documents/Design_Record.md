@@ -232,3 +232,5 @@ LIST                                 //将生成代码为：Function_X_CallCnt =
 
 ## 关于通讯协议栈
 - 一个操作系统的流行，除了靠出色的性能及易用性，很大一定程度还看系统所拥有的外围功能---丰富的外设驱动、通讯协议栈、shell等等。
+- 通讯协议栈是非常大的亮点，以contiki为例，众多Zigbee和6LoWPAN玩家为了了解及使用6LoWPAN而多contiki操作系统产生了浓厚的兴趣（也使得protothread的方式得到普及）。
+- 所以对于MOE，一个前沿或可靠通讯协议栈是有必要的。对于我开启了LEON（Lite Engine Of Network）项目（以我儿子命名），LEON既可以独立使用，与MOE当然也会更加融合。
