@@ -79,17 +79,18 @@ extern "C" {
 /* Check a condition */
 #define PT_CHECK_COND(c)        PT_WAIT_UNTIL(c)
 
-/* Return and recall after delay */
+/* Return and recall after t ms delay */
 #define PT_DELAY(t)             Moe_Timer_Delay(t);\
                                 PT_WAIT_EVENT(EVENT_DELAY)
 
-/* Return and recall as soon as possible */
+/* Return and recall as soon as possible, leave a chance for other task */
 #define PT_BREAK()              Moe_Event_Set(sg_u8TaskID, EVENT_BREAK, MOE_EVENT_NORMAL, NULL);\
                                 PT_YIELD()
 
 /* Wait for a message event */
 #define PT_WAIT_MSG()           PT_WAIT_EVENT(EVENT_MSG)
 
+/* Because PT process should NOT use stack, we need static local variable */
 #define PTV                     static
 
         
