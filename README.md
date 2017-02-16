@@ -40,7 +40,7 @@ void main(void)
     return;
 }
 ```
-- **Step 2**: **Create** your own tasks or **re-use** exist app tasks to build your application.   
+- **Step 2**: **Create** your own tasks or **re-use** exist app tasks to build your application. (Protothread style application is shown below, For event handler style, please see the source)
 ```c
 /* EXAMPLE CODE */
 /* Task 1: Blinking LED */
