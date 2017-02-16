@@ -39,7 +39,7 @@ void main(void)
     return;
 }
 ```
-- **步骤 2**: **创建**您的TASK或**复用**已有的经过测试的TASK来实现您的应用功能.  
+- **步骤 2**: **创建**您的TASK或**复用**已有的经过测试的TASK来实现您的应用功能.  (以下仅展示了protothread风格的应用，Event handler风格请详见源码)
 ```c
 /* 示例代码 */
 /* Task 1： LED闪烁*/
