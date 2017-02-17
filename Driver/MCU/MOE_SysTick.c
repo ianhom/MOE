@@ -11,13 +11,8 @@
 #include "type_def.h"
 #include "../../Pub/common_head.h"
 #include "./project_config.h"
-#include "../../Core/MOE_Core.h"
-#include "../../Core/MOE_Event.h"
-#include "../../Core/MOE_Timer.h"
-#include "../../Core/MOE_Msg.h"
-#include "./Board_Config.h"
+#include "./MOE_sysTick.h"
 #include "../../Pub/debug.h"
-//#include "core_cm0plus.h"
 
 /* System ms counter */
 volatile static uint32 sg_u32SysClk = 0;
