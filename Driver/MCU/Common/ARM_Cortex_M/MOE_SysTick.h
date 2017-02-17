@@ -1,5 +1,5 @@
 /******************************************************************************
-* File       : MOE_SysTick.c
+* File       : MOE_SysTick.h
 * Function   : Set SysTick for 1 ms
 * description: To be done.           
 * Version    : V1.00
