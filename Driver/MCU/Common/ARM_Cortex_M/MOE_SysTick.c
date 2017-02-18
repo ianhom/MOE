@@ -30,11 +30,11 @@ volatile static uint32 sg_u32SysClk = 0;
 ******************************************************************************/
 void SysTick_Ms_Int_Init(uint32_t u32Tick)
 {
-    SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk;  /* Set clock source = core clock */
-    SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;    /* Enable systick interrupt      */
-    SysTick->LOAD  = u32Tick;                     /* Set tick count for 1ms        */
-    SysTick->VAL   = 0;
-    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;     /* Enable SysTick                */
+    MOE_SysTick->CTRL |= MOE_SysTick_CTRL_CLKSOURCE_MSK;  /* Set clock source = core clock */
+    MOE_SysTick->CTRL |= MOE_SysTick_CTRL_TICKINT_MSK;    /* Enable systick interrupt      */
+    MOE_SysTick->LOAD  = u32Tick;                         /* Set tick count for 1ms        */
+    MOE_SysTick->VAL   = 0;
+    MOE_SysTick->CTRL |= MOE_SysTick_CTRL_ENABLE_MSK;     /* Enable SysTick                */
     return;   
 }
 
@@ -68,7 +68,7 @@ uint32 SysTick_GetSysClk(void)
 void SysTick_Handler(void)
 {
     volatile uint32 u32Temp;
-    u32Temp = SysTick->CTRL;
+    u32Temp = MOE_SysTick->CTRL;
     sg_u32SysClk++;            /* Update the system ms counter */
     return;
 }
