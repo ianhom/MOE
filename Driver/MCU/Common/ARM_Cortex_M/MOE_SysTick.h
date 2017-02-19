@@ -45,15 +45,15 @@ typedef struct _MOE_SysTick_Type
 #define MOE_SysTick_CTRL_TICKINT_MSK           (1UL << SysTick_CTRL_TICKINT_POS)              /*!< SysTick CTRL: TICKINT Mask */
 
 #define MOE_SysTick_CTRL_ENABLE_POS             0U                                            /*!< SysTick CTRL: ENABLE Position */
-#define MOE_SysTick_CTRL_ENABLE_MSK            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysTick CTRL: ENABLE Mask */
+#define MOE_SysTick_CTRL_ENABLE_MSK            (1UL)                                          /*!< SysTick CTRL: ENABLE Mask */
 
 /* SysTick Reload Register Definitions */
 #define MOE_SysTick_LOAD_RELOAD_POS             0U                                            /*!< SysTick LOAD: RELOAD Position */
-#define MOE_SysTick_LOAD_RELOAD_MSK            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysTick LOAD: RELOAD Mask */
+#define MOE_SysTick_LOAD_RELOAD_MSK            (0xFFFFFFUL)                                   /*!< SysTick LOAD: RELOAD Mask */
 
 /* SysTick Current Register Definitions */
 #define MOE_SysTick_VAL_CURRENT_POS             0U                                            /*!< SysTick VAL: CURRENT Position */
-#define MOE_SysTick_VAL_CURRENT_MSK            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysTick VAL: CURRENT Mask */
+#define MOE_SysTick_VAL_CURRENT_MSK            (0xFFFFFFUL)                                   /*!< SysTick VAL: CURRENT Mask */
 
 /* SysTick Calibration Register Definitions */
 #define MOE_SysTick_CALIB_NOREF_POS            31U                                            /*!< SysTick CALIB: NOREF Position */
@@ -63,11 +63,11 @@ typedef struct _MOE_SysTick_Type
 #define MOE_SysTick_CALIB_SKEW_MSK             (1UL << SysTick_CALIB_SKEW_POS)                /*!< SysTick CALIB: SKEW Mask */
 
 #define MOE_SysTick_CALIB_TENMS_POS             0U                                            /*!< SysTick CALIB: TENMS Position */
-#define MOE_SysTick_CALIB_TENMS_MSK            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysTick CALIB: TENMS Mask */
+#define MOE_SysTick_CALIB_TENMS_MSK            (0xFFFFFFUL)                                   /*!< SysTick CALIB: TENMS Mask */
 
-#define MOE_SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
+#define MOE_SysTick_BASE        (SCS_BASE +  0x0010UL)                                        /*!< SysTick Base Address */
 
-#define MOE_SysTick             ((MOE_SysTick_Type   *)     MOE_SysTick_BASE  )   /*!< SysTick configuration struct */
+#define MOE_SysTick             ((MOE_SysTick_Type   *)     MOE_SysTick_BASE  )               /*!< SysTick configuration struct */
 
 
 /******************************************************************************
