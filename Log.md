@@ -1,4 +1,7 @@
 # Log   
+##19th Feb 2017
+Modify Macro of SysTick registers
+
 ##16th Feb 2017
 Add SysTick driver
 
