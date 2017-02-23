@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_SysTick.c
 * Function   : Set SysTick for 1 ms
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 15th Feb 2017
@@ -14,7 +14,7 @@
 #include "./MOE_sysTick.h"
 #include "../../Pub/debug.h"
 
-/* System ms counter */
+/* Init system ms counter */
 volatile static uint32 sg_u32SysClk = 0;
 
 /******************************************************************************
@@ -23,7 +23,7 @@ volatile static uint32 sg_u32SysClk = 0;
 * Input      : uint32_t u32Tick    1~0xFFFFFFFF     The tick count for 1 ms
 * Output:    : None.
 * Return     : None.
-* description: To be done.
+* Description: Configura clock source, Enable interrupt and Enable Systick function.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 16th Feb 2017
@@ -44,7 +44,7 @@ void SysTick_Ms_Int_Init(uint32_t u32Tick)
 * Input      : uint32_t u32Tick    1~0xFFFFFFFF     The tick count for 1 ms
 * Output:    : None.
 * Return     : 1~0xFFFFFFFF   The current system ms counter.
-* description: To be done.
+* Description: None.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 16th Feb 2017
@@ -60,7 +60,7 @@ uint32 SysTick_GetSysClk(void)
 * Input      : None.
 * Output:    : None.
 * Return     : None.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 16th Feb 2017
@@ -69,7 +69,7 @@ void SysTick_Handler(void)
 {
     volatile uint32 u32Temp;
     u32Temp = MOE_SysTick->CTRL;
-    sg_u32SysClk++;            /* Update the system ms counter */
+    sg_u32SysClk++;               /* Update the system ms counter */
     return;
 }
 
