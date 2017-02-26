@@ -56,6 +56,17 @@ void Board_Init(void)
     return;
 }
 
+/******************************************************************************
+* Name       : void out_char(char u8C)
+* Function   : Ouput context from uart2
+* Input      : char u8C    0~255     All char needed be print out
+* Output:    : None
+* Return     : None
+* Description: To be done.
+* Version    : V1.00
+* Author     : Ian
+* Date       : 21st Nov 2016
+******************************************************************************/
 void out_char(char u8C)
 {
     while(!(USART2->ISR & USART_ISR_TXE_Msk));  
