@@ -18,7 +18,7 @@
 #include "./MOE_Event.h"
 
 static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind);
-static void Moe_Timer_Update_Left_Time(uint32 *pu32TmDiff);
+static void Moe_Timer_Update_Left_Time(void);
 static T_TIMER_NODE* Moe_Timer_Add(void);
 static T_TIMER_NODE* Moe_Timer_Find(T_TIMER_NODE *ptNode);
 static T_TIMER_NODE* Moe_Timer_Del(T_TIMER_NODE *ptNode);
@@ -253,9 +253,9 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
 }
 
 /******************************************************************************
-* Name       : static void Moe_Timer_Update_Left_Time(uint32 *pu32TmDiff)
-* Function   : Start a timer
-* Input      : uint32 *pu32TmDiff     The pointer of time difference bewteen all left time update
+* Name       : static void Moe_Timer_Update_Left_Time(void)
+* Function   : Update the left time
+* Input      : None.
 * Output:    : None.
 * Return     : None.
 * description: To be done.
@@ -263,17 +263,17 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
 * Author     : Ian
 * Date       : 25th Aug 2016
 ******************************************************************************/
-static void Moe_Timer_Update_Left_Time(uint32 *pu32TmDiff)
+static void Moe_Timer_Update_Left_Time(void)
 {
     uint32 u32IntSt;
-    uint32 u32TmDiff = *pu32TmDiff;
+    uint32 u32TmDiff = sg_u32TmDiff;
     T_TIMER_NODE* ptNode = sg_ptTmHead;
     
-    MOE_CHECK_IF_RET_VOID((0 == *pu32TmDiff),"Unnecessary to update!!\n");
+    MOE_CHECK_IF_RET_VOID((0 == u32TmDiff),"Unnecessary to update!!\n");
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
     /**************************************************************************************************/
-    *pu32TmDiff = 0;  /* Reset time difference between all left time update */
+    sg_u32TmDiff = 0;  /* Reset time difference between all left time update */
     while(ptNode)
     {
         if(ptNode->tTimer.u32TmLeft > u32TmDiff)           /* If time is NOT up     */
