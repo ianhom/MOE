@@ -2,7 +2,7 @@
             |  Description                              
  ---------- | ------------------------------
  Name       | PT_Demo_STM32F407                                       
- Function   | Demo application of 2 protothread tasks: Task 1 controls the 2 LEDS blinking; Task 2 print task infomation periodically                           
+ Function   | Demo application of 2 protothread tasks: Task 1 controls the 2 LEDS blinking; Task 2 prints task infomation periodically                           
  Platform   | STM32F407                        
  MCU        | STM32F407
  Type       | ARM Cortex-M4
