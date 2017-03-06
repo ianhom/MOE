@@ -17,28 +17,31 @@ MOE的API按如下模块进行分类
 
 Module               | Description
 -------------------- | -----------------------------
-MOE Core             | 调度&事件处理模块
-MOE message          | 消息机制模块
-MOE Timer            | 软件定时器模块
+MOE Core             | 任务调度及事件处理模块
+MOE message          | 消息机制模块，通过该模块可以实现各个任务之间的通信
+MOE Timer            | 软件定时器模块，所有时间相关的服务都由该模块提供：系统计时、任务延时调度、定时器CallBack处理等。
 MOE Queue            | 通用队列操作模块
-...                  | ...
+...                  | 
 
 ------------
 
 ### MOE Core
 该模块是MOE系统的核心部分，包含调度及事件驱动机制的处理。
-#### void Moe_Init(void)   
+#### uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)  
 
-函数名           | void Moe_Init(void) 
+函数原型          | uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
 功能             | MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。
-函数入参         | 无
+函数入参         | PF_TIMER_SRC pfSysTm：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数**必填**。
+                | PF_POLL pfPoll：需要系统代为轮询的函数。如无轮询函数，此参数**填NULL**。
 函数出参         | 无
-返回值           | 无
+返回值           | SW_OK: 操作成功
+                | SW_ERR：操作失败
 说明             | **该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次。**   
 
-
+   
+   
 #### void Moe_Run_System(void)
 
 函数名           | void Moe_Run_System(void)
@@ -53,7 +56,7 @@ MOE Queue            | 通用队列操作模块
 
 #### uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 
-函数名           | uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+函数原型         | uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Event.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c) 
 功能             | 事件设置函数，通过该函数可以向目标任务设置对应事件。                           
