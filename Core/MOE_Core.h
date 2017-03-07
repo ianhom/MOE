@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Core.h
 * Function   : Provide the main function of MOE-like scheduler.
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 29th Apr 2016
@@ -76,7 +76,7 @@ typedef uint32 (*PF_TIMER_SRC)(void);
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: Set a memory block with a desired value
+* Description: Set a memory block with a desired value
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -85,15 +85,20 @@ uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len);
 
 
 /******************************************************************************
-* Name       : void Moe_Init(void)
-* Function   : Init all tasks
-* Input      : None
+* Name       : uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
+* Function   : Init MOE
+* Input      : PF_TIMER_SRC pfSysTm   Free running system clock in ms
+*              PF_POLL      pfPoll    The function to be polled(could be NULL)
 * Output:    : None
-* Return     : None
-* description: 1. Clear tasks events list with NO EVENT.
-*              2. Clear task process function pointer table with NULL.
-*              3. Init all tasks and pass the task ID into the tasks.
-*              4. Check all tasks are registered.
+* Return     : SW_OK   Successful.
+*              SW_ERR  Failed.
+* Description: 1. Check system clock function parameter
+*              2. Save poll function (even it is NULL)
+*              3. Init timer
+*              4. Init HAL
+*              5. Init Message
+*              6. Init event processing 
+*              7. Init all tasks.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 29th Apr 2016
@@ -107,7 +112,7 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 28th Apr 2016
@@ -120,7 +125,7 @@ void Moe_Run(void);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -133,7 +138,7 @@ uint8 Moe_Get_Active_Evt(void);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -146,7 +151,7 @@ uint8 Moe_Get_Active_Task(void);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 25th May 2016
@@ -159,7 +164,7 @@ void Moe_Reg_Malloc_Free(PF_MALLOC pfMalloc, PF_FREE pfFree);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 25th May 2016
@@ -172,7 +177,7 @@ void* Moe_Malloc(uint32 u32Size);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 25th May 2016
