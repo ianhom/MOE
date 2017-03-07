@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Core.c
 * Function   : Provide the main function of scheduler.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 28th Apr 2016
@@ -115,7 +115,9 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 * Input      : None
 * Output:    : None
 * Return     : None
-* Description: To be done.
+* Description: 1. Process timers
+*              2. Do poll function if available
+*              3. Get event and process task
 * Version    : V1.00
 * Author     : Ian
 * Date       : 28th Apr 2016
@@ -150,10 +152,10 @@ void Moe_Run(void)
 
 /******************************************************************************
 * Name       : uint8 Moe_Get_Active_Task(void)
-* Function   : To be done.
+* Function   : Get the current active task number.
 * Input      : None
 * Output:    : None
-* Return     : None
+* Return     : uint8   0~255   The current active task number
 * Description: To be done.
 * Version    : V1.00
 * Author     : Ian
@@ -166,10 +168,10 @@ uint8 Moe_Get_Active_Task(void)
 
 /******************************************************************************
 * Name       : uint8 Moe_Get_Active_Evt(void)
-* Function   : To be done.
+* Function   : Get the currentactive event.
 * Input      : None
 * Output:    : None
-* Return     : None
+* Return     : uint8   0~255   The current active event
 * Description: To be done.
 * Version    : V1.00
 * Author     : Ian
