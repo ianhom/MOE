@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_PT_IEC870_PL.c
 * Function   : A demo task for PT application
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 13th Jul 2016
@@ -75,7 +75,7 @@ static uint8 sg_au8TxConfig[47] = {0x06, 0x2E, 0x02, 0x07, 0x54, 0x76, 0xFF, 0x8
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
 *              1~254   Event which is not processed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 13th Jul 2016
@@ -137,7 +137,7 @@ uint8 Task_PT_IEC870_PL_Process(uint8 u8Evt, void *pPara)
 *              uint8 *pu8Des      Pointer of decoded data
 * Output:    : None
 * Return     : None
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 13th Jul 2016
