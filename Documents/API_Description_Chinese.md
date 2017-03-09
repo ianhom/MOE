@@ -30,7 +30,7 @@ MOE Queue            | 通用队列操作模块
 该模块是MOE系统的核心部分，包含调度及事件驱动机制的处理。
 #### uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)  
 
-函数原型          | uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
+函数名          | uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
 功能             | MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。
@@ -58,14 +58,15 @@ MOE Queue            | 通用队列操作模块
 
 #### uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 
-函数原型         | uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+函数名         | uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
 --------------- | ------------------------------------------------   
 文件             | [MOE/Core/MOE_Event.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c) 
 功能             | 事件设置函数，通过该函数可以向目标任务设置对应事件。                           
 函数入参         | uint8  u8TaskID: 被设置事件的任务ID                                             
                 | uint16 u16Evt  : 被设置事件的类型
 函数出参         | 无
-返回值           | SW_OK：操作成功 / SW_ERR：操作失败
+返回值           | SW_OK：操作成功
+                | SW_ERR：操作失败
 说明             | 无   
 
 ---------------------------------------------------------------------------------------------
@@ -80,7 +81,8 @@ MOE Queue            | 通用队列操作模块
                 | uint8  u8Val : 被写入的值
                 | uint8  u8Len : 被写入的指定长度
 函数出参         | 无
-返回值           | SW_OK：操作成功 / SW_ERR：操作失败
+返回值           | SW_OK：操作成功
+                | SW_ERR：操作失败
 说明             | 该函数可用于清空数组、队列等数据，如事件队列初始化。
 
 ---------------------------------------------------------------------------------------------
