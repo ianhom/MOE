@@ -30,29 +30,86 @@ MOE Queue            | 通用队列操作模块
 该模块是MOE系统的核心部分，包含调度及事件驱动机制的处理。
 #### uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)  
 
-函数名          | uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
---------------- | ------------------------------------------------   
-文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
-功能             | MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。
-函数入参         | PF_TIMER_SRC pfSysTm：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数**必填**。
-                | PF_POLL pfPoll：需要系统代为轮询的函数。如无轮询函数，此参数**填NULL**。
-函数出参         | 无
-返回值           | SW_OK: 操作成功
-                | SW_ERR：操作失败
-说明             | **该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次。**   
+<table aline="center" border="1" width="1000">
+    <tr>
+        <th width="100">函数原型</th>
+        <th width="900">uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
+    </tr>
+	
+    <tr>
+    	<td align="center">文件</td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+    </tr>
+    
+    <tr>
+        <td align="center">功能</td>
+        <td>MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。</td>
+    </tr>
+    
+    <tr>
+	<td align="center">函数入参</td>
+        <td><i>PF_TIMER_SRC pfSysTm</i>：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>
+	    <i>PF_POLL pfPoll</i>：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">函数出参</td>
+        <td>无</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">返回值</td>
+        <td><i>SW_OK</i>: 操作成功<br>
+	    <i>SW_ERR</i>：操作失败</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">说明</td>
+        <td><b>该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次</b></td>
+    </tr>
+</table>
+
 
 --------------------------------------------------------------------------------------------- 
    
 #### void Moe_Run_System(void)
 
-函数名           | void Moe_Run_System(void)
---------------- | ------------------------------------------------   
-文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
-功能             | MOE系统启动函数，进入该函数后将无法退出，所有系统模块及任务的处理都将在该函数中进行。
-函数入参         | 无
-函数出参         | 无
-返回值           | 无
-说明             | **调用该函数之前，必须调用Moe_Init()初始化函数。**   
+<table aline="center" border="1" width="1000">
+    <tr>
+        <th width="100">函数原型</th>
+        <th width="900">void Moe_Run_System(void)</th>
+    </tr>
+	
+    <tr>
+    	<td align="center">文件</td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+    </tr>
+    
+    <tr>
+        <td align="center">功能</td>
+        <td> MOE系统启动函数，进入该函数后将无法退出，所有系统模块及任务的处理都将在该函数中进行。</td>
+    </tr>
+    
+    <tr>
+	<td align="center">函数入参</td>
+        <td>无</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">函数出参</td>
+        <td>无</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">返回值</td>
+        <td>无</td>
+    </tr>
+    
+    <tr>
+    	<td align="center">说明</td>
+        <td><b>调用该函数之前，必须调用Moe_Init()初始化函数</b></td>
+    </tr>
+</table>
 
 ---------------------------------------------------------------------------------------------
 
@@ -138,41 +195,3 @@ To be done...
 To be done...
 
 
-<table aline="center" border="1" width="1000">
-    <tr>
-        <th width="100">函数名</th>
-        <th width="900">uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
-    </tr>
-	
-    <tr>
-    	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
-    </tr>
-    
-    <tr>
-        <td align="center">功能</td>
-        <td>MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。</td>
-    </tr>
-    
-    <tr>
-	<td align="center">函数入参</td>
-        <td><u>PF_TIMER_SRC pfSysTm</u>：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>
-	    <u>PF_POLL pfPoll</u>：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
-    </tr>
-    
-    <tr>
-    	<td align="center">函数出参</td>
-        <td>无</td>
-    </tr>
-    
-    <tr>
-    	<td align="center">返回值</td>
-        <td><u>SW_OK</u>: 操作成功<br>
-	    <u>SW_ERR</u>：操作失败</td>
-    </tr>
-    
-    <tr>
-    	<td align="center">说明</td>
-        <td><b>该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次</b></td>
-    </tr>
-</table>
