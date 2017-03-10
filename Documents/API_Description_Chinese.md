@@ -138,10 +138,10 @@ To be done...
 To be done...
 
 
-<table aline="center" border="1" width="100%">
+<table aline="center" border="1" width="1000">
     <tr>
-        <th width="15%" >函数名</th>
-        <th width="85%">uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
+        <th width="100">函数名</th>
+        <th width="900">uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
     </tr>
 	
     <tr>
@@ -156,7 +156,8 @@ To be done...
     
     <tr>
 	<td align="center">函数入参</td>
-        <td>PF_TIMER_SRC pfSysTm：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>PF_POLL pfPoll：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
+        <td><u>PF_TIMER_SRC pfSysTm</u>：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>
+	    <u>PF_POLL pfPoll</u>：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
     </tr>
     
     <tr>
@@ -166,7 +167,8 @@ To be done...
     
     <tr>
     	<td align="center">返回值</td>
-        <td>SW_OK: 操作成功<br>SW_ERR：操作失败</td>
+        <td><u>SW_OK</u>: 操作成功<br>
+	    <u>SW_ERR</u>：操作失败</td>
     </tr>
     
     <tr>
