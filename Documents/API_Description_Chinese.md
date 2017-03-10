@@ -138,65 +138,39 @@ To be done...
 To be done...
 
 
-<style>
-table th:nth-of-type(2) {
-    width: 2000px;
-}
-</style>
-
-函数名          | uint8 Moe
---------------- | ------------------------------------------------   
-文件             | [MOE/Core/MOE_Core.c ](https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c) 
-功能             | MOE系统的初始
-函数入参         | PF_TIMER_SRC pf
-                | PF_POLL pfPoll：需
-函数出参         | 无
-返回值           | SW_OK: 
-                | SW_ERR：操作失败
-说明             | **该函数需要在Moe_Ru 
-
-
-<table aline="center">
+<table aline="center" border="1" width="100%">
     <tr>
-        <th >函数名</th>
-        <th>uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
+        <th width="15%" >函数名</th>
+        <th width="85%">uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)</th>
     </tr>
 	
-	  <tr>
-	    	<td align="center">文件</td>
-		    <td align="center"><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+    <tr>
+    	<td align="center">文件</td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
     </tr>
     
     <tr>
-	    	<td align="center">功能</td>
-		    <td align="center">MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。</td>
+        <td align="center">功能</td>
+        <td>MOE系统的初始化函数，该函数初始化硬件、系统模块及所有任务的初始化操作。</td>
     </tr>
     
     <tr>
-	    	<td align="center" rowspan="2">函数入参</td>
-		    <td align="center">PF_TIMER_SRC pfSysTm：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数**必填**。</td>
+	<td align="center">函数入参</td>
+        <td>PF_TIMER_SRC pfSysTm：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>PF_POLL pfPoll：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
     </tr>
     
     <tr>
-		    <td align="center">PF_POLL pfPoll：需要系统代为轮询的函数。如无轮询函数，此参数**填NULL**。</td>
+    	<td align="center">函数出参</td>
+        <td>无</td>
     </tr>
     
     <tr>
-	    	<td align="center">函数出参</td>
-		    <td align="center">无</td>
+    	<td align="center">返回值</td>
+        <td>SW_OK: 操作成功<br>SW_ERR：操作失败</td>
     </tr>
     
     <tr>
-	    	<td align="center" rowspan="2">返回值</td>
-		    <td align="center">SW_OK: 操作成功</td>
-    </tr>
-    
-    <tr>
-		    <td align="center">SW_ERR：操作失败</td>
-    </tr>
-    
-    <tr>
-	    	<td align="center">说明</td>
-		    <td align="center">**该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次。**   </td>
+    	<td align="center">说明</td>
+        <td><b>该函数需要在Moe_Run_System()调用之前调用一次，且全程只能调用一次</b></td>
     </tr>
 </table>
