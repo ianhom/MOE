@@ -37,7 +37,7 @@ MOE Queue            | 通用队列操作模块
     </tr>
     <tr>
     	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c#L77">MOE/Core/MOE_Core.c </a></td>
     </tr>
     <tr>
         <td align="center">功能</td>
@@ -76,7 +76,7 @@ MOE Queue            | 通用队列操作模块
 	
     <tr>
     	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c#L125">MOE/Core/MOE_Core.c </a></td>
     </tr>
     
     <tr>
@@ -116,7 +116,7 @@ MOE Queue            | 通用队列操作模块
     </tr>
     <tr>
     	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c">MOE/Core/MOE_Event.c </a></td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Event.c#L80">MOE/Core/MOE_Event.c </a></td>
     </tr>
     <tr>
         <td align="center">功能</td>
@@ -143,7 +143,7 @@ MOE Queue            | 通用队列操作模块
 </table>
 ---------------------------------------------------------------------------------------------
 
-#### uint8 Moe_Event_Set(uint8 u8TaskID, uint16 u16Evt)
+#### uint8 Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
 
 <table aline="center" border="1" width="1000">
     <tr>
@@ -152,7 +152,7 @@ MOE Queue            | 通用队列操作模块
     </tr>
     <tr>
     	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c#L42">MOE/Core/MOE_Core.c </a></td>
     </tr>
     <tr>
         <td align="center">功能</td>
@@ -189,7 +189,7 @@ MOE Queue            | 通用队列操作模块
     </tr>
     <tr>
     	<td align="center">文件</td>
-	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c">MOE/Core/MOE_Core.c </a></td>
+	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c#L164">MOE/Core/MOE_Core.c </a></td>
     </tr>
     <tr>
         <td align="center">功能</td>
