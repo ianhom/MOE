@@ -12,7 +12,7 @@ Features with:
 [**Timer**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | Useful ms-timer with callback.   
 [**Message**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#再谈消息机制) | Easy-use message API for communication between tasks, To-All-Task message with low RAM comsuption supported.   
 [**Debug**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | Flexible debug print options for each task or module; Useful easy-assert.  
-[**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于PT协程应用) | Protothread is supported for application module.   
+[**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于原型线程) | Protothread is supported for application module.   
 
 
 For more discussion, please join our QQ Group: **[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
