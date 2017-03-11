@@ -45,8 +45,8 @@ MOE Queue            | 通用队列操作模块
     </tr>
     <tr>
 	<td align="center">函数入参</td>
-        <td><i>PF_TIMER_SRC pfSysTm</i>：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>
-	    <i>PF_POLL pfPoll</i>：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
+        <td><i><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.h#L46">PF_TIMER_SRC  </a> pfSysTm</i>：获取系统毫秒时钟的函数。因为时间服务是系统必备，所以此参数<b>必填</b>。<br>
+	    <i><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.h#L44">PF_POLL  </a> pfPoll</i>：需要系统代为轮询的函数。如无轮询函数，此参数<b>填NULL</b>。</td>
     </tr>
     <tr>
     	<td align="center">函数出参</td>
