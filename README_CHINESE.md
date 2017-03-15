@@ -6,7 +6,7 @@
 MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。MOE的含义为"Minds Of Embedded system"，同时也是我宝贝女儿的小名:smile:   
 MOE特点如下：      
 
- | 描述     
+特点 | 描述     
 ----------------- | ---------------------------------------------   
 [**事件驱动**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | 可变的事件队列长度，支持高优先级事件插队.   
 [**软件定时器**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | 实用的软件定时器功能，支持回调.   
@@ -93,8 +93,9 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 - **步骤 4**: 运行，Enjoy. :smile:
 
 ## 项目目录   
+
    文件夹          |   说明   
-    :-----        | :------------   
+:-----        | :------------   
    [**App/**](https://github.com/ianhom/MOE/tree/master/App)             | 应用任务模块，与具体工程无关，新工程可复用该文件夹下模块或根据需求添加模块
    [**Core/**](https://github.com/ianhom/MOE/tree/master/Core)           | 内核文件，包含调度、事件驱动处理、定时器、消息处理
    [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu)             | MCU芯片内核、时钟、启动相关文件
