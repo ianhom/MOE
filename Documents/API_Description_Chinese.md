@@ -73,32 +73,26 @@ MOE Queue            | 通用队列操作模块
         <th width="120">函数原型</th>
         <th width="880">void Moe_Run_System(void)</th>
     </tr>
-	
     <tr>
     	<td align="center">文件</td>
 	<td><a href="https://github.com/ianhom/MOE/blob/master/Core/MOE_Core.c#L125">MOE/Core/MOE_Core.c </a></td>
     </tr>
-    
     <tr>
         <td align="center">功能</td>
         <td> MOE系统启动函数，进入该函数后将无法退出，所有系统模块及任务的处理都将在该函数中进行。</td>
     </tr>
-    
     <tr>
 	<td align="center">函数入参</td>
         <td>无</td>
     </tr>
-    
     <tr>
     	<td align="center">函数出参</td>
         <td>无</td>
     </tr>
-    
     <tr>
     	<td align="center">返回值</td>
         <td>无</td>
     </tr>
-    
     <tr>
     	<td align="center">说明</td>
         <td><b>调用该函数之前，必须调用Moe_Init()初始化函数</b></td>
