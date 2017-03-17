@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_Demo_Queue.h
 * Function   : It is demo task for queue
-* description: This task creates two queues,one is located in task space, and 
+* Description: This task creates two queues,one is located in task space, and 
 *              the other is created by Queue API. Task sends two messages with 
 *              the two queues and recieves the two messages from the queues.           
 * Version    : V1.00
@@ -42,7 +42,7 @@ extern "C" {
 *              void  *pPara            Pointer of parameter
 * Output:    : None
 * Return     : To be done
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 19th Jun 2016
