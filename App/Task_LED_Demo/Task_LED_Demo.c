@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_LED_Demo.c
 * Function   : It is a LED demo task.
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -34,7 +34,7 @@ static void (*const TASK1_LED_On)(uint8 u8Clr)  = TASK1_LED_ON;
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
 *              1~254   Event which is not processed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
