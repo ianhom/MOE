@@ -227,7 +227,7 @@ LIST                                 //将生成代码为：Function_X_CallCnt =
 ## 关于文件布局   
 
    文件夹          |   说明   
-    :-----        | :------------   
+:-----        | :------------   
    [**App/**](https://github.com/ianhom/MOE/tree/master/App)             | 应用任务模块，与具体工程无关，新工程可复用该文件夹下模块或根据需求添加模块
    [**Core/**](https://github.com/ianhom/MOE/tree/master/Core)           | 内核文件，包含调度、事件驱动处理、定时器、消息处理
    [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu)             | MCU芯片内核、时钟、启动相关文件
