@@ -1,5 +1,5 @@
 # Basic_Demo_KL25
-            |  Descrption                              
+ --     |  Descrption                              
  ---------- | ------------------------------
  Name       | Basic_Demo_KL25                                        
  Function   | Demo application of 3 event-process tasks                           
