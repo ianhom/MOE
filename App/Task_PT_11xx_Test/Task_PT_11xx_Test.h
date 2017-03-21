@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_PT_11xx_Test.h
 * Function   : PT task for 11xx test
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd May 2016
@@ -38,7 +38,7 @@ extern "C" {
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
 *              1~254   Event which is not processed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Jul 2016
