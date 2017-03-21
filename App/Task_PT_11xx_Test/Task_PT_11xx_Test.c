@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_PT_11xx_Test.c
 * Function   : PT task for 11xx test
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd May 2016
@@ -47,7 +47,7 @@ static void (*const TASK_PT_DEMO_LED_On)(uint8 u8Clr)     = TASK_PT_DEMO_LED_ON;
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
 *              1~254   Event which is not processed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Jul 2016
