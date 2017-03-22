@@ -1,4 +1,4 @@
-#MOE-files
+# MOE Core files
 
 ## Introduction
 The folder contains all core files of "MOE". It includes MOE scheduler, MOE timer, MOE message, MOE event, MOE queue and so on.
