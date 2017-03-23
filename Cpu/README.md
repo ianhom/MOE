@@ -1,4 +1,4 @@
-##CPU related code
+## CPU related code
 This folder contains CPU related code for following MCUs:
 Following MCUs are supported:   
 
