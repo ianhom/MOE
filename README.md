@@ -1,4 +1,6 @@
 # MOE    
+![Smartphone with MOE](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/MOE%20with%20MI%20%20_1.jpg?raw=true)
+The first smartphone with MOE in the world!.......Bazinga!!!    
 ![LOGO](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true)    
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 ## Introduce
