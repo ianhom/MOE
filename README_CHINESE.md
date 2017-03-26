@@ -1,4 +1,7 @@
 # MOE   
+
+![Smartphone with MOE](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/MOE%20with%20MI%20%20_1.jpg?raw=true)
+全球首台搭载MOE的智能手机！。。。。。。开个玩笑！！  
 ![LOGO](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 ## 简介
