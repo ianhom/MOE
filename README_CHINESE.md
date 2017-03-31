@@ -2,13 +2,13 @@
 
 ![Smartphone with MOE](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/MOE_with_MI_3.jpg?raw=true)    
 
-全球首台搭载MOE的智能手机！。。。。。。开个玩笑！！  
+全球首台搭载MOE系统的智能手机！------------------开个玩笑！！  
 
 -----
 ![LOGO](https://github.com/ianhom/MOE/blob/master/Documents/Pic/MOE_logo_V0_1e.png?raw=true)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 ## 简介
-:tada:**热烈欢迎MOE的弟弟诞生**:tada:   
+:tada:**热烈欢迎MOE的弟弟LEON诞生**:tada:   
 MOE是一个用于8/16/32位MCU多任务事件驱动型的调度系统。MOE的含义为"Minds Of Embedded system"，同时也是我宝贝女儿的小名:smile:   
 MOE特点如下：      
 
