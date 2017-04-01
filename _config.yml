@@ -1,0 +1,8 @@
+title: MOE
+description: MOE is an event-driven scheduler system for 8/16/32-bit MCUs. MOE means "Minds Of Embedded system", it’s also the name of my lovely baby daughter :)
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-architect
+
+gems:
+  - jekyll-mentions
