@@ -24,7 +24,8 @@ MOE特点如下：
 更多讨论欢迎加入我们的QQ群：**[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
 ## 如何使用
-- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数（如果有的话）**”，然后初始化并运行MOE.      
+- **步骤 1**: 将MOE移植到您的硬件上，并为其提供“**系统毫秒时钟**”及“**需要时刻轮询的函数（如果有的话）**”，然后初始化并运行MOE.    
+
 ```c
 /* 示例代码 */
 uint16 GetMsClock(void)   /* 获取系统毫秒时钟 */
@@ -46,7 +47,9 @@ void main(void)
     return;
 }
 ```
-- **步骤 2**: **创建**您的TASK或**复用**已有的经过测试的TASK来实现您的应用功能.  (以下仅展示了protothread风格的应用，Event handler风格请详见源码)
+
+- **步骤 2**: **创建**您的TASK或**复用**已有的经过测试的TASK来实现您的应用功能.  (以下仅展示了protothread风格的应用，Event handler风格请详见源码)   
+
 ```c
 /* 示例代码 */
 /* Task 1： LED闪烁*/
@@ -71,7 +74,8 @@ uint8 Task_PT_Demo_Process(uint8 u8Evt, void *pPara)
     return SW_OK;
 }
 ```   
-
+   
+   
 ```c
 /* 示例代码 */
 /* Task 2：周期打印 */
@@ -91,12 +95,14 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
 }
 ```
 
-- **步骤 3**: 在**Project_Config.h**文件中[**注册**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于任务注册)需要运行的TASK，并在该文件中进行其它**相关配置**.   
+- **步骤 3**: 在**Project_Config.h**文件中[**注册**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于任务注册)需要运行的TASK，并在该文件中进行其它**相关配置**.      
+
 ```c
 #define LIST_OF_REG_TASK \
         REG_TASK(Task_PT_Demo_Proces)\
         REG_TASK(Task_PT_Demo2_Proces)
-```
+```   
+   
 - **步骤 4**: 运行，Enjoy. :smile:
 
 ## 项目目录   
