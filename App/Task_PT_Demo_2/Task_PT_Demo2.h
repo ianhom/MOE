@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Task_PT_Demo2.h
 * Function   : Another demo task for PT application
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 8th Jul 2016
@@ -38,7 +38,7 @@ extern "C" {
 * Return     : SW_OK   Successful operation
 *            : SW_ERR  Failed operation
 *              1~254   Event which is not processed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 8th Jul 2016
