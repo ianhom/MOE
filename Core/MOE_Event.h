@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Event.h
 * Function   : Provide event services.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jun 2016
@@ -80,7 +80,7 @@ typedef struct _T_EVENT_QUEUE
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -98,7 +98,7 @@ uint8 Moe_Event_Init(void);
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -112,7 +112,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara);
 * Output:    : None
 * Return     : NULL :     No event
 *              Other:     Event pointer
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
