@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Event.c
 * Function   : Provide event services.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jun 2016
@@ -42,7 +42,7 @@ static uint16 sg_u16EvtCntMax = MAX_QUEUE_EVT_NUM;  /* Max count of exsit events
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -119,7 +119,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -165,7 +165,7 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *p
 * Output:    : None
 * Return     : NULL :     No event
 *              Other:     Event pointer
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -198,7 +198,7 @@ T_EVENT* Moe_Event_Get(void)
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -230,7 +230,7 @@ void Moe_Event_Remove(void)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -277,7 +277,7 @@ uint8 Moe_Event_Init(void)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -324,7 +324,7 @@ uint8 Moe_Event_Set(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *pPara)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -393,7 +393,7 @@ static uint8 Moe_Event_Setting(uint8 u8TaskID, uint8 u8Evt, uint8 u8Urg, void *p
 * Output:    : None
 * Return     : NULL :     No event
 *              Other:     Event pointer
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
@@ -449,7 +449,7 @@ T_EVENT* Moe_Event_Get(void)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 8th Aug 2016
@@ -511,7 +511,7 @@ static uint32 Moe_Event_Queue_Block_Add(void)
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done
+* Description: To be done
 * Version    : V1.00
 * Author     : Ian
 * Date       : 8th Aug 2016
