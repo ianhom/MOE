@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_HAL.c
 * Function   : Hardware Abstract Layer.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Jul 2016
@@ -68,7 +68,7 @@ typedef struct _T_MOE_DRV_PARA
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Jul 2016
