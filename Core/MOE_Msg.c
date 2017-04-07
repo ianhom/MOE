@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Msg.c
 * Function   : Provide message services.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 26th May 2016
@@ -26,7 +26,7 @@ static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16S
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: None
+* Description: None
 * Version    : V1.00
 * Author     : Ian
 * Date       : 27 Jun 2016
@@ -47,7 +47,7 @@ void Moe_Msg_Init(void)
 * Output:    : None.
 * Return     : Pointer of the message data struct.
 *              NULL:  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 26th May 2016
@@ -122,7 +122,7 @@ static T_MSG_HEAD* Moe_Msg_Create(uint8 u8DestTask, uint8 u8MsgType, uint16 u16S
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 28th May 2016
@@ -163,7 +163,7 @@ uint8 Moe_Msg_Send(uint8 u8DestTask, uint8 u8MsgType, uint16 u16Size, void *ptMs
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: Note: If the u8NextTask is the same with u8DestTask, the next task
+* Description: Note: If the u8NextTask is the same with u8DestTask, the next task
 *                    will be set as TASK_NO_TASK, forward the same message to 
 *                    itself is meaningless.
 * Version    : V1.00
@@ -213,7 +213,7 @@ uint8 Moe_Msg_Forward(T_MSG_HEAD *ptMsg, uint8 u8NextTask)
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 31st May 2016
