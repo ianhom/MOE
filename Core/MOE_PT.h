@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_PT.h
 * Function   : PT definitions.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 8th Jul 2016
