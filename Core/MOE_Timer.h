@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_Timer.h
 * Function   : Provide timer services.
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -87,7 +87,7 @@ typedef struct _T_TIMER_NODE
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -101,7 +101,7 @@ uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm);
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -115,7 +115,7 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 23rd Jun 2016
@@ -129,7 +129,7 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut);
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 23rd Jun 2016
@@ -145,7 +145,7 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut);
 * Output:    : None
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 23rd Jun 2016
@@ -160,7 +160,7 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 * Output:    : None
 * Return     : NULL           Fail to stop a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is stopped.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -177,7 +177,7 @@ T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE *ptNode);
 * Output:    : None
 * Return     : NULL           Fail to find the node.
 *              T_TIMER_NODE*  The pointer of the founed node.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -192,7 +192,7 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE* ptNode);
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -205,7 +205,7 @@ uint8 Moe_Timer_Process(void);
 * Input      : None
 * Output:    : None
 * Return     : uint16   The count of timers
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -218,7 +218,7 @@ uint16 Moe_Timer_Test_Cnt(void);
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done
+* Description: To be done
 *              **IT IS A TEST FUNCTION! DO NOT USE IT IN YOUR APPLICATION!**
 * Version    : V1.00
 * Author     : Ian
