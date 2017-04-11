@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : rcc.c
 * Function   : Reset and clock control
-* description: Configure system clock.
+* Description: Configure system clock.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 30th Jul 2016
