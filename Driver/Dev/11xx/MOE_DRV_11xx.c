@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : MOE_DRV_11xx.c
 * Function   : Driver for 11xx.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -27,7 +27,7 @@
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -53,7 +53,7 @@ uint8 Drv_11xx_Init(void)
 * Output:    : uint8 *pu8Data                             Pointer to save return bytes     
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -102,7 +102,7 @@ uint8 Drv_11xx_Cmd(uint8 u8Cmd, uint8 u8Para, uint8 u8Val, uint16 u16Len, uint8 
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -153,7 +153,7 @@ uint8 Drv_11xx_Cmd_Bind(uint8 u8Ch, uint8 *pu8Addr)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -184,7 +184,7 @@ uint8 Drv_11xx_Cmd_Mode_Sel(uint8 u8Mode)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 20th Jul 2016
@@ -214,7 +214,7 @@ uint8 Drv_11xx_Cmd_Rcv_Mode(uint8 u8Mode)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -244,7 +244,7 @@ uint8 Drv_11xx_Cmd_Power_Sel(uint8 u8Lv)
 * Output:    : uint8 *pu8Addr                Pointer to save SN address
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -274,7 +274,7 @@ uint8 Drv_11xx_Cmd_List_Bind(uint8 u8Num, uint8 *pu8Addr)
 * Output:    : uint8 *pu8Data                Pointer to save quality value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -304,7 +304,7 @@ uint8 Drv_11xx_Cmd_Quality_Ind(uint8 *pu8Data)
 * Output:    : uint8 *pu8Data                Pointer to save RSSI value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -334,7 +334,7 @@ uint8 Drv_11xx_Cmd_Get_Rssi(uint8 *pu8Data)
 * Output:    : uint8 *pu8Data                Pointer to register value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -364,7 +364,7 @@ uint8 Drv_11xx_Cmd_Reg_Read(uint8 *pu8Data)
 * Output:    : uint8 *pu8Data                Pointer to register value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -394,7 +394,7 @@ uint8 Drv_11xx_Cmd_Get_Des_Addr_Tab (uint8 *pu8Data)
 * Output:    : uint8 *pu8Data                Pointer to register value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -426,7 +426,7 @@ uint8 Drv_11xx_Cmd_Get_All_Addr_Tab (uint8 *pu8Data)
 * Output:    : uint8 *pu8Data                Pointer to register value
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -458,7 +458,7 @@ uint8 Drv_11xx_Cmd_Channel_Sel(uint8 u8Ch)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -508,7 +508,7 @@ uint8 Drv_11xx_Write_Reg(uint8 u8Reg, uint8 u8Cnt, uint8 *pu8Addr)
 * Output:    : None.
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
@@ -541,7 +541,7 @@ uint8 Drv_11xx_Send_Telegram(uint8 *pu8Data)
 * Output:    : uint8  *pu8Data              Pointer for received telegram
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Jul 2016
