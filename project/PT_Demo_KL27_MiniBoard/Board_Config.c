@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Board_Config.c
 * Function   : Hardware configurations
-* description: Used in PT_Demo_KL27_MiniBoard project.           
+* Description: Used in PT_Demo_KL27_MiniBoard project.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -25,7 +25,7 @@
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -65,7 +65,7 @@ void Gpio_Init(void)
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -109,7 +109,7 @@ void LED_Toggle(uint8 u8Ch)
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -154,7 +154,7 @@ void LED_Off(uint8 u8Ch)
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -200,28 +200,28 @@ void LED_On(uint8 u8Ch)
 * Output:    : None
 * Return     : BOARD_CONFIG_BTN_ST_HIGH  Pin with high voltage level
 *              BOARD_CONFIG_BTN_ST_LOW   Pin with low voltage level
-* description: To be done.
+*              SW_ERR                    Wrong channel number
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
 ******************************************************************************/
 uint8 Btn_St_Get(uint8 u8Ch)
 {
-    uint8 u8Temp;
     if(u8Ch == 1)  /* If it is the No.1 channel button */
     {   /* Get the voltage level of button pin */
-        u8Temp = (!(GPIOA_PDIR & (1 << 5)));
+        return (!(GPIOA_PDIR & (1 << 5)));
     }
     if(u8Ch == 2)  /* If it is the No.2 channel button */
     {   /* Get the voltage level of button pin */
-        u8Temp = (!(GPIOA_PDIR & (1 << 4)));
+        return (!(GPIOA_PDIR & (1 << 4)));
     }
     if(u8Ch == 3)  /* If it is the No.3 channel button */
     {   /* Get the voltage level of button pin */
-        u8Temp = (!(GPIOA_PDIR & (1 << 12)));
+        return (!(GPIOA_PDIR & (1 << 12)));
     }
 
-    return  u8Temp;
+    return  SW_ERR;
 }
 
 
