@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Board_Config.h
 * Function   : Hardware configurations
-* description: Used in PT_Demo_KL25 project.           
+* Description: Used in PT_Demo_KL25 project.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
@@ -46,7 +46,7 @@ extern "C" {
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd Jul 2016
@@ -59,7 +59,7 @@ void Gpio_Init(void);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Jul 2016
@@ -72,7 +72,7 @@ void LED_Toggle(uint8 u8Ch);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Jul 2016
@@ -86,7 +86,7 @@ void LED_Off(uint8 u8Ch);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Jul 2016
@@ -101,7 +101,8 @@ void LED_On(uint8 u8Ch);
 * Output:    : None
 * Return     : BOARD_CONFIG_BTN_ST_HIGH  Pin with high voltage level
 *              BOARD_CONFIG_BTN_ST_LOW   Pin with low voltage level
-* description: To be done.
+*              SW_ERR                    Wrong channel number
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd Jul 2016
