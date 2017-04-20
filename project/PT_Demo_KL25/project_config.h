@@ -63,8 +63,7 @@ LIST_OF_REG_TASK
 
 #define __WANTED_A_LIVE_FOX                           /* Wanted: a live fox.                      */
 
-//#define __MOE_SPI_ENABLE
-#define __MOE_UART_ENABLE
+#define __FRDM_MINI_SHIELD_SUPPORTED                  /* Use leds and keys in min-shield          */
 
 /******************************************************************************
 NOTE: You have four ways to use malloc:
