@@ -1,4 +1,5 @@
 # MOE   
+[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE)   
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 
 
