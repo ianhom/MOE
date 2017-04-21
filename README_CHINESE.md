@@ -1,4 +1,5 @@
 # MOE   
+[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 
 ![Smartphone with MOE](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/MOE_with_MI_3.jpg?raw=true)    
