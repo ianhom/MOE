@@ -1,5 +1,5 @@
 # MOE   
-[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE)   
+[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE/blob/master/LICENCE.md) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE/releases/tag/V0.1.6) [![status](https://img.shields.io/badge/作者状态-有点饿，好想吃包子-blue.svg?style=plastic)](https://github.com/ianhom/Note-of-all/blob/master/Pic/Misc/zhifu.jpg?raw=true)   
 [English](https://github.com/ianhom/MOE/blob/master/README.md) 
 
 ![Smartphone with MOE](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/MOE_with_MI_3.jpg?raw=true)    
