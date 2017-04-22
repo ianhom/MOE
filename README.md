@@ -1,5 +1,5 @@
 # MOE   
-[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE) [![status](https://img.shields.io/badge/status-hungry-blue.svg?style=plastic)](https://github.com/ianhom/MOE)   
+[![license](https://img.shields.io/github/license/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE/blob/master/LICENCE.md) [![GitHub release](https://img.shields.io/github/release/ianhom/MOE.svg?style=plastic)](https://github.com/ianhom/MOE/releases/tag/V0.1.6) [![status](https://img.shields.io/badge/Author_status-a_little_hungry,a_hamburger_will_be_nice-blue.svg?style=plastic)](https://github.com/ianhom/Note-of-all/blob/master/Pic/Misc/zhifu.jpg?raw=true) 
 [中文说明](https://github.com/ianhom/MOE/blob/master/README_CHINESE.md) 
 
 
