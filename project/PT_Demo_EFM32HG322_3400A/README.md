@@ -16,5 +16,5 @@
   
   
   
-![]()
+![](https://github.com/ianhom/MOE/blob/master/Documents/Pic/Board/HappyGecko%20Starter-kit.png?raw=true)
 
