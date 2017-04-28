@@ -10,7 +10,8 @@
  RAM        | 8K bytes
  ROM        | 64K bytes
  peripheral | LED * 2
-  --        | Reset button * 2
+  --        | Reset button * 1
+  --        | User button * 2
   --        | Touch panel * 2
   --        | Memory LCD * 1
   
