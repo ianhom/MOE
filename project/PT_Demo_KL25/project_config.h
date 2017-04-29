@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : project_config.h
 * Function   : project configuration.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 24th May 2016
