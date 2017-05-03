@@ -1,7 +1,3 @@
-[submodule "MOE/Debug/ARM/CmBacktrace"]
-	path = MOE/Debug/ARM/CmBacktrace
-	url  = https://github.com/armink/CmBacktrace.git
-    
 [submodule "Debug/ARM/CmBacktrace"]
 	path = Debug/ARM/CmBacktrace
 	url = https://github.com/armink/CmBacktrace.git
