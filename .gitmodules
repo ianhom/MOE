@@ -1,3 +1,6 @@
 [submodule "Debug/ARM/CmBacktrace"]
 	path = Debug/ARM/CmBacktrace
 	url = https://github.com/armink/CmBacktrace.git
+[submodule "Network/LEON"]
+	path = Network/LEON
+	url = https://github.com/ianhom/LEON.git
