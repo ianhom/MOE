@@ -1,4 +1,4 @@
-[submodule "Debug/ARM"]
-	path = Debug/ARM
+[submodule "deps/CmBacktrace"]
+	path = deps/CmBacktrace
 	url  = https://github.com/armink/CmBacktrace.git
     
