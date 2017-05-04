@@ -19,7 +19,7 @@ MOE特点如下：
 [**事件驱动**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | 可变的事件队列长度，支持高优先级事件插队.   
 [**软件定时器**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | 实用的软件定时器功能，支持回调.   
 [**消息机制**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#再谈消息机制) | 易用的消息API轻松实现任务间通讯，支持“To All”消息（低RAM消耗）.   
-[**调试选项**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | 灵活的调试选项，每个模块可设置不同的调试信息打印等级;易用的ASSERT.  
+[**调试选项**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | 灵活的调试选项，每个模块可设置不同的调试信息打印等级;易用的ASSERT;支持Cortex M的错误跟踪[CmBacktrace](https://github.com/armink/CmBacktrace)(Hardfault backtrace for Cortex-M)    
 [**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于原型线程) | 应用模块支持Protothread的编写方式.
 
 更多讨论欢迎加入我们的QQ群：**[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
@@ -107,7 +107,9 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
    [**App/**](https://github.com/ianhom/MOE/tree/master/App)             | 应用任务模块，与具体工程无关，新工程可复用该文件夹下模块或根据需求添加模块
    [**Core/**](https://github.com/ianhom/MOE/tree/master/Core)           | 内核文件，包含调度、事件驱动处理、定时器、消息处理
    [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu)             | MCU芯片内核、时钟、启动相关文件
+   [**Debug/**](https://github.com/ianhom/MOE/tree/master/Debug)         | 实用的调试工具及模块    
    [**Driver/**](https://github.com/ianhom/MOE/tree/master/Driver)       | 驱动文件，包含MCU外设驱动、扩展设备驱动（RF模块，传感器等）
+   [**Network/**](https://github.com/ianhom/MOE/tree/master/Network)     | 各种网络通讯协议栈（待完成）
    [**Pub/**](https://github.com/ianhom/MOE/tree/master/Pub)             | 项目公共文件，包含公共头文件、宏定义、调试文件
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility)     | 常用功能模块，包含队列、链表、printf等
    [**project/**](https://github.com/ianhom/MOE/tree/master/project)     | 具体工程相关文件，包含工程配置文件，硬件配置配件和main文件
