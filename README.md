@@ -115,7 +115,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
    [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu) | Startup and other necessary code for starting MCUs       
    [**Debug/**](https://github.com/ianhom/MOE/tree/master/Debug) | Useful tool & modules for debugging      
    [**Driver/**](https://github.com/ianhom/MOE/tree/master/Driver) | Driver of MCU peripheral and other extended module(sensors or RF parts)    
-   [**Network/**](https://github.com/ianhom/MOE/tree/master/Debug) | Stack for kinds fo network(to be done.)
+   [**Network/**](https://github.com/ianhom/MOE/tree/master/Network) | Stack for kinds fo network(to be done.)
    [**Pub/**](https://github.com/ianhom/MOE/tree/master/Pub) | Public files including public head file, MACRO and debug file    
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility) | Useful function modules including queue, link list, printf    
    [**project/**](https://github.com/ianhom/MOE/tree/master/project) | Files for specific projects including configuration of SW/HW and the main file    
