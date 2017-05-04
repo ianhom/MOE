@@ -22,7 +22,7 @@ Features with:
 [**Event-driven**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于事件驱动) | Flexible event queue length, priority event supported.   
 [**Timer**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于定时器) | Useful ms-timer with callback.   
 [**Message**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#再谈消息机制) | Easy-use message API for communication between tasks, To-All-Task message with low RAM comsuption supported.   
-[**Debug**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | Flexible debug print options for each task or module; Useful easy-assert.  
+[**Debug**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于调试选项) | Flexible debug print options for each task or module; Useful easy-assert; [CmBacktrace](https://github.com/armink/CmBacktrace)(Hardfault backtrace for Cortex-M)
 [**Protothread**](https://github.com/ianhom/MOE/blob/master/Documents/Design_Record.md/#关于原型线程) | Protothread is supported for application module.   
 
 
@@ -113,7 +113,9 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
    [**App/**](https://github.com/ianhom/MOE/tree/master/App) | App modules which can be re-used in different projects. Please add new app module here for new application requirement    
    [**Core/**](https://github.com/ianhom/MOE/tree/master/Core) | Core files including scheduler, Event-drivern, timer and message.    
    [**Cpu/**](https://github.com/ianhom/MOE/tree/master/Cpu) | Startup and other necessary code for starting MCUs       
+   [**Debug/**](https://github.com/ianhom/MOE/tree/master/Debug) | Useful tool & modules for debugging      
    [**Driver/**](https://github.com/ianhom/MOE/tree/master/Driver) | Driver of MCU peripheral and other extended module(sensors or RF parts)    
+   [**Network/**](https://github.com/ianhom/MOE/tree/master/Debug) | Stack for kinds fo network(to be done.)
    [**Pub/**](https://github.com/ianhom/MOE/tree/master/Pub) | Public files including public head file, MACRO and debug file    
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility) | Useful function modules including queue, link list, printf    
    [**project/**](https://github.com/ianhom/MOE/tree/master/project) | Files for specific projects including configuration of SW/HW and the main file    
