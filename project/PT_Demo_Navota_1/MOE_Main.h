@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Moe_main.h
 * Function   : Main start
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 2nd Dec 2016
