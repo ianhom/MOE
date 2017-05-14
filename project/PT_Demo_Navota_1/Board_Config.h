@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Board_Config.h
 * Function   : Hardware configurations
-* description: Used in PT_Demo_Navota_1 project.             
+* Description: Used in PT_Demo_Navota_1 project.             
 * Version    : V1.00
 * Author     : Ian
 * Date       : 7th Dec 2016
@@ -39,7 +39,7 @@ extern "C" {
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 7th Dec 2016
@@ -52,7 +52,7 @@ void Gpio_Init(void);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 7th Dec 2016
@@ -65,7 +65,7 @@ void LED_Toggle(uint8 u8Ch);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 7th Dec 2016
@@ -79,7 +79,7 @@ void LED_Off(uint8 u8Ch);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 7th Dec 2016
