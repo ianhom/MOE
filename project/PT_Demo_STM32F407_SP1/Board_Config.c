@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Board_Config.c
 * Function   : Hardware configurations
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Nov 2016
@@ -38,7 +38,7 @@ static GPIO_TypeDef *aptLedPort[2] = {LED_1_PORT, LED_2_PORT};
 * Input      : None
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 21st Nov 2016
@@ -153,19 +153,19 @@ static void MX_GPIO_Init(void)
 
 void Board_LED_Toggle(uint8 u8Ch)
 {
-	  switch(u8Ch)
-		{
-		    case LED_1:
-				case LED_2:
-				{
-				    HAL_GPIO_TogglePin(aptLedPort[u8Ch - LED_1], au16LedPin[u8Ch - LED_1]);
-				    break;
-		    }
-				default:
-			  {
-				    break;
-				}
-		}
+    switch(u8Ch)
+    {
+        case LED_1:
+        case LED_2:
+        {
+            HAL_GPIO_TogglePin(aptLedPort[u8Ch - LED_1], au16LedPin[u8Ch - LED_1]);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
     return;
 }
 
@@ -173,8 +173,6 @@ void Error_Handler(void)
 {
     while(1);
 }
-
-
 
 
 /* End of file */
