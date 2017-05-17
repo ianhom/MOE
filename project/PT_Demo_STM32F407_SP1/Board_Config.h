@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Board_Config.h
 * Function   : Hardware configurations
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Novl 2016
@@ -47,7 +47,7 @@ extern "C" {
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Nov 2016
@@ -60,7 +60,7 @@ void LED_Off(uint8 u8Ch);
 * Input      : uint8 u8Ch    0~255    Channel number of led
 * Output:    : None
 * Return     : None
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 22nd Nov 2016
