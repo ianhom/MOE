@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : Moe_main.c
 * Function   : Main-start of the project.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 4th Nov 2016
