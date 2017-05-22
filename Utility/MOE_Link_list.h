@@ -1,7 +1,7 @@
 /*/******************************************************************************
 * File       : MOE_Link_list.h
 * Function   : General link list function.
-* description: To be done.          
+* Description: To be done.          
 * Version    : V1.00
 * Author     : Ian
 * Date       : 2nd Jun 2016
@@ -33,7 +33,7 @@ extern "C" {
 * Output:    : None
 * Return     : SW_OK   Successful.
 *              SW_ERR  Failed.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 2nd Jun 2016
@@ -64,7 +64,7 @@ void* Moe_Link_list_Del(void **pptHead, void **pptTail, void* ptNode);
 * Output:    : None
 * Return     : NULL           Fail to find the node.
 *              T_TIMER_NODE*  The pointer of the founed node.
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
@@ -78,7 +78,7 @@ void *Moe_Link_list_Find(void **pptHead, uint16 u16OffSet, uint8 u8Size,uint8 u8
 * Input      : None
 * Output:    : None
 * Return     : uint16   The count of timers
-* description: To be done.
+* Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
