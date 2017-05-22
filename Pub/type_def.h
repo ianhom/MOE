@@ -1,7 +1,7 @@
 /******************************************************************************
 * File       : type_def.h
 * Function   : Type definitions.
-* description: To be done.           
+* Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
 * Date       : 3rd May 2016
