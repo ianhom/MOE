@@ -190,14 +190,13 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE* ptNode);
 * Function   : Main process for timer updating.
 * Input      : None
 * Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Return     : 0~2^32ms     The left time for next timer.       
 * Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint8 Moe_Timer_Process(void);
+uint32 Moe_Timer_Process(void);
 
 /******************************************************************************
 * Name       : uint16 Moe_Timer_Test_Cnt(void)
