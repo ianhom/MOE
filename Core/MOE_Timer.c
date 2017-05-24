@@ -518,14 +518,13 @@ static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind)
 * Function   : Main process for timer updating.
 * Input      : None
 * Output:    : None
-* Return     : SW_OK   Successful.
-*              SW_ERR  Failed.
+* Return     : 0~2^32ms     The left time for next timer.       
 * Description: To be done.
 * Version    : V1.00
 * Author     : Ian
 * Date       : 6th May 2016
 ******************************************************************************/
-uint8 Moe_Timer_Process(void)
+uint32 Moe_Timer_Process(void)
 {
     T_TIMER_NODE* ptFind = sg_ptTmHead;
     T_TIMER_NODE* ptNodeFree;
@@ -537,7 +536,17 @@ uint8 Moe_Timer_Process(void)
     sg_u32TmDiff += u32TmDiff;  /* Update the time difference bewteen all left time update */
 
     ENTER_CRITICAL_ZONE(u32IntSt);  /* Enter the critical zone to prevent event updating unexpectedly */
-    /**************************************************************************************************/
+    /**************************************************************************************************/  
+    if(sg_u32Coming > u32TmDiff)                    /* If the comming left time is NOT up */
+    {
+        sg_u32Coming -= u32TmDiff;                  /* Update the comming left time       */
+    }
+    else                                            /* If the comming left time is up     */
+    {
+        sg_u32Coming  = 0xFFFFFFFF;                 /* Reset comming left time            */
+        Moe_Timer_Update_Left_Time(&sg_u32TmDiff);  /* Update all left time               */
+    }
+    
     if(MOE_TIMER_DEL_REQ == sg_u8DelReq)            /* If the deleting flag is set */
     {
         sg_u8DelReq = MOE_TIMER_DEL_REQ_NONE;       /* Clear the flag              */
@@ -553,21 +562,17 @@ uint8 Moe_Timer_Process(void)
             ptFind = ptFind->ptNext;
         }
     }
-    
-    if(sg_u32Coming > u32TmDiff)                    /* If the comming left time is NOT up */
-    {
-        sg_u32Coming -= u32TmDiff;                  /* Update the comming left time       */
-    }
-    else                                            /* If the comming left time is up     */
-    {
-        sg_u32Coming  = 0xFFFFFFFF;                 /* Reset comming left time            */
-        Moe_Timer_Update_Left_Time(&sg_u32TmDiff);  /* Update all left time               */
-    }
-    
     /**************************************************************************************************/
     EXIT_CRITICAL_ZONE(u32IntSt);   /* Exit the critical zone                                         */
 
-    return SW_OK;                                               
+    if(NULL == ptFind)        /* If NO timer node exsit   */
+    {
+        return 0;             /* Return left time as 0    */
+    }
+    else                      /* If any timer node exsits */
+    {
+        return sg_u32Coming;  /* Return the left time     */
+    }                                            
 }
 
 /******************************************************************************
