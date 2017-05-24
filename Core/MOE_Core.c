@@ -22,8 +22,9 @@
 static PF_MALLOC sg_pfMalloc = NULL;
 static PF_FREE   sg_pfFree   = NULL;
 static PF_POLL   sg_pfPoll   = NULL;
+static PF_SLEEP  sg_pfSleep  = NULL;
 
-static T_EVENT sg_tEvt = {NULL};
+static T_EVENT sg_tEvt   = {NULL};
 static T_EVENT *sg_ptEvt = &sg_tEvt;
 /******************************************************************************
 * Name       : void Moe_Memset(uint8* pDes, uint8 u8Val, uint8 u8Len)
@@ -124,9 +125,10 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
 ******************************************************************************/
 void Moe_Run(void)
 {
+    uint32 u32LeftTm;
     while(1)                             /* The main loop                */
     {
-        Moe_Timer_Process();             /* Update all timers            */
+        u32LeftTm = Moe_Timer_Process(); /* Update all timers            */
         if (sg_pfPoll)
         {
             sg_pfPoll();                 /* Do polling process if needed */
@@ -147,7 +149,15 @@ void Moe_Run(void)
             sg_ptEvt->u8Task = TASK_NO_TASK;                     /* Finish task processing and cancel active task mark */
             sg_ptEvt = &sg_tEvt;                                 /* Point to a none event & task "event struct"        */   
         }
+        else  /* If no event */
+        {
+            if(sp_pfSleep)
+            {
+                sp_pfSleep(u32LeftTm);                           /* Enter sleep mode */
+            }
+        }
     }
+    return;
 }
 
 /******************************************************************************
