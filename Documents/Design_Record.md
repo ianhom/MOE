@@ -242,7 +242,8 @@ LIST                                 //将生成代码为：Function_X_CallCnt =
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility)     | 常用功能模块，包含队列、链表、printf等
    [**project/**](https://github.com/ianhom/MOE/tree/master/project)     | 具体工程相关文件，包含工程配置文件，硬件配置配件和main文件
    [**Documents/**](https://github.com/ianhom/MOE/tree/master/Documents) | 说明性文档，包含设计说明，API说明、图片   
-    
+   [**Tools/**](https://github.com/ianhom/MOE/tree/master/Tools)         | 配置、编译、调试、分析等实用工具
+   
 ## 关于开发板
 - MOE目前已经移植了多款开发板（Nucleo系列、FRDM系列），当然，为了更好展现MOE，也在为MOE定制一款开发板。MOE开发板将采用大容量MCU，用于支持复杂的应用及脚本解释器。   
 - 同时MOE支持useful的调试功能，便捷的仿真器和串口调试也是必不可少的。
@@ -312,4 +313,4 @@ T_RELAY tRelay[MAX_RELAY_CHANNEL_NUM] = {0};  /* Create 5 relay objects */
 ## 关于可抢占内核
 - 目前MOE的特点是小巧，她是非抢占内核。之前也提到过，抢占式内核也是我学习的方向之一，随后将对MOE增加抢占式内核。
 - 目前已经接触过的RTOS有FreeRTOS、Trochili和LiteOS，原理基本相同，但各模块的具体策略各有特色。MOE喜欢在完全掌握各家系统的特点之后，结合MOE的喜好，发展自己风格的RT内核。
-- 增加可抢占内核后，原有的应用可以不需要修改，原应用中的与非抢占内核相关的部分（各种形式的return），计划通过宏等方式排除差异。争取做到应用的通用。
+- 增加可抢占内核后，原有的应用可以不需要修改，原应用中的与非抢占内核相关的部分（各种形式的return），计划通过宏等方式排除差异。争取做到应用的通用。对于系统中内核以外的模块（定时器，消息等）也需要进行调整，来兼容适应非抢占及抢占式的内核。
