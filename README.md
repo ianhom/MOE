@@ -120,6 +120,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility) | Useful function modules including queue, link list, printf    
    [**project/**](https://github.com/ianhom/MOE/tree/master/project) | Files for specific projects including configuration of SW/HW and the main file    
    [**Documents/**](https://github.com/ianhom/MOE/tree/master/Documents) | Description documents including design record, API reference and pictures    
+   [**Tools/**](https://github.com/ianhom/MOE/tree/master/Tools)         | Useful Tools for configuration, building, debugging, analysis and so on   
    
    
 
