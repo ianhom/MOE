@@ -114,7 +114,7 @@ uint8 Task_PT_Demo2_Process(uint8 u8Evt, void *pPara)
    [**Utility/**](https://github.com/ianhom/MOE/tree/master/Utility)     | 常用功能模块，包含队列、链表、printf等
    [**project/**](https://github.com/ianhom/MOE/tree/master/project)     | 具体工程相关文件，包含工程配置文件，硬件配置配件和main文件
    [**Documents/**](https://github.com/ianhom/MOE/tree/master/Documents) | 说明性文档，包含设计说明，API说明、图片   
-   [**Tools/**](https://github.com/ianhom/MOE/tree/master/Tools)         | 配置、编译、调试、分析等工具       
+   [**Tools/**](https://github.com/ianhom/MOE/tree/master/Tools)         | 配置、编译、调试、分析等实用工具       
    
 ## 文档参考
  - [API说明](https://github.com/ianhom/MOE/blob/master/Documents/API_Description_Chinese.md)    
