@@ -321,4 +321,5 @@ T_RELAY tRelay[MAX_RELAY_CHANNEL_NUM] = {0};  /* Create 5 relay objects */
   非抢占式内核 | MOE-bit  | 小b | 适用于资源受限的平台，低功耗应用    
   抢占式内核   | MOE-BYTE | 大B | 适用于资源充足，注重性能的应用    
 
+- MOE-bit即使目前的协作型OS
 - MOE-BYTE将会实现主流RTOS的特性，并在此基础上尝试新的思路。
