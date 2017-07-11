@@ -165,14 +165,10 @@ Still work with software timers, add some test functions, **un-debugged**.
 ## 7th May 2016
 Timer is added, however **the code is NOT debug yet**. Please wait for the updating.
 
-## 5th May 2016
-[百度](http://www.baidu.com)   
-![baidu](https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png)
-> -百度一下会死啊！ 
-> -会。。。
-
 ## 4th May 2016
 I have finished the basical parts of schudeler function, I use 3 tasks and set event to each others, it works. Also I add debug print MACROs with maybe useful. I will add software timer in next step.
+
+--------
 
 写给萌萌的话：    
 - 萌萌，这个是爸爸以你的名义写的代码，或许你直到长大也不能理解这段代码的用途，但是爸爸我想用一个擅长的方式为你留下些什么。在编写的过程中，爸爸一直很用心，因为有你的名字，爸爸希望它能有更好的表现，让更多的人使用。或许有朝一日这个系统小有名气了，萌萌可以自豪地说“这是我爸爸为我写的！”。这是爸爸的初衷，如果真有那天，再来感谢老爸吧。    
