@@ -28,6 +28,9 @@ Features with:
 
 For more discussion, please join our QQ Group: **[475258651](https://jq.qq.com/?_wv=1027&k=41PrZvS)**   
 
+## Supported Platform    
+- MIMXRT1050-EVK.........(coming soon)    
+
 ## How to use
 - **Step 1**: Port the MOE to your hardware, provide "**system clock in ms**" and "**poll function(if available)**", init and run MOE.  
 ```c
