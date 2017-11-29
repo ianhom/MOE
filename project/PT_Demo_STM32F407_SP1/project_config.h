@@ -30,7 +30,7 @@ extern "C" {
 /* Add your task process here */
 #define LIST_OF_REG_TASK\
         REG_TASK(Task_PT_Demo_Process)\
-	      REG_TASK(Task_PT_Demo2_Process)\
+	REG_TASK(Task_PT_Demo2_Process)\
         REG_TASK(Task_PT_Demo3_Process)
 
 #define REG_TASK(name) uint8 name(uint8 u8Evt, void *pPara);
