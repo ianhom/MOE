@@ -14,4 +14,6 @@
    --       | Button * 3
 
             
- ![PT_Demo_MIMXRT1050-EVK]()
+ ![MIMXRT1050-EVK](../../Documents/Pic/Board/MIMXRT1050-EVK-DEVICE.jpg)    
+ 
+ ![MIMXRT1050-EVK-Screen](../../Documents/Pic/Board/MIMXRT1050-EVK-DEVICE2.jpg)
