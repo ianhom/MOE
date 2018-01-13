@@ -95,7 +95,8 @@ uint8 Moe_Init(PF_TIMER_SRC pfSysTm, PF_POLL pfPoll)
     Moe_Event_Init();
     
     /* Init all tasks */
-    sg_tEvt.u8Evt  = EVENT_INIT;
+    sg_ptEvt      = &sg_tEvt;       /* Make sure tasks get the correct IDs */
+    sg_tEvt.u8Evt = EVENT_INIT;
     for(sg_tEvt.u8Task = 1; sg_tEvt.u8Task <= MAX_TASK_NUM; sg_tEvt.u8Task++)
     {
         cg_apfTaskFn[sg_tEvt.u8Task - 1](sg_tEvt.u8Evt, sg_tEvt.pPara);
