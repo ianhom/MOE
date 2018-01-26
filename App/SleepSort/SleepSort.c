@@ -21,6 +21,8 @@
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
+static uint8 sg_au8Num[10] = [2,4,1,6,10,8,1,5,7,3,8,9];;
+
 /******************************************************************************
 * Name       : uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
 * Function   : Sleep sorting
@@ -37,8 +39,6 @@ static uint8 sg_u8TaskID = TASK_NO_TASK;
 ******************************************************************************/
 uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
 {   
-    static uint32 u32Temp = 0x0;
-    u32Temp++;
     /* Check which event should be processed */
     switch (u8Evt)
     {
@@ -68,7 +68,10 @@ uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
         /* If it is a test event */
         case EVENT_TEST:       
         {
-            
+            for(uint8 u8Index = 0; u8Index < 10; u8Index++)
+            {
+                Moe_Timer_Delay(sg_au8Num[u8Index]);
+            }
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
 
