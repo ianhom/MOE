@@ -4,9 +4,10 @@
 * Description: To be done.           
 * Version    : V1.00
 * Author     : Ian
-* Date       : 6th May 2016
+* Date       : 27th Jan 2018
 * History    :  No.  When           Who           What
 *               1    06/May/2016    Ian           Create
+*               2    27/Jan/2018    Ian           Add parameter for task
 ******************************************************************************/
 
 #ifndef _MOE_TIMER_H_
@@ -67,6 +68,7 @@ typedef struct _T_TIMER
     uint16       u16Cnt;                  /* Count to start the timer */
     uint8        u8Evt;                   /* Timeout event to be set  */
     uint8        u8TaskID;                /* Timeout event task ID    */
+    void        *pTskPara;                /* Parameters for task      */
 }T_TIMER;
 
 
