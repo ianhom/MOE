@@ -2,11 +2,12 @@
 * File       : MOE_Timer.c
 * Function   : Provide timer services.
 * Description: To be done.          
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 6th May 2016
+* Date       : 27th Jan 2018
 * History    :  No.  When           Who           What
 *               1    06/May/2016    Ian           Create
+*               2    27/Jan/2018    Ian           Add parameter for task
 ******************************************************************************/
 
 #include "../Pub/type_def.h"
@@ -113,9 +114,9 @@ static T_TIMER_NODE* Moe_Timer_Add(void)
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
 {
@@ -125,6 +126,7 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
     tTmr.u8Evt        = EVENT_PERIODIC;         /* Periodic event  */
     tTmr.u8TaskID     = TASK_CURRENT_TASK;      /* Call itself     */
     tTmr.u32TmOut     = u32TmOut;               /* Set time out    */
+    tTmr.pTskPara     = NULL;                   /* Task parameter  */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     tTmr.pfTmCallback = NULL;                   /* Callback        */
     tTmr.pPara        = NULL;                   /* Prarmeters      */
@@ -142,9 +144,9 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
 {
@@ -154,6 +156,7 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
     tTmr.u8Evt        = EVENT_DELAY;       /* Delay event     */
     tTmr.u8TaskID     = TASK_CURRENT_TASK; /* Call itself     */
     tTmr.u32TmOut     = u32TmOut;          /* Set time out    */
+    tTmr.pTskPara     = NULL;                   /* Task parameter  */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     tTmr.pfTmCallback = NULL;              /* Callback        */
     tTmr.pPara        = NULL;              /* Prarmeters      */
@@ -172,9 +175,9 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut)
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 {
@@ -184,6 +187,7 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
     tTmr.u8Evt        = u8Evt;       /* Set time up event    */
     tTmr.u8TaskID     = u8DesTask;   /* Set destination task */
     tTmr.u32TmOut     = u32TmOut;    /* Set time out         */
+    tTmr.pTskPara     = NULL;                   /* Task parameter  */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     tTmr.pfTmCallback = NULL;        /* Callback             */
     tTmr.pPara        = NULL;        /* Prarmeters           */
@@ -201,9 +205,9 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 6th May 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
 {
@@ -227,6 +231,7 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
     ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
     ptNode->tTimer.u8Evt        = ptTm->u8Evt;            /* Set the event                      */
     ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
+    pTNode->tTimer.pTskPara     = ptTm->pTskPara;         /* Set the task parameter             */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
     /* If the parameter is NULL */
@@ -478,14 +483,14 @@ T_TIMER_NODE* Moe_Timer_Restart(T_TIMER_NODE *ptNode)
 * Output:    : None.
 * Return     : None.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 25th Aug 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 static void Moe_Timer_Time_Up(T_TIMER_NODE *ptFind)
 {   
-    /* Set the desired evnet */
-    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt,MOE_EVENT_NORMAL, NULL);  
+    /* Set the desired event */
+    Moe_Event_Set(ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt,MOE_EVENT_NORMAL, ptFind->tTimer.pTskPara);  
     DBG_PRINT("Time is up, Task %d has a 0x%x type event\n",ptFind->tTimer.u8TaskID,ptFind->tTimer.u8Evt);
 #ifdef __TIMER_CALLBACK_SUPPORTED
     if (NULL != ptFind->tTimer.pfTmCallback)                /* If we have callback for such timer */
