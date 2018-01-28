@@ -2,7 +2,7 @@
 * File       : MOE_Timer.h
 * Function   : Provide timer services.
 * Description: To be done.           
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
 * Date       : 27th Jan 2018
 * History    :  No.  When           Who           What
@@ -97,20 +97,6 @@ typedef struct _T_TIMER_NODE
 uint8 Moe_Timer_Init(PF_TIMER_SRC pfSysTm);
 
 /******************************************************************************
-* Name       : T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
-* Function   : Start a timer
-* Input      : T_TIMER *ptTm     Pointer of timers set by user.
-* Output:    : None
-* Return     : NULL           Fail to start a timer.
-*              T_TIMER_NODE*  The pointer of the timer which is started.
-* Description: To be done.
-* Version    : V1.00
-* Author     : Ian
-* Date       : 6th May 2016
-******************************************************************************/
-T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
-
-/******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut)
 * Function   : Start a timer for current task and set "EVENT_DELAY"
 * Input      : uint32 u32TmOut   0~2^32   Time out in ms
@@ -118,9 +104,9 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut);
 
@@ -132,9 +118,9 @@ T_TIMER_NODE* Moe_Timer_Periodic(uint32 u32TmOut);
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut);
 
@@ -148,13 +134,26 @@ T_TIMER_NODE* Moe_Timer_Delay(uint32 u32TmOut);
 * Return     : NULL           Fail to start a timer.
 *              T_TIMER_NODE*  The pointer of the timer which is started.
 * Description: To be done.
-* Version    : V1.00
+* Version    : V1.01
 * Author     : Ian
-* Date       : 23rd Jun 2016
+* Date       : 27th Jan 2018
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut);
 
-
+/******************************************************************************
+* Name       : T_TIMER_NODE* Moe_Timer_Start(uint8 u8TaskID, uint8 u8Evt, uint16 u16Cnt, uint32 u32TmOut)
+* Function   : Start a timer
+* Input      : T_TIMER *ptTm     Pointer of timers set by user.
+* Output:    : None
+* Return     : NULL           Fail to start a timer.
+*              T_TIMER_NODE*  The pointer of the timer which is started.
+* Description: To be done.
+* Version    : V1.01
+* Author     : Ian
+* Date       : 27th Jan 2018
+******************************************************************************/
+T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm);
+    
 /******************************************************************************
 * Name       : T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE *ptNode)
 * Function   : Stop a started timer.
@@ -168,8 +167,6 @@ T_TIMER_NODE* Moe_Timer_Easy_Start(uint8 u8DesTask, uint8 u8Evt,uint32 u32TmOut)
 * Date       : 6th May 2016
 ******************************************************************************/
 T_TIMER_NODE* Moe_Timer_Stop(T_TIMER_NODE *ptNode);
-
-
 
 
 /******************************************************************************
