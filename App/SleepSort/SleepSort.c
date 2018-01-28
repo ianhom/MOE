@@ -21,8 +21,8 @@
 
 static uint8 sg_u8TaskID = TASK_NO_TASK;
 
-static uint8 sg_au8Num[10] = [2,4,1,6,10,8,1,5,7,3,8,9];;
-
+static uint8 sg_au8Num[10] = [2,4,1,6,10,8,1,5,7,3,8,9];
+static T_TIMER_NODE tNode;
 /******************************************************************************
 * Name       : uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
 * Function   : Sleep sorting
@@ -42,45 +42,13 @@ uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
     /* Check which event should be processed */
     switch (u8Evt)
     {
-        /* If it is a timer event */
-        case EVENT_PERIODIC:       
+        /* If it is a delay event */
+        case EVENT_DELAY:       
         {
-            T_TEST_MSG tMsg;
-
-            DBG_PRINT("I am task 1 and I am working!!\n");
-
-            tMsg.DATA.u32Data = u32Temp;
-            if(SW_ERR == MOE_MSG_SEND(2, MSG_TYPE_TEST, tMsg))
-            {
-                DBG_PRINT("Heap is running out!!");
-            }
-
+            printf("%d",*((uint8*)pPara));
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
-
-        /* If it is a message event */
-        case EVENT_MSG:       
-        {
             
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
-
-        /* If it is a test event */
-        case EVENT_TEST:       
-        {
-            for(uint8 u8Index = 0; u8Index < 10; u8Index++)
-            {
-                Moe_Timer_Delay(sg_au8Num[u8Index]);
-            }
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
-
-        /* If it is a timer event */
-        case EVENT_TIMER:       
-        {
-            
-            return SW_OK;     /* Return SW_OK to indicate event is processed */
-        }
 
         /* If it is a message event */
         case EVENT_INIT:       
@@ -90,7 +58,16 @@ uint8 SleepSort_Process(uint8 u8Evt, void *pPara)
             /******************************************************************/
 
             /*--------------------   Add your init code here   ----------------------*/
-            Moe_Timer_Periodic(100);
+            tNode.u16Cnt    = 1;
+            tNode.u8Evt     = EVENT_DELAY;
+            tNode.u8TaskID  = TASK_CURRENT_TASK;
+            for(uint8 u8Index = 0; u8Index < 10; u8Index++)
+            {
+                tNode.u32TmOut  = sg_au8Num[u8Index];
+                tNode.u32TmLeft = sg_au8Num[u8Index];
+                tTmr.pTskPara   = (void*)(&sg_au8Num[u8Index]);
+                Moe_Timer_Start(tNode);
+            }
             /*-------------------   The end of your init code   ---------------------*/
             return SW_OK;     /* Return SW_OK to indicate event is processed */
         }
