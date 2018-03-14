@@ -99,7 +99,7 @@ static T_TIMER_NODE* Moe_Timer_Add(void)
     else                                 /* If node exsits                  */
     {
         sg_ptTmTail->ptNext = ptNode;    /* Add new node after the tail one */
-    }
+    }”
     sg_ptTmTail = ptNode;                /* Update the tail node            */
 
     return ptNode;
@@ -231,7 +231,7 @@ T_TIMER_NODE* Moe_Timer_Start(T_TIMER *ptTm)
     ptNode->tTimer.u16Cnt       = ptTm->u16Cnt;           /* Set the restart count              */
     ptNode->tTimer.u8Evt        = ptTm->u8Evt;            /* Set the event                      */
     ptNode->tTimer.u8TaskID     = ptTm->u8TaskID;         /* Set the task ID                    */
-    pTNode->tTimer.pTskPara     = ptTm->pTskPara;         /* Set the task parameter             */
+    ptNode->tTimer.pTskPara     = ptTm->pTskPara;         /* Set the task parameter             */
 #ifdef __TIMER_CALLBACK_SUPPORTED
     ptNode->tTimer.pfTmCallback = ptTm->pfTmCallback;     /* Set the callback function          */
     /* If the parameter is NULL */
