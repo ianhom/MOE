@@ -1,4 +1,7 @@
 # Log   
+## 10th Sep 2018
+- I am going to rebuild MOE with more fun function
+
 ## 1st April 2017
 ![MOE cpu](https://github.com/ianhom/MOE/blob/master/Documents/Pic/other/CPU_with_MOE.jpg?raw=true)
 - The first smart CPU with MOE in the world!.....Only today   
