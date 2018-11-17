@@ -1,4 +1,7 @@
 # Log   
+## 17th Nov 2018
+- MOE is ready for a new satrt
+
 ## 10th Sep 2018
 - I am going to rebuild MOE with more fun function
 
