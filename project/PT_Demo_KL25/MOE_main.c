@@ -11,7 +11,7 @@
 #include "common.h"
 #include "../../Pub/common_head.h"
 #include "./project_config.h"
-#include "./Moe_main.h"
+#include "./MOE_main.h"
 #include "../../Pub/debug.h"
 #include "../../Core/MOE_Core.h"
 #include "../../Core/MOE_Timer.h"
