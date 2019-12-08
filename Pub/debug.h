@@ -17,6 +17,16 @@
 extern "C" {
 #endif
 
+/* Color printing */
+#define CP_NONE               "\033[0m"
+#define CP_RED                "\033[1;31;40m"
+#define CP_GREEN              "\033[1;32;40m"
+#define CP_YELLOW             "\033[1;33;40m"
+#define CP_BLUE               "\033[1;34;40m"
+#define CP_MAGENTE            "\033[1;35;40m"
+#define CP_CYAN               "\033[1;36;40m"
+#define CP_WHITE              "\033[1;37;40m"
+
 #ifndef __DEBUG_NONE
 #define __DEBUG_NONE                   (0)      /* No need to printf                                */
 #define __DEBUG_BASIC_INFO             (1)      /* Provide basic printf function                    */
